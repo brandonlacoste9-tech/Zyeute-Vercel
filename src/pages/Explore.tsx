@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Header } from '../components/layout/Header';
+import { Header } from '../components/Header';
 import { BottomNav } from '../components/layout/BottomNav';
 import { supabase } from '../lib/supabase';
 import { QUEBEC_HASHTAGS, QUEBEC_REGIONS } from '../lib/quebecFeatures';

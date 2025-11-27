@@ -3,10 +3,10 @@
  */
 
 import React, { useState } from 'react';
-import { Avatar } from '../ui/Avatar';
-import { Button } from '../ui/Button';
+import { Avatar } from '../Avatar';
+import { Button } from '../Button';
 import { supabase } from '../../lib/supabase';
-import { toast } from '../ui/Toast';
+import { toast } from '../Toast';
 import { moderateContent } from '../../services/moderationService';
 import { getTimeAgo, formatNumber } from '../../lib/utils';
 import type { Comment as CommentType, User } from '../../types';

@@ -5,7 +5,7 @@
 import React from 'react';
 import { VideoCard, VideoCardSkeleton } from '../features/VideoCard';
 import type { Post } from '../../types';
-import { cn } from '../../lib/utils';
+import { cn } from '../lib/utils';
 
 export interface FeedGridProps {
   posts: Post[];

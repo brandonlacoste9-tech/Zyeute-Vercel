@@ -4,9 +4,9 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Header } from '../components/layout/Header';
+import { Header } from '../components/Header';
 import { BottomNav } from '../components/layout/BottomNav';
-import { Button } from '../components/ui/Button';
+import { Button } from '../components/Button';
 import { toast } from '../components/Toast';
 
 interface VoiceSettings {

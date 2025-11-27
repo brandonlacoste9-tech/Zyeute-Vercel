@@ -3,7 +3,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Header } from '../components/layout/Header';
+import { Header } from '../components/Header';
 import { BottomNav } from '../components/layout/BottomNav';
 import { supabase } from '../lib/supabase';
 import { formatNumber } from '../lib/utils';

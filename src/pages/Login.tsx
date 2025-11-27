@@ -4,8 +4,8 @@
 
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Button } from '../components/ui/Button';
-import { Logo } from '../components/ui/Logo';
+import { Button } from '../components/Button';
+import { Logo } from '../components/Logo';
 import { supabase, signIn, signInWithGoogle } from '../lib/supabase';
 
 export const Login: React.FC = () => {

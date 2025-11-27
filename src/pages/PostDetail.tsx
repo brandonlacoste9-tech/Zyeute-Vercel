@@ -4,9 +4,9 @@
 
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Header } from '../components/layout/Header';
-import { Avatar } from '../components/ui/Avatar';
-import { Button } from '../components/ui/Button';
+import { Header } from '../components/Header';
+import { Avatar } from '../components/Avatar';
+import { Button } from '../components/Button';
 import { FireRating } from '../components/features/FireRating';
 import { VideoPlayer } from '../components/features/VideoPlayer';
 import { CommentThread } from '../components/features/CommentThread';

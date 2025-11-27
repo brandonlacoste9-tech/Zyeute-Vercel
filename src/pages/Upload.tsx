@@ -5,8 +5,8 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Header } from '../components/layout/Header';
-import { Button } from '../components/ui/Button';
+import { Header } from '../components/Header';
+import { Button } from '../components/Button';
 import { supabase } from '../lib/supabase';
 import { extractHashtags, generateId } from '../lib/utils';
 import { QUEBEC_REGIONS } from '../lib/quebecFeatures';

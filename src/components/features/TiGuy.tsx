@@ -5,7 +5,7 @@
  */
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Button } from '../ui/Button';
+import { Button } from '../Button';
 import { cn } from '../../lib/utils';
 
 interface Message {

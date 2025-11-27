@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { Header } from '../components/layout/Header';
+import { Header } from '../components/Header';
 import { BottomNav } from '../components/layout/BottomNav';
 
 const WatchLive: React.FC = () => {

@@ -5,10 +5,10 @@
 
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Header } from '../components/layout/Header';
+import { Header } from '../components/Header';
 import { BottomNav } from '../components/layout/BottomNav';
-import { Avatar } from '../components/ui/Avatar';
-import { Button } from '../components/ui/Button';
+import { Avatar } from '../components/Avatar';
+import { Button } from '../components/Button';
 import { supabase } from '../lib/supabase';
 import { toast } from '../components/Toast';
 import { generateId } from '../lib/utils';

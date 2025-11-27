@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Avatar } from '../ui/Avatar';
+import { Avatar } from '../Avatar';
 import { VideoPlayer } from './VideoPlayer';
 import type { Post, User } from '../../types';
 

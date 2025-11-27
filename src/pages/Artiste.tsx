@@ -3,9 +3,9 @@
  */
 
 import React, { useState } from 'react';
-import { Header } from '../components/layout/Header';
+import { Header } from '../components/Header';
 import { BottomNav } from '../components/layout/BottomNav';
-import { Button } from '../components/ui/Button';
+import { Button } from '../components/Button';
 import { TiGuy } from '../components/features/TiGuy';
 import { generateImage, type ImageGenerationResult } from '../services/imageService';
 import { toast } from '../components/Toast';

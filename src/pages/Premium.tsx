@@ -5,9 +5,9 @@
  */
 
 import React, { useState } from 'react';
-import { Header } from '../components/layout/Header';
+import { Header } from '../components/Header';
 import { BottomNav } from '../components/layout/BottomNav';
-import { Button } from '../components/ui/Button';
+import { Button } from '../components/Button';
 import { subscribeToPremium } from '../services/stripeService';
 import { usePremium } from '../hooks/usePremium';
 

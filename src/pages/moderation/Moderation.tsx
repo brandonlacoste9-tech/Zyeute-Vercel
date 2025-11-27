@@ -4,9 +4,9 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Header } from '../../components/layout/Header';
-import { Button } from '../../components/ui/Button';
-import { Avatar } from '../../components/ui/Avatar';
+import { Header } from '../../components/Header';
+import { Button } from '../../components/Button';
+import { Avatar } from '../../components/Avatar';
 import { supabase } from '../../lib/supabase';
 import { toast } from '../../components/Toast';
 import { formatNumber, getTimeAgo } from '../../lib/utils';
