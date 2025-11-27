@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { LogoFull } from './Logo';
-import { cn } from '../../lib/utils';
+import { cn } from '../lib/utils';
 
 interface LoadingScreenProps {
   message?: string;
