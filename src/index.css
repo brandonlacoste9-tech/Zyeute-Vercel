@@ -109,7 +109,7 @@
   }
   
   .btn-leather:hover {
-    @apply bg-neutral-750 border-gold-500/50 text-gold-300;
+    @apply bg-neutral-700 border-gold-500/50 text-gold-300;
     transform: translateY(-1px);
     box-shadow: 0 6px 12px rgba(0,0,0,0.4), 0 0 10px rgba(255, 191, 0, 0.1);
   }
