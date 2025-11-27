@@ -90,18 +90,6 @@ function App() {
             {/* Achievement Listener (Global) */}
             <AchievementListener />
 
-            {/* Nano Banana Integration (Floating Button) */}
-            <a
-              href="https://www.vraiquebec.com/chat"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="fixed bottom-24 right-4 z-50 w-14 h-14 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-600 shadow-lg shadow-yellow-500/50 flex items-center justify-center hover:scale-110 transition-transform duration-300 border-2 border-white/20 group"
-              aria-label="Nano Banana AI Assistant"
-            >
-              <span className="text-2xl group-hover:rotate-12 transition-transform">🍌</span>
-              <span className="absolute -top-2 -right-2 w-4 h-4 bg-red-600 rounded-full animate-pulse" />
-            </a>
-
             <Routes>
               {/* Public Routes */}
               <Route path="/login" element={<Login />} />

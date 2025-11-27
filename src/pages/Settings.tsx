@@ -365,7 +365,7 @@ export const Settings: React.FC = () => {
             <span>Zyeuté v1.0.0</span>
           </p>
           <p>Fait avec fierté québécoise 🇨🇦</p>
-          <p className="text-xs text-leather-500">Propulsé par Nano Banana 🍌</p>
+          <p className="text-xs text-leather-500">Fait au Québec avec fierté 🦫⚜️</p>
         </div>
       </div>
 
