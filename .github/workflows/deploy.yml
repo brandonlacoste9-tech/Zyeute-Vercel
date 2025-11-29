@@ -18,6 +18,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# Limit GITHUB_TOKEN permissions for security
+permissions:
+  contents: read
+
 jobs:
   # Job 1: Lint and Type Check
   lint:
