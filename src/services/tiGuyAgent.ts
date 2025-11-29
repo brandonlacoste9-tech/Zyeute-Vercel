@@ -44,10 +44,12 @@
 import OpenAI from 'openai';
 
 // Initialize OpenAI client
+// NOTE: Using client-side OpenAI is for demo/development purposes
+// In production, this should be moved to a server-side endpoint to protect the API key
 const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
 const openai = apiKey ? new OpenAI({
-  apiKey: apiKey,
-  dangerouslyAllowBrowser: true // Required for client-side usage (Note: Server-side preferred in prod)
+  apiKey,
+  dangerouslyAllowBrowser: true // SECURITY WARNING: Exposes API key in client code. Use server-side proxy in production.
 }) : null;
 
 export type TiGuyInput = {
@@ -102,7 +104,7 @@ export const TiGuyAgent = async (input: TiGuyInput): Promise<TiGuyResponse | nul
     `;
 
     const response = await openai.chat.completions.create({
-      model: 'gpt-4o', // Using gpt-4o instead of gpt-4-1106-preview (more recent)
+      model: 'gpt-4o', // Using GPT-4 Omni (latest multimodal model)
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.8,
       response_format: { type: "json_object" } // Ensure JSON response

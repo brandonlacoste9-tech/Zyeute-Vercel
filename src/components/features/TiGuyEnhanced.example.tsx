@@ -11,7 +11,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '../Button';
 import { cn } from '../../lib/utils';
 import { TiGuyAgent, type TiGuyInput, type TiGuyResponse } from '../../services/tiGuyAgent';
-import { toast } from '../Toast';
+import { toast } from '../../components/Toast';
 
 interface Message {
   id: string;

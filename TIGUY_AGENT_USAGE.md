@@ -271,6 +271,34 @@ VITE_OPENAI_API_KEY=sk-proj-your-api-key-here
 
 Without this key, the service runs in demo mode automatically.
 
+### ⚠️ Security Note
+
+**Client-side API usage is for development/demo purposes only.**
+
+The current implementation uses `dangerouslyAllowBrowser: true` which exposes the API key in client-side code. For production use, you should:
+
+1. **Move API calls to server-side**: Create a backend endpoint that handles OpenAI requests
+2. **Use a proxy service**: Set up a serverless function (Vercel, Netlify, etc.) to proxy requests
+3. **Implement rate limiting**: Protect your API key from abuse
+4. **Add authentication**: Ensure only authenticated users can access the service
+
+Example server-side implementation:
+```typescript
+// pages/api/tiguy.ts (Next.js API route example)
+import { OpenAI } from 'openai';
+
+export default async function handler(req, res) {
+  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  
+  const { text, intent } = req.body;
+  
+  // Call OpenAI API server-side
+  const response = await openai.chat.completions.create({...});
+  
+  res.json(response);
+}
+```
+
 ## Related Services
 
 - **openaiService.ts**: General OpenAI utilities (caption generation, hashtags)
