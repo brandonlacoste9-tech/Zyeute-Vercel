@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { Header } from '../components/Header';
-import { BottomNav } from '../components/layout/BottomNav';
+import { BottomNav } from '../components/BottomNav';
 
 const EmailPreferences: React.FC = () => {
   return (

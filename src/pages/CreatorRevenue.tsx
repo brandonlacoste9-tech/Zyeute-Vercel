@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Header } from '../components/Header';
-import { BottomNav } from '../components/layout/BottomNav';
+import { BottomNav } from '../components/BottomNav';
 import { Button } from '../components/Button';
 import { supabase } from '../lib/supabase';
 import { cn, formatNumber } from '../lib/utils';

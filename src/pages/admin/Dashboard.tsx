@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Header } from '../../components/Header';
-import { BottomNav } from '../../components/layout/BottomNav';
+import { BottomNav } from '../../components/BottomNav';
 import { supabase } from '../../lib/supabase';
 import { Button } from '../../components/Button';
 
