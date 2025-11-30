@@ -17,8 +17,8 @@ Add the following environment variables to your `.env.local` file:
 STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key_here
 STRIPE_WEBHOOK_SECRET=whsec_your_webhook_signing_secret_here
 
-# Supabase Configuration (for admin operations)
-NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+# Supabase Configuration (for server-side admin operations)
+SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key_here
 ```
 

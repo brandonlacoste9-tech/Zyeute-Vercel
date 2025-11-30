@@ -8,7 +8,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 
 const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
@@ -24,6 +24,7 @@ export async function POST(req: Request) {
   try {
     event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
   } catch (err: any) {
+    console.error("Webhook signature verification failed:", err.message);
     return new NextResponse(`Webhook Error: ${err.message}`, { status: 400 });
   }
 
@@ -32,8 +33,20 @@ export async function POST(req: Request) {
     const userId = session.metadata?.userId;
     const subscriptionId = session.subscription as string;
 
-    if (userId) {
-      await supabaseAdmin
+    // Validate required fields
+    if (!userId) {
+      console.error("Missing userId in session metadata");
+      return new NextResponse("Missing userId in session metadata", { status: 400 });
+    }
+
+    if (!subscriptionId) {
+      console.error("Missing subscription ID in session");
+      return new NextResponse("Missing subscription ID", { status: 400 });
+    }
+
+    // Update user profile with error handling
+    try {
+      const { error } = await supabaseAdmin
         .from("profiles")
         .update({
           is_premium: true,
@@ -42,7 +55,18 @@ export async function POST(req: Request) {
           updated_at: new Date().toISOString(),
         })
         .eq("id", userId);
+
+      if (error) {
+        console.error("Supabase update error:", error);
+        return new NextResponse(`Database Error: ${error.message}`, { status: 500 });
+      }
+
+      console.log(`Successfully updated profile for user ${userId}`);
+    } catch (err: any) {
+      console.error("Unexpected error updating profile:", err);
+      return new NextResponse(`Internal Error: ${err.message}`, { status: 500 });
     }
   }
+  
   return new NextResponse(null, { status: 200 });
 }
