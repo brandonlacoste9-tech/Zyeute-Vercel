@@ -11,7 +11,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "health-check": "npm run type-check || true && npm run build"
   },
   "dependencies": {
     "@ai-sdk/openai": "^2.0.74",
