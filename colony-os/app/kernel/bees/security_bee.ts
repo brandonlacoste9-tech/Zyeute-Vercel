@@ -3,9 +3,9 @@
  * Performs comprehensive security audits using Gemini AI with context caching
  */
 
-import { gemini } from '../lib/gemini-client';
-import { SecurityAuditSchema, SecurityAuditFinding } from '../../../../src/schemas/SecurityAuditSchema';
-import { IntegrityForeman } from '../managers/integrity_foreman';
+import { gemini } from '../../lib/gemini-client.js';
+import { SecurityAuditSchema, SecurityAuditFinding } from '../../../../src/schemas/SecurityAuditSchema.js';
+import { IntegrityForeman } from '../managers/integrity_foreman.js';
 
 class SecurityBee {
   /**
@@ -33,7 +33,7 @@ Output findings strictly as JSON array matching the SecurityAuditSchema.`;
 
     try {
       const response = await gemini.generateContent({
-        model: "models/gemini-1.5-pro",
+        model: "gemini-2.0-flash-exp",
         contextCache: contextCacheId,
         systemInstruction,
         contents: "Analyze the codebase for security vulnerabilities. Focus on RLS policies, authentication mechanisms, and secret exposure.",

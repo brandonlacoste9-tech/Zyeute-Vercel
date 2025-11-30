@@ -3,7 +3,7 @@
  * Manages long-term storage and caching of codebase digests using Gemini
  */
 
-import { gemini } from '../lib/gemini-client';
+import { gemini } from '../../lib/gemini-client.js';
 
 class ArchiveBee {
   /**
@@ -20,7 +20,7 @@ class ArchiveBee {
 
     // Create cached context using Gemini cache manager
     const cache = await gemini.cacheManager.create({
-      model: "models/gemini-1.5-pro",
+      model: "gemini-2.0-flash-exp",
       displayName: "Codebase_Digest_Live",
       contents: [{ parts: [{ text: digestContent }] }],
       ttlSeconds: 604800 // 7 days (604800 seconds)

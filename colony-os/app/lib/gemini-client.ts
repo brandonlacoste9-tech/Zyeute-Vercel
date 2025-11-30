@@ -104,8 +104,10 @@ async function generateContent(options: {
     throw new Error('Gemini client not initialized. Set GEMINI_API_KEY environment variable.');
   }
 
+  // Remove 'models/' prefix if present (SDK handles it)
+  const modelName = options.model?.replace(/^models\//, '') || 'gemini-2.0-flash-exp';
   const model = genAI.getGenerativeModel({ 
-    model: options.model || 'models/gemini-1.5-pro' 
+    model: modelName
   });
 
   // Prepare contents
@@ -130,10 +132,21 @@ async function generateContent(options: {
     generationConfig.temperature = options.generationConfig.temperature;
   }
 
+  // Format contents properly for Gemini API
+  // Gemini API expects contents as an array of parts
+  let formattedContents;
+  if (typeof contents === 'string') {
+    formattedContents = [{ parts: [{ text: contents }] }];
+  } else if (Array.isArray(contents)) {
+    formattedContents = contents;
+  } else {
+    throw new Error('Invalid contents format');
+  }
+
   // Note: Context cache support may vary by SDK version
   // This is a conceptual implementation
   const result = await model.generateContent({
-    contents: typeof contents === 'string' ? contents : contents,
+    contents: formattedContents,
     systemInstruction: options.systemInstruction,
     generationConfig: Object.keys(generationConfig).length > 0 ? generationConfig : undefined,
   });
