@@ -4,9 +4,10 @@
  */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Avatar } from '../Avatar';
 import { VideoPlayer } from './VideoPlayer';
+import { useHaptics } from '@/hooks/useHaptics';
 import { cn } from '../../lib/utils';
 import type { Post, User } from '../../types';
 
@@ -31,19 +32,34 @@ export const VideoCard: React.FC<VideoCardProps> = ({
   onComment,
   onShare,
 }) => {
+  const navigate = useNavigate();
+  const { tap } = useHaptics();
   const [isLiked, setIsLiked] = React.useState(false);
   const isHorizontal = variant === 'horizontal';
 
-  const handleFire = () => {
+  const handleCardClick = () => {
+    // Only navigate to player if it's a video post
+    if (post.type === 'video') {
+      tap();
+      navigate(`/video/${post.id}`);
+    }
+  };
+
+  const handleFire = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent card click when clicking fire button
     setIsLiked(!isLiked);
     onFireToggle?.(post.id, post.fire_count);
   };
 
   return (
-    <div className={cn(
-      'leather-card rounded-2xl overflow-hidden stitched hover:scale-[1.01] transition-all duration-300 group shadow-xl',
-      isHorizontal ? 'w-72 flex-shrink-0' : 'w-full'
-    )}>
+    <div
+      className={cn(
+        'leather-card rounded-2xl overflow-hidden stitched hover:scale-[1.01] transition-all duration-300 group shadow-xl',
+        isHorizontal ? 'w-72 flex-shrink-0' : 'w-full',
+        post.type === 'video' ? 'cursor-pointer' : ''
+      )}
+      onClick={post.type === 'video' ? handleCardClick : undefined}
+    >
       {/* User Header */}
       <div className={cn(
         'flex items-center gap-3 border-b border-neutral-800 bg-black/20',
@@ -54,7 +70,7 @@ export const VideoCard: React.FC<VideoCardProps> = ({
           <Avatar
             src={user.avatar_url}
             size="md"
-            isVerified={user.verified}
+            isVerified={user.is_verified}
             className="ring-2 ring-gold-500/20"
           />
         </Link>
@@ -64,7 +80,7 @@ export const VideoCard: React.FC<VideoCardProps> = ({
             className="font-bold text-stone-200 hover:text-gold-400 transition-colors flex items-center gap-1"
           >
             {user.display_name || user.username}
-            {user.verified && <span className="text-gold-500 drop-shadow-[0_0_2px_rgba(255,191,0,0.5)]">✓</span>}
+            {user.is_verified && <span className="text-gold-500 drop-shadow-[0_0_2px_rgba(255,191,0,0.5)]">✓</span>}
           </Link>
           {post.region && (
             <p className="text-stone-500 text-xs flex items-center gap-1">
@@ -87,7 +103,7 @@ export const VideoCard: React.FC<VideoCardProps> = ({
       )}>
         <VideoPlayer
           src={post.media_url}
-          thumbnail={post.thumbnail_url}
+          poster={post.media_url}
           autoPlay={autoPlay}
           muted={muted}
           loop
@@ -122,7 +138,10 @@ export const VideoCard: React.FC<VideoCardProps> = ({
           </button>
 
           <button
-            onClick={() => onComment?.(post.id)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onComment?.(post.id);
+            }}
             className="flex items-center gap-2 text-stone-400 hover:text-gold-500 transition-colors"
           >
             <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -132,7 +151,10 @@ export const VideoCard: React.FC<VideoCardProps> = ({
           </button>
 
           <button
-            onClick={() => onShare?.(post.id)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onShare?.(post.id);
+            }}
             className="flex items-center gap-2 text-stone-400 hover:text-gold-500 transition-colors"
           >
             <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>

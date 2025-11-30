@@ -7,6 +7,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Header } from '@/components/Header';
 import { BottomNav } from '@/components/BottomNav';
+import { ChatButton } from '@/components/ChatButton';
+import { GoldButton } from '@/components/GoldButton';
 import { SectionHeader } from '@/components/SectionHeader';
 import { StoryCarousel } from '@/components/features/StoryCircle';
 import { VideoCard } from '@/components/features/VideoCard';
@@ -229,12 +231,11 @@ export const Feed: React.FC = () => {
             <p className="text-stone-400 mb-6">
               Commence à suivre des créateurs québécois pour voir leur contenu ici!
             </p>
-            <Link
-              to="/explore"
-              className="btn-gold inline-block px-8 py-3 rounded-xl font-bold hover:scale-105 transition-transform"
-            >
-              Découvrir des créateurs
-            </Link>
+                  <Link to="/explore">
+                    <GoldButton className="px-8 py-3 rounded-xl" size="lg">
+                      Découvrir des créateurs
+                    </GoldButton>
+                  </Link>
           </div>
         ) : (
           <>
@@ -275,6 +276,9 @@ export const Feed: React.FC = () => {
           <span className="text-red-500 drop-shadow-[0_0_5px_rgba(255,0,0,0.3)]">🇨🇦</span>
         </p>
       </div>
+
+      {/* Premium Chat Button */}
+      <ChatButton isFixed={true} />
 
       <BottomNav />
     </div>

@@ -4,7 +4,8 @@
  */
 
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
+import { useHaptics } from '@/hooks/useHaptics';
 import { cn } from '../lib/utils';
 
 interface NavItem {
@@ -92,6 +93,20 @@ const navItems: NavItem[] = [
 ];
 
 export const BottomNav: React.FC = () => {
+  const location = useLocation();
+  const { tap } = useHaptics();
+
+  // Helper to check if a path is active (handles profile routes)
+  const isActivePath = (path: string): boolean => {
+    if (path === '/profile/me') {
+      return location.pathname === '/profile/me' || location.pathname.startsWith('/profile/');
+    }
+    if (path === '/') {
+      return location.pathname === '/';
+    }
+    return location.pathname === path || location.pathname.startsWith(path + '/');
+  };
+
   return (
     <nav 
       className="fixed bottom-0 left-0 right-0 z-50 safe-bottom"
@@ -106,25 +121,32 @@ export const BottomNav: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-2">
         <div className="flex items-center justify-around h-16">
-          {navItems.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.to === '/'}
-              className={({ isActive }) =>
-                cn(
-                  'flex flex-col items-center justify-center gap-0.5 px-3 py-2 rounded-xl transition-all duration-300 relative',
-                  item.to === '/upload' ? '-mt-4' : '',
-                  isActive 
-                    ? 'text-gold-400' 
-                    : 'text-neutral-500 hover:text-gold-500/70'
-                )
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  {/* Active Glow Indicator */}
-                  {isActive && (
+          {navItems.map((item) => {
+            const isActive = isActivePath(item.to);
+            
+            return (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.to === '/'}
+                onClick={() => tap()} // Haptic feedback on navigation
+                className={({ isActive: navLinkActive }) =>
+                  cn(
+                    'flex flex-col items-center justify-center gap-0.5 px-3 py-2 rounded-xl transition-all duration-300 relative',
+                    item.to === '/upload' ? '-mt-4' : '',
+                    (isActive || navLinkActive)
+                      ? 'text-gold-400' 
+                      : 'text-neutral-500 hover:text-gold-500/70'
+                  )
+                }
+              >
+              {({ isActive: navLinkActive }) => {
+                const active = isActive || navLinkActive;
+                
+                return (
+                  <>
+                    {/* Active Glow Indicator */}
+                    {active && (
                     <>
                       {/* Top Bar */}
                       <div 
@@ -144,54 +166,56 @@ export const BottomNav: React.FC = () => {
                     </>
                   )}
 
-                  {/* Upload Button Special Styling */}
-                  {item.to === '/upload' ? (
-                    <div 
-                      className="relative p-1 rounded-full transition-all duration-300"
-                      style={{
-                        background: isActive 
-                          ? 'linear-gradient(135deg, #FFD700 0%, #DAA520 100%)'
-                          : 'linear-gradient(135deg, #3a3530 0%, #252320 100%)',
-                        boxShadow: isActive 
-                          ? '0 0 20px rgba(255,191,0,0.5), inset 0 1px 0 rgba(255,255,255,0.3)'
-                          : '0 4px 10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)',
-                        border: `2px solid ${isActive ? 'rgba(255,191,0,0.8)' : 'rgba(255,191,0,0.3)'}`,
-                      }}
-                    >
-                      <div className={isActive ? 'text-black' : 'text-gold-400'}>
-                        {isActive ? item.activeIcon : item.icon}
+                    {/* Upload Button Special Styling */}
+                    {item.to === '/upload' ? (
+                      <div 
+                        className="relative p-1 rounded-full transition-all duration-300"
+                        style={{
+                          background: active 
+                            ? 'linear-gradient(135deg, #FFD700 0%, #DAA520 100%)'
+                            : 'linear-gradient(135deg, #3a3530 0%, #252320 100%)',
+                          boxShadow: active 
+                            ? '0 0 20px rgba(255,191,0,0.5), inset 0 1px 0 rgba(255,255,255,0.3)'
+                            : '0 4px 10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)',
+                          border: `2px solid ${active ? 'rgba(255,191,0,0.8)' : 'rgba(255,191,0,0.3)'}`,
+                        }}
+                      >
+                        <div className={active ? 'text-black' : 'text-gold-400'}>
+                          {active ? item.activeIcon : item.icon}
+                        </div>
                       </div>
-                    </div>
-                  ) : (
-                    /* Icon with Glow Effect */
-                    <div 
-                      className="relative z-10 transition-all duration-300"
+                    ) : (
+                      /* Icon with Glow Effect */
+                      <div 
+                        className="relative z-10 transition-all duration-300"
+                        style={{
+                          filter: active 
+                            ? 'drop-shadow(0 0 8px rgba(255,191,0,0.6))'
+                            : 'none',
+                        }}
+                      >
+                        {active ? item.activeIcon : item.icon}
+                      </div>
+                    )}
+
+                    {/* Label */}
+                    <span 
+                      className={cn(
+                        'text-[10px] font-semibold tracking-wide relative z-10 transition-all duration-300',
+                        item.to === '/upload' && 'sr-only'
+                      )}
                       style={{
-                        filter: isActive 
-                          ? 'drop-shadow(0 0 8px rgba(255,191,0,0.6))'
-                          : 'none',
+                        textShadow: active ? '0 0 10px rgba(255,191,0,0.5)' : 'none',
                       }}
                     >
-                      {isActive ? item.activeIcon : item.icon}
-                    </div>
-                  )}
-
-                  {/* Label */}
-                  <span 
-                    className={cn(
-                      'text-[10px] font-semibold tracking-wide relative z-10 transition-all duration-300',
-                      item.to === '/upload' && 'sr-only'
-                    )}
-                    style={{
-                      textShadow: isActive ? '0 0 10px rgba(255,191,0,0.5)' : 'none',
-                    }}
-                  >
-                    {item.label}
-                  </span>
-                </>
-              )}
+                      {item.label}
+                    </span>
+                  </>
+                );
+              }}
             </NavLink>
-          ))}
+            );
+          })}
         </div>
       </div>
 

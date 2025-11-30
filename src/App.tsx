@@ -20,6 +20,7 @@ import Profile from '@/pages/Profile';
 import Upload from '@/pages/Upload';
 import Explore from '@/pages/Explore';
 import PostDetail from '@/pages/PostDetail';
+import Player from '@/pages/Player';
 import Notifications from '@/pages/Notifications';
 import Settings from '@/pages/Settings';
 import Analytics from '@/pages/Analytics';
@@ -87,227 +88,244 @@ function App() {
         <NotificationProvider>
           <BorderColorProvider>
             <BrowserRouter>
-              <MainLayout>
-            
-            {/* Achievement Listener (Global) */}
-            <AchievementListener />
+              {/* Achievement Listener (Global) */}
+              <AchievementListener />
 
-            <Routes>
-              {/* Public Routes */}
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/auth/callback" element={<AuthCallback />} />
+              <Routes>
+                {/* Full-screen routes (outside MainLayout) */}
+                <Route
+                  path="/video/:videoId"
+                  element={
+                    <ProtectedRoute>
+                      <Player />
+                    </ProtectedRoute>
+                  }
+                />
 
-              {/* Protected Routes */}
-              <Route
-                path="/"
-                element={
-                  <ProtectedRoute>
-                    <Feed />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/explore"
-                element={
-                  <ProtectedRoute>
-                    <Explore />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/upload"
-                element={
-                  <ProtectedRoute>
-                    <Upload />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/story/create"
-                element={
-                  <ProtectedRoute>
-                    <StoryCreator />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/notifications"
-                element={
-                  <ProtectedRoute>
-                    <Notifications />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/profile/:slug"
-                element={
-                  <ProtectedRoute>
-                    <Profile />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/p/:id"
-                element={
-                  <ProtectedRoute>
-                    <PostDetail />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/settings"
-                element={
-                  <ProtectedRoute>
-                    <Settings />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/analytics"
-                element={
-                  <ProtectedRoute>
-                    <Analytics />
-                  </ProtectedRoute>
-                }
-              />
-              
-              {/* Phase 2 Feature Routes */}
-              <Route
-                path="/artiste"
-                element={
-                  <ProtectedRoute>
-                    <Artiste />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/studio"
-                element={
-                  <ProtectedRoute>
-                    <Studio />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/marketplace"
-                element={
-                  <ProtectedRoute>
-                    <Marketplace />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/premium"
-                element={
-                  <ProtectedRoute>
-                    <Premium />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/challenges"
-                element={
-                  <ProtectedRoute>
-                    <Challenges />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/settings/voice"
-                element={
-                  <ProtectedRoute>
-                    <VoiceSettingsPage />
-                  </ProtectedRoute>
-                }
-              />
+                {/* Main App Content (inside MainLayout) */}
+                <Route
+                  path="*"
+                  element={
+                    <MainLayout>
+                      <Routes>
+                        {/* Public Routes */}
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/signup" element={<Signup />} />
+                        <Route path="/auth/callback" element={<AuthCallback />} />
 
-              {/* Live Streaming Routes */}
-              <Route
-                path="/live"
-                element={
-                  <ProtectedRoute>
-                    <LiveDiscover />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/live/go"
-                element={
-                  <ProtectedRoute>
-                    <GoLive />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/live/watch/:id"
-                element={
-                  <ProtectedRoute>
-                    <WatchLive />
-                  </ProtectedRoute>
-                }
-              />
-              
-              {/* Moderation Routes (Admin Only) */}
-              <Route
-                path="/moderation"
-                element={
-                  <ProtectedRoute>
-                    <Moderation />
-                  </ProtectedRoute>
-                }
-              />
+                        {/* Protected Routes */}
+                        <Route
+                          path="/"
+                          element={
+                            <ProtectedRoute>
+                              <Feed />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/explore"
+                          element={
+                            <ProtectedRoute>
+                              <Explore />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/upload"
+                          element={
+                            <ProtectedRoute>
+                              <Upload />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/story/create"
+                          element={
+                            <ProtectedRoute>
+                              <StoryCreator />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/notifications"
+                          element={
+                            <ProtectedRoute>
+                              <Notifications />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/profile/:slug"
+                          element={
+                            <ProtectedRoute>
+                              <Profile />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/p/:id"
+                          element={
+                            <ProtectedRoute>
+                              <PostDetail />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/settings"
+                          element={
+                            <ProtectedRoute>
+                              <Settings />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/analytics"
+                          element={
+                            <ProtectedRoute>
+                              <Analytics />
+                            </ProtectedRoute>
+                          }
+                        />
+                        
+                        {/* Phase 2 Feature Routes */}
+                        <Route
+                          path="/artiste"
+                          element={
+                            <ProtectedRoute>
+                              <Artiste />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/studio"
+                          element={
+                            <ProtectedRoute>
+                              <Studio />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/marketplace"
+                          element={
+                            <ProtectedRoute>
+                              <Marketplace />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/premium"
+                          element={
+                            <ProtectedRoute>
+                              <Premium />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/challenges"
+                          element={
+                            <ProtectedRoute>
+                              <Challenges />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/settings/voice"
+                          element={
+                            <ProtectedRoute>
+                              <VoiceSettingsPage />
+                            </ProtectedRoute>
+                          }
+                        />
 
-              {/* Legal Pages (Public) */}
-              <Route path="/legal/community-guidelines" element={<CommunityGuidelines />} />
-              <Route path="/legal/terms" element={<TermsOfService />} />
-              <Route path="/legal/privacy" element={<PrivacyPolicy />} />
+                        {/* Live Streaming Routes */}
+                        <Route
+                          path="/live"
+                          element={
+                            <ProtectedRoute>
+                              <LiveDiscover />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/live/go"
+                          element={
+                            <ProtectedRoute>
+                              <GoLive />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/live/watch/:id"
+                          element={
+                            <ProtectedRoute>
+                              <WatchLive />
+                            </ProtectedRoute>
+                          }
+                        />
+                        
+                        {/* Moderation Routes (Admin Only) */}
+                        <Route
+                          path="/moderation"
+                          element={
+                            <ProtectedRoute>
+                              <Moderation />
+                            </ProtectedRoute>
+                          }
+                        />
 
-              {/* Gamification */}
-              <Route
-                path="/achievements"
-                element={
-                  <ProtectedRoute>
-                    <Achievements />
-                  </ProtectedRoute>
-                }
-              />
+                        {/* Legal Pages (Public) */}
+                        <Route path="/legal/community-guidelines" element={<CommunityGuidelines />} />
+                        <Route path="/legal/terms" element={<TermsOfService />} />
+                        <Route path="/legal/privacy" element={<PrivacyPolicy />} />
 
-              {/* Creator Monetization */}
-              <Route
-                path="/revenue"
-                element={
-                  <ProtectedRoute>
-                    <CreatorRevenue />
-                  </ProtectedRoute>
-                }
-              />
+                        {/* Gamification */}
+                        <Route
+                          path="/achievements"
+                          element={
+                            <ProtectedRoute>
+                              <Achievements />
+                            </ProtectedRoute>
+                          }
+                        />
 
-              {/* Admin Routes */}
-              <Route
-                path="/admin"
-                element={
-                  <ProtectedAdminRoute>
-                    <AdminDashboard />
-                  </ProtectedAdminRoute>
-                }
-              />
-              <Route
-                path="/admin/emails"
-                element={
-                  <ProtectedAdminRoute>
-                    <EmailCampaigns />
-                  </ProtectedAdminRoute>
-                }
-              />
+                        {/* Creator Monetization */}
+                        <Route
+                          path="/revenue"
+                          element={
+                            <ProtectedRoute>
+                              <CreatorRevenue />
+                            </ProtectedRoute>
+                          }
+                        />
 
-              {/* Catch all - redirect to feed */}
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-            
-                {/* Ti-Guy mascot assistant (always available) */}
-                <TiGuy />
-              </MainLayout>
+                        {/* Admin Routes */}
+                        <Route
+                          path="/admin"
+                          element={
+                            <ProtectedAdminRoute>
+                              <AdminDashboard />
+                            </ProtectedAdminRoute>
+                          }
+                        />
+                        <Route
+                          path="/admin/emails"
+                          element={
+                            <ProtectedAdminRoute>
+                              <EmailCampaigns />
+                            </ProtectedAdminRoute>
+                          }
+                        />
+
+                        {/* Catch all - redirect to feed */}
+                        <Route path="*" element={<Navigate to="/" replace />} />
+                      </Routes>
+                      
+                      {/* Ti-Guy mascot assistant (always available) */}
+                      <TiGuy />
+                    </MainLayout>
+                  }
+                />
+              </Routes>
             </BrowserRouter>
           </BorderColorProvider>
         </NotificationProvider>

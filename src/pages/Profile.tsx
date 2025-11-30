@@ -7,15 +7,29 @@ import React from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Header } from '@/components/Header';
 import { BottomNav } from '@/components/BottomNav';
+import { ChatButton } from '@/components/ChatButton';
+import { GoldButton } from '@/components/GoldButton';
 import { Avatar } from '@/components/Avatar';
+import { Image } from '@/components/Image';
 import { Button } from '@/components/Button';
 import { supabase } from '@/lib/supabase';
 import { formatNumber } from '@/lib/utils';
+import { useHaptics } from '@/hooks/useHaptics';
+import { IoShareOutline } from 'react-icons/io5';
 import type { User, Post } from '@/types';
+
+// Helper component for the Stats bar
+const ProfileStat: React.FC<{ value: number | string; label: string }> = ({ value, label }) => (
+  <div className="flex flex-col items-center">
+    <span className="text-lg font-bold text-white">{value}</span>
+    <span className="text-xs text-gold-500/70 uppercase tracking-widest">{label}</span>
+  </div>
+);
 
 export const Profile: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
+  const { tap, impact } = useHaptics();
 
   const [user, setUser] = React.useState<User | null>(null);
   const [currentUser, setCurrentUser] = React.useState<User | null>(null);
@@ -119,6 +133,7 @@ export const Profile: React.FC = () => {
 
   const handleFollow = async () => {
     if (!user || !currentUser) return;
+    impact();
 
     if (isFollowing) {
       await supabase
@@ -138,6 +153,11 @@ export const Profile: React.FC = () => {
     }
   };
 
+  // Calculate total likes from posts
+  const totalLikes = React.useMemo(() => {
+    return posts.reduce((sum, post) => sum + post.fire_count, 0);
+  }, [posts]);
+
   if (isLoading || !user) {
     return (
       <div className="min-h-screen bg-black leather-overlay flex items-center justify-center">
@@ -150,141 +170,104 @@ export const Profile: React.FC = () => {
     <div className="min-h-screen bg-black leather-overlay pb-20">
       <Header title={user.username} showBack={true} showSearch={false} />
 
-      {/* Profile Header - Premium Leather Design */}
-      <div className="max-w-2xl mx-auto px-4 py-6">
-        {/* Avatar & Stats Section */}
-        <div className="leather-card rounded-2xl p-6 mb-4 stitched">
-          <div className="flex items-start gap-6 mb-6">
-            {/* Avatar */}
-            <div className="relative">
-              <Avatar
-                src={user.avatar_url}
-                size="2xl"
-                isVerified={user.verified}
-                className="ring-4 ring-gold-500/50 glow-gold"
+      {/* Profile Top Section with Gold Gradient Background */}
+      <main className="flex-grow overflow-y-auto relative">
+        {/* Gold Gradient Background for Top Section */}
+        <div className="absolute top-0 left-0 w-full h-48 bg-gradient-to-b from-gold-900/50 to-black" />
+
+        <div className="relative p-4 z-10">
+          {/* Profile Picture and Share Button */}
+          <div className="flex justify-between items-start mb-4">
+            <div className="w-24 h-24 rounded-full border-4 border-gold-500 overflow-hidden shadow-lg">
+              <Image
+                src={user.avatar_url || 'https://via.placeholder.com/150/FFBF00/000000?text=' + (user.username?.[0] || 'U')}
+                alt={user.display_name || user.username}
+                objectFit="cover"
               />
-              {user.verified && (
-                <div className="absolute -bottom-2 -right-2 bg-gold-500 rounded-full p-2 glow-gold">
-                  <svg className="w-4 h-4 text-leather-900" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-              )}
             </div>
-
-            {/* Stats */}
-            <div className="flex-1">
-              <div className="grid grid-cols-3 gap-4 mb-4">
-                <div className="text-center">
-                  <div className="text-2xl font-black text-gold-400 embossed">
-                    {formatNumber(user.posts_count || 0)}
-                  </div>
-                  <div className="text-leather-300 text-xs font-medium">Posts</div>
-                </div>
-                <button className="text-center hover:scale-105 transition-transform">
-                  <div className="text-2xl font-black text-gold-400 embossed">
-                    {formatNumber(user.followers_count || 0)}
-                  </div>
-                  <div className="text-leather-300 text-xs font-medium">Abonnés</div>
-                </button>
-                <button className="text-center hover:scale-105 transition-transform">
-                  <div className="text-2xl font-black text-gold-400 embossed">
-                    {formatNumber(user.following_count || 0)}
-                  </div>
-                  <div className="text-leather-300 text-xs font-medium">Abonnements</div>
-                </button>
-              </div>
-
-              {/* Action Buttons */}
-              {isOwnProfile ? (
-                <div className="flex gap-2">
-                  <Link to="/settings" className="flex-1">
-                    <button className="w-full btn-leather py-2 rounded-xl font-semibold">
-                      Modifier le profil
-                    </button>
-                  </Link>
-                  <Link to="/premium" className="flex-1">
-                    <button className="w-full btn-gold py-2 rounded-xl font-semibold">
-                      ⚜️ VIP
-                    </button>
-                  </Link>
-                </div>
-              ) : (
-                <div className="flex gap-2">
-                  <button
-                    onClick={handleFollow}
-                    className={`flex-1 py-2 rounded-xl font-semibold transition-all ${
-                      isFollowing
-                        ? 'btn-leather'
-                        : 'btn-gold glow-gold'
-                    }`}
-                  >
-                    {isFollowing ? 'Abonné' : 'S\'abonner'}
-                  </button>
-                  <button className="btn-leather px-4 py-2 rounded-xl">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                    </svg>
-                  </button>
-                </div>
-              )}
-            </div>
+            <button
+              onClick={() => {
+                tap();
+                // Handle share logic
+              }}
+              className="p-2 text-gold-500 hover:text-white transition"
+              aria-label="Partager"
+            >
+              <IoShareOutline className="text-2xl" />
+            </button>
           </div>
 
-          {/* User Info */}
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <h2 className="text-xl font-black text-white embossed">
-                {user.display_name || user.username}
-              </h2>
-              {user.verified && (
-                <span className="text-gold-500 text-lg">✓</span>
-              )}
-            </div>
-
-            {user.bio && (
-              <p className="text-leather-100 text-sm leading-relaxed">
-                {user.bio}
-              </p>
+          {/* Name and Handle */}
+          <h1 className="text-2xl font-bold mt-2 text-white">
+            {user.display_name || user.username}
+            {user.is_verified && (
+              <span className="text-gold-500 drop-shadow-[0_0_3px_rgba(255,191,0,0.8)] ml-2">
+                ✓
+              </span>
             )}
+          </h1>
+          <p className="text-sm text-gold-500/70">@{user.username}</p>
 
-            {/* Location & Region */}
-            {(user.city || user.region) && (
-              <div className="flex items-center gap-2 text-leather-300 text-sm">
-                <span className="text-gold-500">📍</span>
-                <span>
-                  {user.city && user.region ? `${user.city}, ${user.region}` : user.city || user.region}
-                </span>
-              </div>
-            )}
+          {/* Stats Bar */}
+          <div className="flex justify-between items-center bg-black/50 p-3 mt-4 rounded-lg border border-gold-500/20 shadow-md">
+            <ProfileStat value={formatNumber(user.posts_count || 0)} label="Posts" />
+            <div className="h-10 w-px bg-gold-500/20" />
+            <ProfileStat value={formatNumber(user.followers_count || 0)} label="Followers" />
+            <div className="h-10 w-px bg-gold-500/20" />
+            <ProfileStat
+              value={totalLikes >= 1000 ? `${(totalLikes / 1000).toFixed(1)}K` : formatNumber(totalLikes)}
+              label="Likes"
+            />
+          </div>
 
-            {/* Fire Score */}
-            {user.fire_score > 0 && (
-              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500/20 to-red-500/20 px-3 py-1.5 rounded-full border border-orange-500/30">
-                <span className="text-orange-400 text-lg">🔥</span>
-                <span className="text-orange-300 font-bold text-sm">
-                  {formatNumber(user.fire_score)} Fire Score
-                </span>
-              </div>
-            )}
-
-            {/* Coins */}
-            {isOwnProfile && user.coins > 0 && (
-              <div className="inline-flex items-center gap-2 bg-gold-500/10 px-3 py-1.5 rounded-full border border-gold-500/30 ml-2">
-                <span className="text-gold-400">💰</span>
-                <span className="text-gold-300 font-bold text-sm">
-                  {formatNumber(user.coins)} Cennes
-                </span>
-              </div>
+          {/* Action Button */}
+          <div className="mt-4">
+            {isOwnProfile ? (
+              <Link to="/settings" onClick={tap}>
+                <GoldButton className="w-full" size="md">
+                  Edit Profile
+                </GoldButton>
+              </Link>
+            ) : (
+              <GoldButton
+                onClick={handleFollow}
+                isInverse={isFollowing}
+                className="w-full"
+                size="md"
+              >
+                {isFollowing ? 'Following' : 'Follow'}
+              </GoldButton>
             )}
           </div>
+
+          {/* Bio */}
+          {user.bio && (
+            <div className="mt-4">
+              <p className="text-white text-sm leading-relaxed">{user.bio}</p>
+            </div>
+          )}
+
+          {/* Location */}
+          {(user.city || user.region) && (
+            <div className="flex items-center gap-2 text-gold-500/70 text-sm mt-2">
+              <span>📍</span>
+              <span>
+                {user.city && user.region ? `${user.city}, ${user.region}` : user.city || user.region}
+              </span>
+            </div>
+          )}
         </div>
 
-        {/* Tabs */}
-        <div className="leather-card rounded-2xl mb-4 stitched overflow-hidden">
+        {/* Content Tabs Section */}
+        <div className="p-4 pt-0">
+          {/* Tabs */}
+          <div className="leather-card rounded-2xl mb-4 stitched overflow-hidden">
           <div className="grid grid-cols-3 bg-leather-900/50">
             <button
-              onClick={() => setActiveTab('posts')}
+              onClick={() => {
+                setActiveTab('posts');
+                tap();
+              }}
               className={`py-4 font-semibold transition-all relative ${
                 activeTab === 'posts'
                   ? 'text-gold-400'
@@ -297,7 +280,10 @@ export const Profile: React.FC = () => {
               )}
             </button>
             <button
-              onClick={() => setActiveTab('fires')}
+              onClick={() => {
+                setActiveTab('fires');
+                tap();
+              }}
               className={`py-4 font-semibold transition-all relative ${
                 activeTab === 'fires'
                   ? 'text-gold-400'
@@ -311,7 +297,10 @@ export const Profile: React.FC = () => {
             </button>
             {isOwnProfile && (
               <button
-                onClick={() => setActiveTab('saved')}
+                onClick={() => {
+                  setActiveTab('saved');
+                  tap();
+                }}
                 className={`py-4 font-semibold transition-all relative ${
                   activeTab === 'saved'
                     ? 'text-gold-400'
@@ -325,9 +314,9 @@ export const Profile: React.FC = () => {
               </button>
             )}
           </div>
-        </div>
+          </div>
 
-        {/* Posts Grid */}
+          {/* Posts Grid */}
         {posts.length === 0 ? (
           <div className="leather-card rounded-2xl p-12 text-center stitched">
             <div className="text-6xl mb-4">🦫</div>
@@ -341,9 +330,9 @@ export const Profile: React.FC = () => {
             </p>
             {isOwnProfile && (
               <Link to="/upload">
-                <button className="btn-gold px-8 py-3 rounded-xl">
+                <GoldButton className="px-8 py-3 rounded-xl" size="lg">
                   Créer un post
-                </button>
+                </GoldButton>
               </Link>
             )}
           </div>
@@ -355,10 +344,10 @@ export const Profile: React.FC = () => {
                 to={`/post/${post.id}`}
                 className="relative aspect-square leather-card rounded-xl overflow-hidden stitched-subtle hover:scale-105 transition-transform group"
               >
-                <img
-                  src={post.thumbnail_url || post.media_url}
+                <Image
+                  src={post.media_url}
                   alt={post.caption || 'Post'}
-                  className="w-full h-full object-cover"
+                  objectFit="cover"
                 />
                 {/* Overlay on hover */}
                 <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
@@ -380,8 +369,9 @@ export const Profile: React.FC = () => {
               </Link>
             ))}
           </div>
-        )}
-      </div>
+          )}
+        </div>
+      </main>
 
       {/* Quebec Pride Footer */}
       <div className="text-center py-8 text-leather-400 text-sm">
@@ -391,6 +381,9 @@ export const Profile: React.FC = () => {
           <span className="text-gold-500">🇨🇦</span>
         </p>
       </div>
+
+      {/* Premium Chat Button */}
+      <ChatButton isFixed={true} />
 
       <BottomNav />
     </div>
