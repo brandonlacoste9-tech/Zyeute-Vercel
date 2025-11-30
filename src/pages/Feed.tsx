@@ -7,6 +7,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Header } from '@/components/Header';
 import { BottomNav } from '@/components/BottomNav';
+import { SectionHeader } from '@/components/SectionHeader';
 import { StoryCarousel } from '@/components/features/StoryCircle';
 import { VideoCard } from '@/components/features/VideoCard';
 import { supabase } from '@/lib/supabase';
@@ -182,14 +183,39 @@ export const Feed: React.FC = () => {
         <div className="absolute bottom-[2px] left-0 right-0 border-b border-dashed border-gold-500/30 opacity-50" />
       </div>
 
-      {/* Stories Carousel */}
+      {/* Recent Stories Section */}
       {stories.length > 0 && (
-        <div className="border-b border-neutral-800 py-4 bg-black/20 backdrop-blur-sm">
-          <StoryCarousel stories={stories} />
-        </div>
+        <>
+          <SectionHeader title="Recent Stories" />
+          <div className="border-b border-neutral-800 py-4 bg-black/20 backdrop-blur-sm">
+            <StoryCarousel stories={stories} />
+          </div>
+        </>
       )}
 
-      {/* Feed Content */}
+      {/* Videos Section - Horizontal Scroll */}
+      {posts.length > 0 && (
+        <>
+          <SectionHeader title="Videos" showArrow linkTo="/explore" />
+          <div className="flex overflow-x-auto gap-4 px-4 pb-6 scrollbar-hide">
+            {posts.slice(0, 10).map((post) => (
+              <VideoCard
+                key={`h-${post.id}`}
+                post={post}
+                user={post.user}
+                variant="horizontal"
+                autoPlay={false}
+                muted={true}
+              />
+            ))}
+            {/* Padding at end for better scroll UX */}
+            <div className="flex-shrink-0 w-2" />
+          </div>
+        </>
+      )}
+
+      {/* Latest Hitants Section - Vertical Feed */}
+      <SectionHeader title="Latest Hitants" />
       <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
         {isLoading && posts.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20">

@@ -7,11 +7,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Avatar } from '../Avatar';
 import { VideoPlayer } from './VideoPlayer';
+import { cn } from '../../lib/utils';
 import type { Post, User } from '../../types';
 
 interface VideoCardProps {
   post: Post;
   user: User;
+  variant?: 'horizontal' | 'vertical';
   autoPlay?: boolean;
   muted?: boolean;
   onFireToggle?: (postId: string, currentFire: number) => void;
@@ -22,6 +24,7 @@ interface VideoCardProps {
 export const VideoCard: React.FC<VideoCardProps> = ({
   post,
   user,
+  variant = 'vertical',
   autoPlay = false,
   muted = true,
   onFireToggle,
@@ -29,6 +32,7 @@ export const VideoCard: React.FC<VideoCardProps> = ({
   onShare,
 }) => {
   const [isLiked, setIsLiked] = React.useState(false);
+  const isHorizontal = variant === 'horizontal';
 
   const handleFire = () => {
     setIsLiked(!isLiked);
@@ -36,9 +40,15 @@ export const VideoCard: React.FC<VideoCardProps> = ({
   };
 
   return (
-    <div className="leather-card rounded-2xl overflow-hidden stitched hover:scale-[1.01] transition-all duration-300 group shadow-xl">
+    <div className={cn(
+      'leather-card rounded-2xl overflow-hidden stitched hover:scale-[1.01] transition-all duration-300 group shadow-xl',
+      isHorizontal ? 'w-72 flex-shrink-0' : 'w-full'
+    )}>
       {/* User Header */}
-      <div className="p-3 flex items-center gap-3 border-b border-neutral-800 bg-black/20">
+      <div className={cn(
+        'flex items-center gap-3 border-b border-neutral-800 bg-black/20',
+        isHorizontal ? 'p-2' : 'p-3'
+      )}>
         <Link to={`/profile/${user.username}`} className="relative">
           <div className="absolute inset-0 rounded-full border border-gold-500/30 blur-[1px]"></div>
           <Avatar
@@ -71,7 +81,10 @@ export const VideoCard: React.FC<VideoCardProps> = ({
       </div>
 
       {/* Video Player */}
-      <div className="relative bg-black aspect-[4/5] md:aspect-video">
+      <div className={cn(
+        'relative bg-black',
+        isHorizontal ? 'aspect-video' : 'aspect-[4/5] md:aspect-video'
+      )}>
         <VideoPlayer
           src={post.media_url}
           thumbnail={post.thumbnail_url}
@@ -86,9 +99,15 @@ export const VideoCard: React.FC<VideoCardProps> = ({
       </div>
 
       {/* Actions Bar */}
-      <div className="p-4 space-y-3 bg-neutral-900/50">
+      <div className={cn(
+        'space-y-3 bg-neutral-900/50',
+        isHorizontal ? 'p-2 space-y-2' : 'p-4 space-y-3'
+      )}>
         {/* Fire, Comment, Share */}
-        <div className="flex items-center gap-5">
+        <div className={cn(
+          'flex items-center',
+          isHorizontal ? 'gap-2' : 'gap-5'
+        )}>
           <button
             onClick={handleFire}
             className={`flex items-center gap-2 transition-all ${
@@ -132,7 +151,10 @@ export const VideoCard: React.FC<VideoCardProps> = ({
 
         {/* Caption */}
         {post.caption && (
-          <div className="text-stone-300 text-sm leading-relaxed">
+          <div className={cn(
+            'text-stone-300 leading-relaxed',
+            isHorizontal ? 'text-xs line-clamp-2' : 'text-sm'
+          )}>
             <Link to={`/profile/${user.username}`} className="font-bold text-gold-400 hover:text-gold-300 mr-2">
               {user.username}
             </Link>
