@@ -23,6 +23,7 @@ import Settings from '@/pages/Settings';
 import Analytics from '@/pages/Analytics';
 import Login from '@/pages/Login';
 import Signup from '@/pages/Signup';
+import AuthCallback from '@/pages/AuthCallback';
 import StoryCreator from '@/components/features/StoryCreator';
 import Achievements from '@/pages/Achievements';
 import { AchievementListener } from '@/components/gamification/AchievementModal';
@@ -93,6 +94,7 @@ function App() {
               {/* Public Routes */}
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/auth/callback" element={<AuthCallback />} />
 
               {/* Protected Routes */}
               <Route
