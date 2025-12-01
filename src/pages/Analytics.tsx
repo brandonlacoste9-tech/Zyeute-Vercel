@@ -39,7 +39,7 @@ export const Analytics: React.FC = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         const { data } = await supabase
-          .from('users')
+          .from('user_profiles')
           .select('*')
           .eq('id', user.id)
           .single();

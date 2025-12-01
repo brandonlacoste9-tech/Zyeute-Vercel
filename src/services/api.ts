@@ -15,7 +15,7 @@ export async function getCurrentUser(): Promise<User | null> {
     if (!authUser) return null;
 
     const { data, error } = await supabase
-      .from('users')
+      .from('user_profiles')
       .select('*')
       .eq('id', authUser.id)
       .single();
@@ -44,7 +44,7 @@ export async function getFeedPosts(page: number = 0, limit: number = 20): Promis
       .from('posts')
       .select(`
         *,
-        user:users(*)
+        user:user_profiles(*)
       `)
       .order('created_at', { ascending: false })
       .range(start, end);
@@ -74,13 +74,13 @@ export async function getUserProfile(
 
     if (usernameOrId === 'me' && currentUserId) {
       query = supabase
-        .from('users')
+        .from('user_profiles')
         .select('*')
         .eq('id', currentUserId)
         .single();
     } else {
       query = supabase
-        .from('users')
+        .from('user_profiles')
         .select('*')
         .eq('username', usernameOrId)
         .single();
@@ -107,7 +107,7 @@ export async function getUserPosts(userId: string): Promise<Post[]> {
   try {
     const { data, error } = await supabase
       .from('posts')
-      .select('*, user:users(*)')
+      .select('*, user:user_profiles(*)')
       .eq('user_id', userId)
       .order('created_at', { ascending: false });
 
@@ -132,7 +132,7 @@ export async function getStories(
   try {
     const { data, error } = await supabase
       .from('stories')
-      .select('*, user:users(*)')
+      .select('*, user:user_profiles(*)')
       .gt('expires_at', new Date().toISOString())
       .order('created_at', { ascending: false });
 
@@ -166,7 +166,7 @@ export async function getStories(
       }
       // If current user has no story, add them to the beginning
       const { data: currentUserData } = await supabase
-        .from('users')
+        .from('user_profiles')
         .select('*')
         .eq('id', currentUserId)
         .single();

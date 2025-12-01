@@ -207,7 +207,7 @@ export async function subscribeToCreator(
 
     // Check if user has enough cennes (for demo purposes)
     const { data: userData } = await supabase
-      .from('users')
+      .from('user_profiles')
       .select('cennes')
       .eq('id', subscriberId)
       .single();
@@ -221,7 +221,7 @@ export async function subscribeToCreator(
 
     // Deduct cennes
     await supabase
-      .from('users')
+      .from('user_profiles')
       .update({ cennes: (userData.cennes || 0) - cennesRequired })
       .eq('id', subscriberId);
 
@@ -295,7 +295,7 @@ export async function getCreatorRevenue(creatorId: string): Promise<RevenueSumma
   try {
     // Get user stats
     const { data: userData } = await supabase
-      .from('users')
+      .from('user_profiles')
       .select('total_earnings, pending_earnings, total_subscribers')
       .eq('id', creatorId)
       .single();
@@ -387,7 +387,7 @@ export async function requestPayout(
 
     // Check pending earnings
     const { data: userData } = await supabase
-      .from('users')
+      .from('user_profiles')
       .select('pending_earnings, payout_email')
       .eq('id', creatorId)
       .single();
@@ -416,7 +416,7 @@ export async function requestPayout(
 
     // Update pending earnings
     await supabase
-      .from('users')
+      .from('user_profiles')
       .update({
         pending_earnings: (userData.pending_earnings || 0) - amount,
       })

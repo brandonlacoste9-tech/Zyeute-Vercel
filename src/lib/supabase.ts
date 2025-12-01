@@ -56,10 +56,11 @@ export async function signUp(email: string, password: string, username: string) 
 
   // Create user profile
   if (data.user) {
-    const { error: profileError } = await supabase.from('users').insert({
+    const { error: profileError } = await supabase.from('user_profiles').insert({
       id: data.user.id,
       username,
       display_name: username,
+      email: email,
     });
 
     if (profileError) return { data: null, error: profileError };
@@ -79,10 +80,15 @@ export async function signOut() {
  * Sign in with Google OAuth
  */
 export async function signInWithGoogle() {
+  // Use production URL if available, otherwise use current origin
+  const redirectUrl = import.meta.env.VITE_APP_URL 
+    ? `${import.meta.env.VITE_APP_URL}/auth/callback`
+    : `${window.location.origin}/auth/callback`;
+  
   return await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: `${window.location.origin}/auth/callback`,
+      redirectTo: redirectUrl,
     },
   });
 }

@@ -46,7 +46,7 @@ export const Settings: React.FC = () => {
         }
 
         const { data } = await supabase
-          .from('users')
+          .from('user_profiles')
           .select('*')
           .eq('id', authUser.id)
           .single();

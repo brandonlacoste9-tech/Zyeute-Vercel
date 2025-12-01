@@ -100,7 +100,7 @@ export async function getUserAchievements(userId: string): Promise<UserAchieveme
 export async function getUserTier(userId: string): Promise<TierInfo | null> {
   try {
     const { data, error } = await supabase
-      .from('users')
+      .from('user_profiles')
       .select('total_points, current_tier')
       .eq('id', userId)
       .single();
@@ -304,7 +304,7 @@ async function checkAchievementCondition(
       case 'points':
         if (trigger.type === 'points_earned') {
           const { data } = await supabase
-            .from('users')
+            .from('user_profiles')
             .select('total_points')
             .eq('id', userId)
             .single();
@@ -327,7 +327,7 @@ async function checkAchievementCondition(
       case 'account_age_days':
         if (trigger.type === 'daily_check') {
           const { data } = await supabase
-            .from('users')
+            .from('user_profiles')
             .select('created_at')
             .eq('id', userId)
             .single();
@@ -376,7 +376,7 @@ export async function getAchievementStats(userId: string): Promise<{
       .slice(0, 5);
 
     const { data: userData } = await supabase
-      .from('users')
+      .from('user_profiles')
       .select('total_points')
       .eq('id', userId)
       .single();
@@ -408,7 +408,7 @@ export async function getAchievementStats(userId: string): Promise<{
 export async function getLeaderboard(limit = 100): Promise<any[]> {
   try {
     const { data, error } = await supabase
-      .from('users')
+      .from('user_profiles')
       .select('id, username, avatar_url, total_points, current_tier, achievement_count, is_verified')
       .order('total_points', { ascending: false })
       .limit(limit);
@@ -427,7 +427,7 @@ export async function getLeaderboard(limit = 100): Promise<any[]> {
 export async function getUserRank(userId: string): Promise<number> {
   try {
     const { data: userData } = await supabase
-      .from('users')
+      .from('user_profiles')
       .select('total_points')
       .eq('id', userId)
       .single();
@@ -435,7 +435,7 @@ export async function getUserRank(userId: string): Promise<number> {
     if (!userData) return 0;
 
     const { count } = await supabase
-      .from('users')
+      .from('user_profiles')
       .select('id', { count: 'exact', head: true })
       .gt('total_points', userData.total_points);
 
