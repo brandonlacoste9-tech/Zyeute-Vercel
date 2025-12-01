@@ -54,6 +54,11 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Skip Stripe API calls (always use network, avoid CSP issues)
+  if (event.request.url.includes('stripe.com') || event.request.url.includes('js.stripe.com')) {
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
