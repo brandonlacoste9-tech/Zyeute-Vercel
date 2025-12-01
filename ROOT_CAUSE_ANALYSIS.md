@@ -301,10 +301,10 @@ If you encounter similar issues in other Vite projects:
 ```
 **Result**: Hashed assets cached safely (hashes change on content updates)
 
-### ✅ Enable Skew Protection (Recommended)
-**Action**: Enable in Netlify Dashboard
-- Site settings → Build & deploy → Deploy settings → Skew Protection
-- **Result**: Netlify automatically handles HTML/asset mismatches during deploys
+### ✅ Skew Protection (Automatic)
+**Status**: Automatically available for supported frameworks (Astro 5.15+, Next.js)
+- Works behind the scenes by pinning user sessions to specific deploys
+- **Note**: Check Netlify docs for Vite support status
 
 ## Why Netlify's Approach is Better
 
@@ -318,7 +318,7 @@ If you encounter similar issues in other Vite projects:
 ✅ **Current Configuration**:
 - Standard SPA rewrite (Netlify recommended pattern)
 - Long-term caching for hashed assets
-- ⏳ **Next Step**: Enable Skew Protection in Netlify Dashboard
+- Skew Protection: Automatically enabled for supported frameworks (if available for Vite)
 
 ## Summary
 

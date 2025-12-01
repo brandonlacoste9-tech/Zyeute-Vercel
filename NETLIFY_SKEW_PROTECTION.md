@@ -1,18 +1,17 @@
-# Netlify Skew Protection Setup
+# Netlify Skew Protection
 
 ## What is Skew Protection?
 
-Netlify Skew Protection prevents "chunk-load errors" during deploys when users have old HTML cached but new assets are deployed (or vice versa). This is the recommended solution for Vite SPAs with hashed filenames.
+Netlify Skew Protection prevents "chunk-load errors" during deploys when users have old HTML cached but new assets are deployed (or vice versa). It works behind the scenes by pinning each user session to a specific deploy.
 
-## How to Enable
+## Automatic Availability
 
-1. **Go to Netlify Dashboard:**
-   - Site settings → Build & deploy → Deploy settings
-   - Look for "Skew Protection" section
+**Skew Protection is automatically available** for supported frameworks:
+- ✅ Astro 5.15+
+- ✅ Next.js
+- ⚠️ Vite apps: Check Netlify's latest documentation for Vite support
 
-2. **Enable Skew Protection:**
-   - Toggle it ON
-   - This handles the "old HTML + new assets" / "new HTML + old assets" mismatch automatically
+**No manual configuration needed** - it works automatically when available for your framework.
 
 ## Alternative Solutions (if Skew Protection not available)
 
