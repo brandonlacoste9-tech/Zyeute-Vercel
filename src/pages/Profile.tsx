@@ -59,19 +59,27 @@ export const Profile: React.FC = () => {
         if (profileUser) {
           setUser(profileUser);
         } else {
-          navigate('/');
+          // Only hard-redirect home if we're not on the special 'me' slug
+          if (slug !== 'me') {
+            navigate('/');
+          }
         }
       } catch (error) {
         console.error('Error fetching user:', error);
-        navigate('/');
+        if (slug !== 'me') {
+          navigate('/');
+        }
       } finally {
         setIsLoading(false);
       }
     };
 
-    if (slug) {
-      fetchUser();
-    }
+    if (!slug) return;
+
+    // For `/profile/me`, wait until currentUser has been resolved
+    if (slug === 'me' && !currentUser) return;
+
+    fetchUser();
   }, [slug, currentUser, navigate]);
 
   // Fetch user posts
