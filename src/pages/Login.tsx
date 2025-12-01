@@ -43,10 +43,21 @@ export const Login: React.FC = () => {
 
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
+    setError('');
     try {
+      console.log('🔵 Initiating Google OAuth...');
       const { error } = await signInWithGoogle();
-      if (error) throw error;
+      if (error) {
+        console.error('❌ Google OAuth error:', error);
+        throw error;
+      }
+      // Don't set isLoading to false here - the redirect will happen
+      // If we're still here after a moment, something went wrong
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 5000);
     } catch (err: any) {
+      console.error('❌ Google sign-in error:', err);
       setError(err.message || 'Erreur de connexion avec Google');
       setIsLoading(false);
     }
