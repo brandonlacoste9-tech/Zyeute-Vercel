@@ -8,6 +8,14 @@ import type { Database } from '../types/database';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://demo.supabase.co';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'demo-key';
 
+// Log which Supabase project is being used (for debugging)
+console.log('[Supabase] Using URL:', supabaseUrl);
+console.log('[Supabase] Expected project: vuanulvyqkfefmjcikfk');
+if (supabaseUrl.includes('kihxqurnmyxnsyqgpdaw')) {
+  console.error('❌ WRONG SUPABASE PROJECT! Using kihxqurnmyxnsyqgpdaw instead of vuanulvyqkfefmjcikfk');
+  console.error('❌ Please update VITE_SUPABASE_URL in Netlify environment variables to: https://vuanulvyqkfefmjcikfk.supabase.co');
+}
+
 // Warn about missing credentials but don't crash
 if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
   console.warn('⚠️ Missing Supabase credentials! Using demo mode. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env.local');
