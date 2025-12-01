@@ -78,18 +78,13 @@ export async function signOut() {
 
 /**
  * Sign in with Google OAuth
+ *
+ * Simpler and safer: let Supabase use its configured Site URL and Redirect URLs
+ * instead of passing a custom redirectTo (which could point to localhost).
  */
 export async function signInWithGoogle() {
-  // Use production URL if available, otherwise use current origin
-  const redirectUrl = import.meta.env.VITE_APP_URL 
-    ? `${import.meta.env.VITE_APP_URL}/auth/callback`
-    : `${window.location.origin}/auth/callback`;
-  
   return await supabase.auth.signInWithOAuth({
     provider: 'google',
-    options: {
-      redirectTo: redirectUrl,
-    },
   });
 }
 
