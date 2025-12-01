@@ -13,6 +13,7 @@ import { Avatar } from '@/components/Avatar';
 import { Image } from '@/components/Image';
 import { Button } from '@/components/Button';
 import { getCurrentUser, getUserProfile, getUserPosts, checkFollowing, toggleFollow } from '@/services/api';
+import { supabase } from '@/lib/supabase';
 import { formatNumber } from '@/lib/utils';
 import { useHaptics } from '@/hooks/useHaptics';
 import { IoShareOutline } from 'react-icons/io5';
@@ -116,6 +117,17 @@ export const Profile: React.FC = () => {
     }
   };
 
+  const handleLogout = async () => {
+    tap();
+    try {
+      await supabase.auth.signOut();
+    } catch (error) {
+      console.error('Error signing out:', error);
+    } finally {
+      navigate('/login');
+    }
+  };
+
   // Calculate total likes from posts
   const totalLikes = React.useMemo(() => {
     return posts.reduce((sum, post) => sum + post.fire_count, 0);
@@ -202,6 +214,29 @@ export const Profile: React.FC = () => {
               </GoldButton>
             )}
           </div>
+
+          {/* Settings / Logout Section for own profile */}
+          {isOwnProfile && (
+            <div className="mt-4 space-y-3">
+              <button
+                onClick={() => {
+                  tap();
+                  navigate('/settings');
+                }}
+                className="w-full flex items-center justify-between px-4 py-3 rounded-xl border border-gold-500/60 bg-black/40 text-sm font-medium text-gold-100"
+              >
+                <span>Paramètres &amp; compte</span>
+                <span className="text-xs text-gold-400/80">Notifications, sécurité…</span>
+              </button>
+
+              <button
+                onClick={handleLogout}
+                className="w-full px-4 py-3 rounded-xl bg-red-600/80 hover:bg-red-600 text-sm font-semibold text-center text-white transition-colors"
+              >
+                Déconnexion
+              </button>
+            </div>
+          )}
 
           {/* Bio */}
           {user.bio && (
