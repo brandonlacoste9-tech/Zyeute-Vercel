@@ -56,12 +56,46 @@ export const Profile: React.FC = () => {
     const fetchUser = async () => {
       setIsLoading(true);
       try {
-        const profileUser = await getUserProfile(slug || '', currentUser?.id);
-        if (profileUser) {
-          setUser(profileUser);
+        // For `/profile/me`, get auth user directly if currentUser isn't available yet
+        if (slug === 'me') {
+          // Try to get auth user directly
+          const { data: { user: authUser } } = await supabase.auth.getUser();
+          
+          if (!authUser) {
+            // Not logged in, redirect to login
+            navigate('/login');
+            return;
+          }
+
+          // Try to get profile using auth user ID
+          const profileUser = await getUserProfile('me', authUser.id);
+          
+          if (profileUser) {
+            setUser(profileUser);
+            // Also set currentUser if not already set
+            if (!currentUser) {
+              setCurrentUser(profileUser);
+            }
+          } else {
+            // Profile doesn't exist, try getCurrentUser as fallback
+            const fallbackUser = await getCurrentUser();
+            if (fallbackUser) {
+              setUser(fallbackUser);
+              setCurrentUser(fallbackUser);
+            } else {
+              // No profile found, show error state
+              console.error('Profile not found for current user');
+              setIsLoading(false);
+              return;
+            }
+          }
         } else {
-          // Only hard-redirect home if we're not on the special 'me' slug
-          if (slug !== 'me') {
+          // Regular profile lookup
+          const profileUser = await getUserProfile(slug || '', currentUser?.id);
+          if (profileUser) {
+            setUser(profileUser);
+          } else {
+            // User not found, redirect home
             navigate('/');
           }
         }
@@ -69,6 +103,16 @@ export const Profile: React.FC = () => {
         console.error('Error fetching user:', error);
         if (slug !== 'me') {
           navigate('/');
+        } else {
+          // For 'me', try to at least show something
+          const { data: { user: authUser } } = await supabase.auth.getUser();
+          if (authUser) {
+            // Try one more time with auth user ID
+            const profileUser = await getUserProfile('me', authUser.id);
+            if (profileUser) {
+              setUser(profileUser);
+            }
+          }
         }
       } finally {
         setIsLoading(false);
@@ -77,11 +121,9 @@ export const Profile: React.FC = () => {
 
     if (!slug) return;
 
-    // For `/profile/me`, wait until currentUser has been resolved
-    if (slug === 'me' && !currentUser) return;
-
+    // For `/profile/me`, don't wait for currentUser - get auth user directly
     fetchUser();
-  }, [slug, currentUser, navigate]);
+  }, [slug, navigate]);
 
   // Fetch user posts
   React.useEffect(() => {
