@@ -46,19 +46,48 @@ export const Login: React.FC = () => {
     setError('');
     try {
       console.log('🔵 Initiating Google OAuth...');
-      const { error } = await signInWithGoogle();
+      console.log('Current origin:', window.location.origin);
+      console.log('Redirect URL will be:', `${window.location.origin}/auth/callback`);
+      
+      const { data, error } = await signInWithGoogle();
+      
+      console.log('OAuth response:', { data, error });
+      
       if (error) {
         console.error('❌ Google OAuth error:', error);
+        console.error('Error details:', {
+          message: error.message,
+          status: error.status,
+          statusCode: error.statusCode,
+          code: error.code,
+        });
         throw error;
       }
-      // Don't set isLoading to false here - the redirect will happen
-      // If we're still here after a moment, something went wrong
+      
+      // If we get data with a URL, Supabase is redirecting
+      if (data?.url) {
+        console.log('✅ OAuth URL generated, redirecting to:', data.url);
+        // The browser will redirect automatically
+        // Don't set isLoading to false - let the redirect happen
+        return;
+      }
+      
+      // If no URL and no error, something unexpected happened
+      console.warn('⚠️ No redirect URL received from OAuth');
       setTimeout(() => {
         setIsLoading(false);
-      }, 5000);
+        setError('Erreur: aucune redirection générée. Vérifie la configuration OAuth.');
+      }, 2000);
     } catch (err: any) {
       console.error('❌ Google sign-in error:', err);
-      setError(err.message || 'Erreur de connexion avec Google');
+      console.error('Error object:', {
+        message: err?.message,
+        status: err?.status,
+        statusCode: err?.statusCode,
+        code: err?.code,
+        stack: err?.stack,
+      });
+      setError(err?.message || 'Erreur de connexion avec Google');
       setIsLoading(false);
     }
   };

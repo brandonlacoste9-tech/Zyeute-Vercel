@@ -89,12 +89,28 @@ export async function signOut() {
  * Explicitly redirects to /auth/callback after OAuth completes
  */
 export async function signInWithGoogle() {
-  return await supabase.auth.signInWithOAuth({
-    provider: 'google',
-    options: {
-      redirectTo: `${window.location.origin}/auth/callback`,
-    },
-  });
+  const redirectTo = `${window.location.origin}/auth/callback`;
+  console.log('[Supabase OAuth] Redirect URL:', redirectTo);
+  console.log('[Supabase OAuth] Supabase URL:', supabaseUrl);
+  
+  try {
+    const result = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo,
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent',
+        },
+      },
+    });
+    
+    console.log('[Supabase OAuth] Result:', result);
+    return result;
+  } catch (error) {
+    console.error('[Supabase OAuth] Exception:', error);
+    throw error;
+  }
 }
 
 /**
