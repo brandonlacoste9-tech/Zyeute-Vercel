@@ -48,7 +48,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         .from('notifications')
         .select(`
           *,
-          actor:users!actor_id(*),
+          actor:user_profiles!actor_id(*),
           post:posts!post_id(*)
         `)
         .eq('user_id', currentUserId)
