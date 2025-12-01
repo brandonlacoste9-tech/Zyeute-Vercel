@@ -73,13 +73,13 @@ jobs:
           echo "🔐 Verifying Stripe integration in codebase..."
           
           # Check if Stripe is properly integrated
-          if grep -r "stripe" src/services/ > /dev/null 2>&1; then
+          if grep -ri "stripe" src/services/ > /dev/null 2>&1; then
             echo "✅ Stripe integration found in services"
           else
             echo "⚠️ Warning: Stripe integration not found in services"
           fi
           
-          if grep -r "@stripe" package.json > /dev/null 2>&1; then
+          if grep "@stripe" package.json > /dev/null 2>&1; then
             echo "✅ Stripe packages found in dependencies"
           else
             echo "⚠️ Warning: Stripe packages not found in dependencies"
