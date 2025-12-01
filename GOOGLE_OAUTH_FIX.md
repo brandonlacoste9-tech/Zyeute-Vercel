@@ -1,32 +1,25 @@
-# 🔐 Google OAuth Redirect URI Fix
+# 🔐 Google OAuth Redirect URI Fix - COMPLETE GUIDE
 
-## Issue
-**Error 400: redirect_uri_mismatch** - The production URL is not configured in Google OAuth settings.
+## Your Supabase Configuration
+- **Client ID:** `912129175098-5m7mj85dq76h4c9mjo6bvrujv9de399p.apps.googleusercontent.com`
+- **Supabase Callback URL:** `https://kihxqurnmyxnsyqgpdaw.supabase.co/auth/v1/callback`
+- **Production App URL:** `https://brandonlacoste9-tech-zyeute-l7i6iwtux.vercel.app`
 
-## Production URL
-**Your Vercel deployment:**
-```
-https://brandonlacoste9-tech-zyeute-l7i6iwtux.vercel.app
-```
+## 🔧 Step-by-Step Fix
 
-## Fix Steps
-
-### 1. Google Cloud Console
+### Step 1: Google Cloud Console (CRITICAL)
 1. Go to: https://console.cloud.google.com/apis/credentials
-2. Find your OAuth 2.0 Client ID (the one used for Zyeuté)
-3. Click **Edit**
-4. Under **Authorized redirect URIs**, add:
+2. Find your OAuth 2.0 Client ID: `912129175098-5m7mj85dq76h4c9mjo6bvrujv9de399p`
+3. Click **Edit** (pencil icon)
+4. Under **Authorized redirect URIs**, you MUST add:
    ```
-   https://brandonlacoste9-tech-zyeute-l7i6iwtux.vercel.app/auth/callback
+   https://kihxqurnmyxnsyqgpdaw.supabase.co/auth/v1/callback
    ```
-5. Also add your custom domain if you have one:
-   ```
-   https://yourdomain.com/auth/callback
-   ```
-6. Click **Save**
+   ⚠️ **This is the Supabase callback URL - it's different from your app URL!**
+5. Click **Save**
 
-### 2. Supabase Dashboard
-1. Go to: https://supabase.com/dashboard/project/YOUR_PROJECT_ID/settings/auth
+### Step 2: Supabase Dashboard (CRITICAL)
+1. Go to: https://supabase.com/dashboard/project/kihxqurnmyxnsyqgpdaw/settings/auth
 2. Under **Site URL**, set to:
    ```
    https://brandonlacoste9-tech-zyeute-l7i6iwtux.vercel.app
@@ -35,21 +28,39 @@ https://brandonlacoste9-tech-zyeute-l7i6iwtux.vercel.app
    ```
    https://brandonlacoste9-tech-zyeute-l7i6iwtux.vercel.app/**
    ```
+   This tells Supabase where to redirect users AFTER authentication completes.
 4. Click **Save**
 
-### 3. Environment Variables (Optional)
-If you want to hardcode the production URL, add to Vercel:
-- **Variable:** `VITE_APP_URL`
-- **Value:** `https://brandonlacoste9-tech-zyeute-l7i6iwtux.vercel.app`
+## 🔄 How It Works
 
-The code will automatically use this if set, otherwise it falls back to `window.location.origin`.
+1. User clicks "Sign in with Google" on your Vercel app
+2. App redirects to Google OAuth (using Supabase's callback URL)
+3. Google authenticates user
+4. Google redirects back to: `https://kihxqurnmyxnsyqgpdaw.supabase.co/auth/v1/callback`
+5. Supabase processes the OAuth response
+6. Supabase redirects user to: `https://brandonlacoste9-tech-zyeute-l7i6iwtux.vercel.app/auth/callback`
+7. Your app handles the callback and logs the user in
 
-## Testing
-After making these changes:
-1. Clear browser cache
-2. Try Google OAuth login again
-3. Should redirect properly to `/auth/callback`
+## ✅ Verification Checklist
 
-## Note
-If you set up a custom domain later, update both Google Cloud Console and Supabase with the new domain.
+- [ ] Added Supabase callback URL to Google Cloud Console
+- [ ] Set Site URL in Supabase to production Vercel URL
+- [ ] Added production Vercel URL to Supabase Redirect URLs
+- [ ] Cleared browser cache
+- [ ] Tested Google OAuth login
 
+## 🐛 Common Issues
+
+**Error 400: redirect_uri_mismatch**
+- ✅ Make sure `https://kihxqurnmyxnsyqgpdaw.supabase.co/auth/v1/callback` is in Google Cloud Console
+- ✅ Check that there are no typos or trailing slashes
+
+**User gets stuck after Google login**
+- ✅ Check that Site URL in Supabase matches your production URL
+- ✅ Verify Redirect URLs includes your production URL with `/**` pattern
+
+## 📝 Notes
+
+- The Supabase callback URL (`https://kihxqurnmyxnsyqgpdaw.supabase.co/auth/v1/callback`) is what Google sees
+- Your app URL (`https://brandonlacoste9-tech-zyeute-l7i6iwtux.vercel.app`) is where Supabase redirects after auth
+- Both need to be configured correctly for the flow to work
