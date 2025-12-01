@@ -18,8 +18,7 @@
     "sourceType": "module",
     "ecmaFeatures": {
       "jsx": true
-    },
-    "project": "./tsconfig.json"
+    }
   },
   "plugins": [
     "react",
@@ -56,6 +55,11 @@
     "node_modules",
     "*.config.js",
     "*.config.ts",
-    "vite.config.ts"
+    "vite.config.ts",
+    "app/",
+    "colony-os/",
+    "scripts/",
+    "public/",
+    "fix-imports.js"
   ]
 }
