@@ -86,13 +86,14 @@ export async function signOut() {
 
 /**
  * Sign in with Google OAuth
- *
- * Simpler and safer: let Supabase use its configured Site URL and Redirect URLs
- * instead of passing a custom redirectTo (which could point to localhost).
+ * Explicitly redirects to /auth/callback after OAuth completes
  */
 export async function signInWithGoogle() {
   return await supabase.auth.signInWithOAuth({
     provider: 'google',
+    options: {
+      redirectTo: `${window.location.origin}/auth/callback`,
+    },
   });
 }
 
