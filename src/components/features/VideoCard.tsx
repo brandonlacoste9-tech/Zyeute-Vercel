@@ -91,7 +91,16 @@ export const VideoCard: React.FC<VideoCardProps> = ({
             </p>
           )}
         </div>
-        <button className="text-stone-500 hover:text-gold-500 transition-colors p-2 rounded-full hover:bg-gold-500/5">
+        <button 
+          onClick={(e) => {
+            e.stopPropagation();
+            tap();
+            // TODO: Show menu with options (Report, Hide, etc.)
+            console.log('Menu clicked for post:', post.id);
+          }}
+          className="text-stone-500 hover:text-gold-500 transition-colors p-2 rounded-full hover:bg-gold-500/5"
+          aria-label="More options"
+        >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
             <path d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
           </svg>

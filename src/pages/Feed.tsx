@@ -85,6 +85,42 @@ export const Feed: React.FC = () => {
     }
   }, [isLoading, hasMore, page, fetchPosts]);
 
+  // Handle fire toggle
+  const handleFireToggle = React.useCallback(async (postId: string, currentFire: number) => {
+    try {
+      // TODO: Implement API call to toggle fire
+      console.log('Fire toggled for post:', postId, 'Current fire count:', currentFire);
+      // For now, just log - will be implemented with API
+    } catch (error) {
+      console.error('Error toggling fire:', error);
+    }
+  }, []);
+
+  // Handle comment
+  const handleComment = React.useCallback((postId: string) => {
+    // Navigate to post detail page for comments
+    window.location.href = `/p/${postId}`;
+  }, []);
+
+  // Handle share
+  const handleShare = React.useCallback(async (postId: string) => {
+    try {
+      const url = `${window.location.origin}/p/${postId}`;
+      if (navigator.share) {
+        await navigator.share({
+          title: 'Regarde ça sur Zyeuté!',
+          url: url,
+        });
+      } else {
+        // Fallback: copy to clipboard
+        await navigator.clipboard.writeText(url);
+        alert('Lien copié dans le presse-papiers! 📋');
+      }
+    } catch (error) {
+      console.error('Error sharing:', error);
+    }
+  }, []);
+
   React.useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -156,6 +192,9 @@ export const Feed: React.FC = () => {
                   variant="horizontal"
                   autoPlay={false}
                   muted={true}
+                  onFireToggle={handleFireToggle}
+                  onComment={handleComment}
+                  onShare={handleShare}
                 />
               </div>
             ))}
@@ -202,6 +241,9 @@ export const Feed: React.FC = () => {
                   user={post.user}
                   autoPlay={false}
                   muted={true}
+                  onFireToggle={handleFireToggle}
+                  onComment={handleComment}
+                  onShare={handleShare}
                 />
               </div>
             ))}

@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Header } from '@/components/Header';
 import { BottomNav } from '@/components/BottomNav';
 import { Avatar } from '@/components/Avatar';
@@ -31,7 +31,7 @@ export const Settings: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(true);
   const [searchQuery, setSearchQuery] = React.useState('');
   const { borderColor, setBorderColor, defaultGold } = useBorderColor();
-  const { tap, success, selection } = useHaptics();
+  const { tap, success, selection, impact } = useHaptics();
 
   // Fetch current user
   React.useEffect(() => {
@@ -269,6 +269,23 @@ export const Settings: React.FC = () => {
     );
   };
 
+  // Handle setting item click
+  const handleSettingClick = (item: SettingItem) => {
+    tap();
+    
+    // Routes that exist
+    const existingRoutes = ['/settings/voice', '/premium'];
+    
+    if (item.path && existingRoutes.includes(item.path)) {
+      navigate(item.path);
+    } else if (item.onClick) {
+      item.onClick();
+    } else if (item.path) {
+      // Route doesn't exist yet - show coming soon message
+      toast.info(`"${item.label}" sera disponible bientôt! ⚜️`);
+    }
+  };
+
   if (isLoading || !user) {
     return (
       <div className="min-h-screen bg-black leather-overlay flex items-center justify-center">
@@ -319,11 +336,10 @@ export const Settings: React.FC = () => {
         {/* Your Activity Section */}
         <div className="mb-6">
           {filterSettings(yourActivitySettings).map((item, index) => (
-            <Link
+            <button
               key={index}
-              to={item.path || '#'}
-              onClick={() => tap()}
-              className="flex items-center gap-4 p-4 hover:bg-leather-800/40 transition-all rounded-xl group border-b border-leather-800/30 last:border-b-0"
+              onClick={() => handleSettingClick(item)}
+              className="w-full flex items-center gap-4 p-4 hover:bg-leather-800/40 transition-all rounded-xl group border-b border-leather-800/30 last:border-b-0 text-left"
             >
               <div className="text-leather-300 group-hover:text-gold-500 transition-colors">
                 {item.icon}
@@ -332,7 +348,7 @@ export const Settings: React.FC = () => {
               <svg className="w-5 h-5 text-leather-500 group-hover:text-gold-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
-            </Link>
+            </button>
           ))}
         </div>
 
@@ -342,10 +358,10 @@ export const Settings: React.FC = () => {
             Ce que tu vois
           </h2>
           {filterSettings(whatYouSeeSettings).map((item, index) => (
-            <Link
+            <button
               key={index}
-              to={item.path || '#'}
-              className="flex items-center gap-4 p-4 hover:bg-leather-800/30 transition-colors rounded-xl group"
+              onClick={() => handleSettingClick(item)}
+              className="w-full flex items-center gap-4 p-4 hover:bg-leather-800/30 transition-colors rounded-xl group text-left"
             >
               <div className="text-leather-300 group-hover:text-gold-500 transition-colors">
                 {item.icon}
@@ -354,7 +370,7 @@ export const Settings: React.FC = () => {
               <svg className="w-5 h-5 text-leather-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
-            </Link>
+            </button>
           ))}
         </div>
 
@@ -364,11 +380,10 @@ export const Settings: React.FC = () => {
             Ton app et médias
           </h2>
           {filterSettings(appAndMediaSettings).map((item, index) => (
-            <Link
+            <button
               key={index}
-              to={item.path || '#'}
-              onClick={() => tap()}
-              className="flex items-center gap-4 p-4 hover:bg-leather-800/30 transition-colors rounded-xl group"
+              onClick={() => handleSettingClick(item)}
+              className="w-full flex items-center gap-4 p-4 hover:bg-leather-800/30 transition-colors rounded-xl group text-left"
             >
               <div className="text-leather-300 group-hover:text-gold-500 transition-colors">
                 {item.icon}
@@ -377,7 +392,7 @@ export const Settings: React.FC = () => {
               <svg className="w-5 h-5 text-leather-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
-            </Link>
+            </button>
           ))}
         </div>
 
@@ -449,11 +464,10 @@ export const Settings: React.FC = () => {
           </h2>
           <div className="leather-card rounded-2xl overflow-hidden stitched">
             {filterSettings(quebecSettings).map((item, index) => (
-              <Link
+              <button
                 key={index}
-                to={item.path || '#'}
-                onClick={() => tap()}
-                className="flex items-center gap-4 p-4 hover:bg-leather-700/30 transition-colors group border-b border-leather-700/30 last:border-b-0"
+                onClick={() => handleSettingClick(item)}
+                className="w-full flex items-center gap-4 p-4 hover:bg-leather-700/30 transition-colors group border-b border-leather-700/30 last:border-b-0 text-left"
               >
                 <div className="text-2xl group-hover:scale-110 transition-transform">
                   {item.icon}
@@ -465,7 +479,7 @@ export const Settings: React.FC = () => {
                 <svg className="w-5 h-5 text-leather-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
-              </Link>
+              </button>
             ))}
           </div>
         </div>
@@ -476,11 +490,10 @@ export const Settings: React.FC = () => {
             Ton compte
           </h2>
           {filterSettings(accountSettings).map((item, index) => (
-            <Link
+            <button
               key={index}
-              to={item.path || '#'}
-              onClick={() => tap()}
-              className="flex items-center gap-4 p-4 hover:bg-leather-800/30 transition-colors rounded-xl group"
+              onClick={() => handleSettingClick(item)}
+              className="w-full flex items-center gap-4 p-4 hover:bg-leather-800/30 transition-colors rounded-xl group text-left"
             >
               <div className="text-leather-300 group-hover:text-gold-500 transition-colors">
                 {item.icon}
@@ -492,7 +505,7 @@ export const Settings: React.FC = () => {
               <svg className="w-5 h-5 text-leather-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
-            </Link>
+            </button>
           ))}
         </div>
 
