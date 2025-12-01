@@ -50,6 +50,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
           *,
           actor:user_profiles!actor_id(*),
           post:posts!post_id(*)
+          post:publications!post_id(*)
         `)
         .eq('user_id', currentUserId)
         .order('created_at', { ascending: false })

@@ -4,6 +4,12 @@
 # Redirect all requests to index.html for client-side routing (React Router)
 # This allows React Router to handle all routes instead of Netlify returning 404s
 # The 200 status code is a "rewrite" - it serves index.html but keeps the original URL
+
+# Exclude source files (shouldn't exist in production, return 404)
+# Note: Netlify _redirects requires a "to" field even for 404s
+/src/*    /.netlify/functions/404    404
+
+# SPA fallback - redirect everything else to index.html
 /*    /index.html    200
 
 # Note: This is also configured in netlify.toml as a backup.
