@@ -3,7 +3,7 @@
  * Handles offline functionality and caching
  */
 
-const CACHE_NAME = 'zyeute-v1';
+const CACHE_NAME = 'zyeute-v2';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -62,6 +62,12 @@ self.addEventListener('fetch', (event) => {
   // Skip Vercel Live feedback script (not needed on Netlify)
   if (event.request.url.includes('vercel.live') || event.request.url.includes('_next-live')) {
     return;
+  }
+
+  // Skip JavaScript and CSS files - always fetch fresh from network (cache busting)
+  // This ensures users always get the latest build
+  if (event.request.url.match(/\.(js|css)$/)) {
+    return fetch(event.request);
   }
 
   event.respondWith(
