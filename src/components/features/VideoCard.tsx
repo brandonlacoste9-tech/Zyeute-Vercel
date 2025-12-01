@@ -54,7 +54,9 @@ export const VideoCard: React.FC<VideoCardProps> = ({
   return (
     <div
       className={cn(
-        'leather-card rounded-2xl overflow-hidden stitched hover:scale-[1.01] transition-all duration-300 group shadow-xl',
+        'leather-card rounded-2xl overflow-hidden stitched transition-all duration-300 group shadow-xl',
+        'hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(255,191,0,0.2)]',
+        'hover:border-gold-500/50',
         isHorizontal ? 'w-72 flex-shrink-0' : 'w-full',
         post.type === 'video' ? 'cursor-pointer' : ''
       )}
@@ -126,8 +128,10 @@ export const VideoCard: React.FC<VideoCardProps> = ({
         )}>
           <button
             onClick={handleFire}
-            className={`flex items-center gap-2 transition-all ${
-              isLiked ? 'text-orange-500 scale-110 drop-shadow-[0_0_8px_rgba(255,100,0,0.5)]' : 'text-stone-400 hover:text-gold-500'
+            className={`flex items-center gap-2 transition-all duration-200 ${
+              isLiked 
+                ? 'text-orange-500 scale-110 drop-shadow-[0_0_8px_rgba(255,100,0,0.5)] animate-pulse' 
+                : 'text-stone-400 hover:text-gold-500 hover:scale-110 active:scale-95'
             }`}
           >
             <svg className="w-7 h-7" fill={isLiked ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>

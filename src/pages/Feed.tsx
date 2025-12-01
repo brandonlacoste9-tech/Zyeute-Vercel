@@ -141,15 +141,23 @@ export const Feed: React.FC = () => {
         <>
           <SectionHeader title="Videos" showArrow linkTo="/explore" />
           <div className="flex overflow-x-auto gap-4 px-4 pb-6 scrollbar-hide">
-            {posts.slice(0, 10).map((post) => (
-              <VideoCard
+            {posts.slice(0, 10).map((post, index) => (
+              <div
                 key={`h-${post.id}`}
-                post={post}
-                user={post.user}
-                variant="horizontal"
-                autoPlay={false}
-                muted={true}
-              />
+                className="animate-fade-in-up flex-shrink-0"
+                style={{
+                  animationDelay: `${index * 0.05}s`,
+                  animationFillMode: 'both',
+                }}
+              >
+                <VideoCard
+                  post={post}
+                  user={post.user}
+                  variant="horizontal"
+                  autoPlay={false}
+                  muted={true}
+                />
+              </div>
             ))}
             {/* Padding at end for better scroll UX */}
             <div className="flex-shrink-0 w-2" />
@@ -180,14 +188,22 @@ export const Feed: React.FC = () => {
           </div>
         ) : (
           <>
-            {posts.map((post) => (
-              <VideoCard
+            {posts.map((post, index) => (
+              <div
                 key={post.id}
-                post={post}
-                user={post.user}
-                autoPlay={false}
-                muted={true}
-              />
+                className="animate-fade-in-up"
+                style={{
+                  animationDelay: `${index * 0.1}s`,
+                  animationFillMode: 'both',
+                }}
+              >
+                <VideoCard
+                  post={post}
+                  user={post.user}
+                  autoPlay={false}
+                  muted={true}
+                />
+              </div>
             ))}
 
             {/* Load More */}
