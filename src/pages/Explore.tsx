@@ -10,6 +10,8 @@ import { BottomNav } from '@/components/BottomNav';
 import { supabase } from '@/lib/supabase';
 import { QUEBEC_HASHTAGS, QUEBEC_REGIONS } from '@/lib/quebecFeatures';
 import { formatNumber } from '@/lib/utils';
+import { useHaptics } from '@/hooks/useHaptics';
+import { toast } from '@/components/Toast';
 import type { Post } from '@/types';
 
 export const Explore: React.FC = () => {
@@ -18,6 +20,7 @@ export const Explore: React.FC = () => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [selectedRegion, setSelectedRegion] = React.useState('');
   const [selectedHashtag, setSelectedHashtag] = React.useState('');
+  const { tap } = useHaptics();
 
   // Fetch posts
   const fetchPosts = React.useCallback(async () => {
@@ -25,7 +28,7 @@ export const Explore: React.FC = () => {
     try {
       let query = supabase
         .from('posts')
-        .select('*, user:users(*)')
+        .select('*, user:user_profiles!user_id(*)')
         .order('fire_count', { ascending: false });
 
       if (selectedRegion) {
@@ -33,7 +36,9 @@ export const Explore: React.FC = () => {
       }
 
       if (selectedHashtag) {
-        query = query.contains('hashtags', [selectedHashtag]);
+        // Remove # if present and search in hashtags array
+        const tagToSearch = selectedHashtag.startsWith('#') ? selectedHashtag.slice(1) : selectedHashtag;
+        query = query.contains('hashtags', [tagToSearch]);
       }
 
       if (searchQuery) {
@@ -76,10 +81,11 @@ export const Explore: React.FC = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Recherche des posts, users, hashtags..."
-              className="input-premium pl-12"
+              className="input-premium pl-14 pr-4"
+              style={{ paddingLeft: '3.5rem' }}
             />
             <svg
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gold-400"
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gold-400 pointer-events-none z-10"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -97,19 +103,31 @@ export const Explore: React.FC = () => {
             <span>Hashtags populaires</span>
           </h2>
           <div className="flex gap-2 overflow-x-auto gold-scrollbar pb-2">
-            {QUEBEC_HASHTAGS.slice(0, 10).map((tag) => (
-              <button
-                key={tag}
-                onClick={() => setSelectedHashtag(selectedHashtag === tag ? '' : tag)}
-                className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-all ${
-                  selectedHashtag === tag
-                    ? 'btn-gold'
-                    : 'btn-leather'
-                }`}
-              >
-                {tag}
-              </button>
-            ))}
+            {QUEBEC_HASHTAGS.slice(0, 10).map((tag) => {
+              const tagWithoutHash = tag.startsWith('#') ? tag.slice(1) : tag;
+              const isSelected = selectedHashtag === tag || selectedHashtag === tagWithoutHash;
+              
+              return (
+                <button
+                  key={tag}
+                  onClick={() => {
+                    tap();
+                    const newTag = isSelected ? '' : tagWithoutHash;
+                    setSelectedHashtag(newTag);
+                    if (newTag) {
+                      toast.info(`Filtre: #${newTag}`);
+                    }
+                  }}
+                  className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-all ${
+                    isSelected
+                      ? 'btn-gold'
+                      : 'btn-leather'
+                  }`}
+                >
+                  {tag}
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -121,7 +139,13 @@ export const Explore: React.FC = () => {
           </h2>
           <div className="flex gap-2 overflow-x-auto gold-scrollbar pb-2">
             <button
-              onClick={() => setSelectedRegion('')}
+              onClick={() => {
+                tap();
+                setSelectedRegion('');
+                if (selectedRegion) {
+                  toast.info('Filtre régional retiré');
+                }
+              }}
               className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-all ${
                 selectedRegion === ''
                   ? 'btn-gold'
@@ -130,19 +154,30 @@ export const Explore: React.FC = () => {
             >
               Toutes
             </button>
-            {QUEBEC_REGIONS.map((region) => (
-              <button
-                key={region.id}
-                onClick={() => setSelectedRegion(selectedRegion === region.id ? '' : region.id)}
-                className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-all ${
-                  selectedRegion === region.id
-                    ? 'btn-gold'
-                    : 'btn-leather'
-                }`}
-              >
-                {region.emoji} {region.name}
-              </button>
-            ))}
+            {QUEBEC_REGIONS.map((region) => {
+              const isSelected = selectedRegion === region.id;
+              
+              return (
+                <button
+                  key={region.id}
+                  onClick={() => {
+                    tap();
+                    const newRegion = isSelected ? '' : region.id;
+                    setSelectedRegion(newRegion);
+                    if (newRegion) {
+                      toast.info(`Filtre: ${region.name}`);
+                    }
+                  }}
+                  className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-semibold transition-all ${
+                    isSelected
+                      ? 'btn-gold'
+                      : 'btn-leather'
+                  }`}
+                >
+                  {region.emoji} {region.name}
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -167,11 +202,13 @@ export const Explore: React.FC = () => {
             )}
             <button
               onClick={() => {
+                tap();
                 setSearchQuery('');
                 setSelectedHashtag('');
                 setSelectedRegion('');
+                toast.success('Filtres réinitialisés');
               }}
-              className="text-gold-400 hover:text-gold-300 text-sm font-semibold"
+              className="text-gold-400 hover:text-gold-300 text-sm font-semibold transition-colors"
             >
               Effacer tout
             </button>
@@ -193,9 +230,11 @@ export const Explore: React.FC = () => {
             </p>
             <button
               onClick={() => {
+                tap();
                 setSearchQuery('');
                 setSelectedHashtag('');
                 setSelectedRegion('');
+                toast.success('Filtres réinitialisés');
               }}
               className="btn-gold px-8 py-3 rounded-xl"
             >
@@ -207,7 +246,7 @@ export const Explore: React.FC = () => {
             {posts.map((post) => (
               <Link
                 key={post.id}
-                to={`/post/${post.id}`}
+                to={`/p/${post.id}`}
                 className="relative aspect-square leather-card rounded-xl overflow-hidden stitched-subtle hover:scale-105 transition-transform group"
               >
                 <img

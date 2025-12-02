@@ -87,10 +87,11 @@
   # Uses same configuration as deploy-preview
   # Inherits preview Supabase branch settings
 
-# Functions configuration (for future use if needed)
-# Uncomment when you add serverless functions
-# [functions]
-#   directory = "netlify/functions"
+# Functions configuration for Stripe integration
+[functions]
+  directory = "netlify/functions"
+  # Node.js version for functions (must match build environment)
+  node_bundler = "esbuild"
 
 # IMPORTANT: Next.js plugin is disabled via NETLIFY_NEXT_PLUGIN_SKIP environment variable
 # Netlify auto-detects Next.js and injects vercel.live scripts
