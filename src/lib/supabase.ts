@@ -8,17 +8,37 @@ import type { Database } from '../types/database';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://demo.supabase.co';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'demo-key';
 
-// Log which Supabase project is being used (for debugging)
-console.log('[Supabase] Using URL:', supabaseUrl);
-console.log('[Supabase] Expected project: vuanulvyqkfefmjcikfk');
+// Enhanced debug logging for Supabase configuration
+console.log('[Supabase] Configuration Details:');
+console.log('  - Full URL:', supabaseUrl);
+console.log('  - URL is set:', !!import.meta.env.VITE_SUPABASE_URL);
+console.log('  - Anon key is set:', !!import.meta.env.VITE_SUPABASE_ANON_KEY);
+console.log('  - Expected project ref: vuanulvyqkfefmjcikfk');
+
+// Extract and validate project reference
+const projectRef = supabaseUrl.split('//')[1]?.split('.')[0] || 'unknown';
+console.log('  - Detected project ref:', projectRef);
+
+// Check for wrong project
 if (supabaseUrl.includes('kihxqurnmyxnsyqgpdaw')) {
-  console.error('❌ WRONG SUPABASE PROJECT! Using kihxqurnmyxnsyqgpdaw instead of vuanulvyqkfefmjcikfk');
-  console.error('❌ Please update VITE_SUPABASE_URL in Netlify environment variables to: https://vuanulvyqkfefmjcikfk.supabase.co');
+  console.error('❌ WRONG SUPABASE PROJECT DETECTED!');
+  console.error('   Current: kihxqurnmyxnsyqgpdaw');
+  console.error('   Expected: vuanulvyqkfefmjcikfk');
+  console.error('   Action: Update VITE_SUPABASE_URL to: https://vuanulvyqkfefmjcikfk.supabase.co');
+  console.error('   Platforms: Check Netlify and Vercel environment variables');
+} else if (projectRef === 'vuanulvyqkfefmjcikfk') {
+  console.log('✅ Using correct Supabase project: vuanulvyqkfefmjcikfk');
+} else if (supabaseUrl.includes('demo.supabase.co')) {
+  console.warn('⚠️ Using demo Supabase URL - features will be limited');
+} else {
+  console.warn('⚠️ Using unexpected Supabase project:', projectRef);
+  console.warn('   Expected: vuanulvyqkfefmjcikfk');
 }
 
 // Warn about missing credentials but don't crash
 if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
-  console.warn('⚠️ Missing Supabase credentials! Using demo mode. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env.local');
+  console.warn('⚠️ Missing Supabase credentials! Using demo mode.');
+  console.warn('   Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env.local');
 }
 
 export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
