@@ -74,12 +74,16 @@ export async function getFeedPosts(page: number = 0, limit: number = 20): Promis
     const start = page * limit;
     const end = start + limit - 1;
 
+    // Query publications directly instead of posts view to avoid RLS/view issues
     const { data, error } = await supabase
-      .from('posts')
+      .from('publications')
       .select(`
         *,
         user:user_profiles!user_id(*)
       `)
+      .eq('visibilite', 'public')  // Only show public posts
+      .is('est_masque', null)      // Not hidden
+      .is('deleted_at', null)      // Not deleted
       .order('created_at', { ascending: false })
       .range(start, end);
 
@@ -88,7 +92,14 @@ export async function getFeedPosts(page: number = 0, limit: number = 20): Promis
       return [];
     }
 
-    return (data || []) as Post[];
+    // Map publications columns to Post type (handle column name differences)
+    const posts = (data || []).map((pub: any) => ({
+      ...pub,
+      visibility: pub.visibilite,  // Map visibilite to visibility
+      is_hidden: pub.est_masque,  // Map est_masque to is_hidden
+    })) as Post[];
+
+    return posts;
   } catch (error) {
     console.error('Error in getFeedPosts:', error);
     return [];
