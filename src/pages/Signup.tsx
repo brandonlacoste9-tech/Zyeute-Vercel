@@ -8,6 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/Button';
 import { Logo } from '@/components/Logo';
 import { signUp } from '@/lib/supabase';
+import { toast } from '@/components/Toast';
 
 export const Signup: React.FC = () => {
   const navigate = useNavigate();
@@ -40,11 +41,16 @@ export const Signup: React.FC = () => {
 
       if (error) throw error;
 
-      alert('Compte créé! Vérifie ton courriel pour confirmer ton compte.');
-      navigate('/login');
+      // Show success toast (non-blocking)
+      toast.success('Compte créé! Vérifie ton courriel pour confirmer ton compte.');
+      
+      // Use setTimeout to ensure state updates complete before navigation
+      // This prevents React DOM manipulation errors
+      setTimeout(() => {
+        navigate('/login', { replace: true });
+      }, 100);
     } catch (err: any) {
       setError(err.message || 'Erreur lors de l\'inscription');
-    } finally {
       setIsLoading(false);
     }
   };
