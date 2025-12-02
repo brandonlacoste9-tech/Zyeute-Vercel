@@ -38,6 +38,8 @@ if (supabaseUrl.includes('kihxqurnmyxnsyqgpdaw')) {
 } else {
   console.warn('⚠️ Using unexpected Supabase project:', projectRef);
   console.warn('   Expected: vuanulvyqkfefmjcikfk');
+}
+
 const EXPECTED_PROJECT_REF = 'vuanulvyqkfefmjcikfk';
 
 // Enhanced logging with actual URL values
