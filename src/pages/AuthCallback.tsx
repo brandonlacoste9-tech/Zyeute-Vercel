@@ -27,7 +27,7 @@ const AuthCallback: React.FC = () => {
     authCallbackLogger.debug('Hash:', window.location.hash);
     authCallbackLogger.debug('Search params:', window.location.search);
     
-    let timeoutId: NodeJS.Timeout | null = null;
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
     let hasNavigated = false;
 
     const exchangeCode = async () => {

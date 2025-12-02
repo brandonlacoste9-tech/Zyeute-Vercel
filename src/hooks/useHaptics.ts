@@ -46,10 +46,10 @@ const isVibrationSupported = (): boolean => {
 /**
  * Trigger haptic feedback with fallback
  */
-const triggerVibration = (pattern: number[]): void => {
+const triggerVibration = (pattern: readonly number[]): void => {
   if (isVibrationSupported()) {
     try {
-      navigator.vibrate(pattern);
+      navigator.vibrate(Array.from(pattern));
     } catch (error) {
       useHapticsLogger.warn('Vibration API error:', error);
     }

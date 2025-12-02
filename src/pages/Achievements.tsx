@@ -23,7 +23,7 @@ import {
 
 const achievementsLogger = logger.withContext('Achievements');
 
-const TIER_ICONS = {
+// const TIER_ICONS = ...
   novice: '🥉',
   vrai: '🥈',
   pur_laine: '🥇',

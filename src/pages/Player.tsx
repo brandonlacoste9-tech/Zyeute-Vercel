@@ -238,7 +238,7 @@ export const Player: React.FC = () => {
   };
 
   // Handle fire toggle
-  const handleFireToggle = async (postId: string, currentFire: number) => {
+  // const handleFireToggle = async (postId: string, currentFire: number) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;

@@ -5,7 +5,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import { toast } from '../components/Toast';
-import type { Notification, User } from '../types';
+import type { Notification} from '../types';
 import { logger } from '../lib/logger';
 
 const notificationContextLogger = logger.withContext('NotificationContext');
@@ -36,7 +36,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     fetchUser();
 
     // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+  // const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setCurrentUserId(session?.user?.id || null);
     });
 

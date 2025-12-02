@@ -116,7 +116,7 @@ export const Feed: React.FC = () => {
   }, [isLoading, hasMore, page, fetchPosts]);
 
   // Handle fire toggle - memoized to prevent VideoCard re-renders
-  const handleFireToggle = React.useCallback(async (postId: string, currentFire: number) => {
+  // const handleFireToggle = React.useCallback(async (postId: string, currentFire: number) => {
     if (!currentUser) return;
     
     try {
@@ -246,7 +246,7 @@ export const Feed: React.FC = () => {
       <SectionHeader title="Latest Hitants" />
       <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
         {/* Debug info - remove in production */}
-        {process.env.NODE_ENV === 'development' && (
+        {import.meta.env.DEV && (
           <div className="mb-4 p-2 bg-black/50 rounded text-xs text-white/60">
             <div>Posts count: {posts.length}</div>
             <div>Is loading: {isLoading ? 'true' : 'false'}</div>
