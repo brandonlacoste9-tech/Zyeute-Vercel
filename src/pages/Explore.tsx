@@ -27,9 +27,12 @@ export const Explore: React.FC = () => {
     setIsLoading(true);
     try {
       let query = supabase
-        .from('posts')
+        .from('publications')
         .select('*, user:user_profiles!user_id(*)')
-        .order('fire_count', { ascending: false });
+        .eq('visibilite', 'public')  // Only show public posts
+        .is('est_masque', null)      // Not hidden
+        .is('deleted_at', null)      // Not deleted
+        .order('reactions_count', { ascending: false }); // Use reactions_count instead of fire_count
 
       if (selectedRegion) {
         query = query.eq('region', selectedRegion);

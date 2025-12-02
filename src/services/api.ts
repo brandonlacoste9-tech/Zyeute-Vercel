@@ -188,20 +188,41 @@ export async function getUserProfile(
  */
 export async function getUserPosts(userId: string): Promise<Post[]> {
   try {
+    // Query publications directly instead of posts view to avoid RLS/view issues
     const { data, error } = await supabase
-      .from('posts')
+      .from('publications')
       .select('*, user:user_profiles!user_id(*)')
       .eq('user_id', userId)
+      .is('deleted_at', null)  // Not deleted
       .order('created_at', { ascending: false });
 
     if (error) {
-      console.error('Error fetching user posts:', error);
+      console.error('[getUserPosts] Supabase error:', error);
       return [];
     }
 
-    return (data || []) as Post[];
+    // Map publications columns to Post type
+    const posts = (data || []).map((pub: any) => ({
+      id: pub.id,
+      user_id: pub.user_id,
+      type: pub.media_url?.match(/\.(mp4|webm|mov)$/i) ? 'video' : 'photo',
+      media_url: pub.media_url || '',
+      caption: pub.content || null,
+      hashtags: null,
+      region: null,
+      city: null,
+      fire_count: pub.reactions_count || 0,
+      comment_count: pub.comments_count || 0,
+      created_at: pub.created_at,
+      user: pub.user,
+      ...pub,
+      visibility: pub.visibilite,
+      is_hidden: pub.est_masque,
+    })) as Post[];
+
+    return posts;
   } catch (error) {
-    console.error('Error in getUserPosts:', error);
+    console.error('[getUserPosts] Exception:', error);
     return [];
   }
 }
