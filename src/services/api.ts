@@ -74,6 +74,8 @@ export async function getFeedPosts(page: number = 0, limit: number = 20): Promis
     const start = page * limit;
     const end = start + limit - 1;
 
+    console.log('[getFeedPosts] Starting query:', { page, limit, start, end });
+
     // Query publications directly instead of posts view to avoid RLS/view issues
     const { data, error } = await supabase
       .from('publications')
@@ -87,34 +89,57 @@ export async function getFeedPosts(page: number = 0, limit: number = 20): Promis
       .order('created_at', { ascending: false })
       .range(start, end);
 
+    console.log('[getFeedPosts] Query result:', { 
+      dataCount: data?.length || 0, 
+      error: error?.message || null,
+      firstItem: data?.[0] 
+    });
+
     if (error) {
-      console.error('Error fetching feed posts:', error);
+      console.error('[getFeedPosts] Supabase error:', error);
+      console.error('[getFeedPosts] Error details:', {
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        code: error.code
+      });
+      return [];
+    }
+
+    if (!data || data.length === 0) {
+      console.warn('[getFeedPosts] No data returned from query');
       return [];
     }
 
     // Map publications columns to Post type (handle column name differences)
-    const posts = (data || []).map((pub: any) => ({
-      id: pub.id,
-      user_id: pub.user_id,
-      type: pub.media_url?.match(/\.(mp4|webm|mov)$/i) ? 'video' : 'photo',  // Infer type from media_url
-      media_url: pub.media_url || '',
-      caption: pub.content || null,  // Map content to caption
-      hashtags: null,  // TODO: Extract from content or join hashtags table
-      region: null,  // TODO: Map from region field if exists
-      city: null,  // TODO: Map from city field if exists
-      fire_count: pub.reactions_count || 0,
-      comment_count: pub.comments_count || 0,
-      created_at: pub.created_at,
-      user: pub.user,  // Already joined
-      // Keep original fields for compatibility
-      ...pub,
-      visibility: pub.visibilite,
-      is_hidden: pub.est_masque,
-    })) as Post[];
+    const posts = (data || []).map((pub: any) => {
+      const mapped = {
+        id: pub.id,
+        user_id: pub.user_id,
+        type: pub.media_url?.match(/\.(mp4|webm|mov)$/i) ? 'video' : 'photo',  // Infer type from media_url
+        media_url: pub.media_url || '',
+        caption: pub.content || null,  // Map content to caption
+        hashtags: null,  // TODO: Extract from content or join hashtags table
+        region: null,  // TODO: Map from region field if exists
+        city: null,  // TODO: Map from city field if exists
+        fire_count: pub.reactions_count || 0,
+        comment_count: pub.comments_count || 0,
+        created_at: pub.created_at,
+        user: pub.user,  // Already joined
+        // Keep original fields for compatibility
+        ...pub,
+        visibility: pub.visibilite,
+        is_hidden: pub.est_masque,
+      };
+      console.log('[getFeedPosts] Mapped post:', { id: mapped.id, caption: mapped.caption, user: mapped.user?.username });
+      return mapped;
+    }) as Post[];
 
+    console.log('[getFeedPosts] Returning posts:', posts.length);
     return posts;
   } catch (error) {
-    console.error('Error in getFeedPosts:', error);
+    console.error('[getFeedPosts] Exception:', error);
+    console.error('[getFeedPosts] Error stack:', error instanceof Error ? error.stack : 'No stack');
     return [];
   }
 }

@@ -38,18 +38,34 @@ export const Feed: React.FC = () => {
   const fetchPosts = React.useCallback(async (pageNum: number) => {
     setIsLoading(true);
     try {
+      console.log('[Feed] Fetching posts, page:', pageNum);
       const data = await getFeedPosts(pageNum, 20);
+      console.log('[Feed] Received posts data:', { 
+        count: data?.length || 0, 
+        posts: data,
+        firstPost: data?.[0] 
+      });
 
       if (pageNum === 0) {
-        setPosts(data);
+        setPosts(data || []);
+        console.log('[Feed] Set posts (page 0):', data?.length || 0);
       } else {
-        setPosts(prev => [...prev, ...data]);
+        setPosts(prev => {
+          const updated = [...prev, ...(data || [])];
+          console.log('[Feed] Appended posts (page > 0):', updated.length);
+          return updated;
+        });
       }
-      setHasMore(data.length === 20);
+      setHasMore((data?.length || 0) === 20);
     } catch (error) {
-      console.error('Error fetching posts:', error);
+      console.error('[Feed] Error fetching posts:', error);
+      // Set empty array on error to show empty state
+      if (pageNum === 0) {
+        setPosts([]);
+      }
     } finally {
       setIsLoading(false);
+      console.log('[Feed] Fetch complete, isLoading set to false');
     }
   }, []);
 
@@ -225,6 +241,15 @@ export const Feed: React.FC = () => {
       {/* Latest Hitants Section - Vertical Feed */}
       <SectionHeader title="Latest Hitants" />
       <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
+        {/* Debug info - remove in production */}
+        {process.env.NODE_ENV === 'development' && (
+          <div className="mb-4 p-2 bg-black/50 rounded text-xs text-white/60">
+            <div>Posts count: {posts.length}</div>
+            <div>Is loading: {isLoading ? 'true' : 'false'}</div>
+            <div>Has more: {hasMore ? 'true' : 'false'}</div>
+            <div>Current user: {currentUser?.username || 'none'}</div>
+          </div>
+        )}
         {isLoading && posts.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20">
             <div className="w-16 h-16 border-4 border-gold-500/30 border-t-gold-500 rounded-full animate-spin mb-4 shadow-[0_0_20px_rgba(255,191,0,0.2)]" />
