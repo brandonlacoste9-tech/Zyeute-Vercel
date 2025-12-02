@@ -68,6 +68,9 @@ export interface SettingsPreferences {
     push: boolean;
     emailDigest: boolean;
     reminders: boolean;
+    notifyComments: boolean;
+    notifyFires: boolean;
+    notifyFollows: boolean;
   };
   region: string;
   language: LanguageOption;
@@ -156,6 +159,9 @@ const basePreferences: SettingsPreferences = {
     push: true,
     emailDigest: false,
     reminders: true,
+    notifyComments: true,
+    notifyFires: true,
+    notifyFollows: true,
   },
   region: 'mtl',
   language: 'fr',
