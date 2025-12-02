@@ -415,9 +415,9 @@ function App() {
                         <Route
                           path="/moderation"
                           element={
-                            <ProtectedRoute>
+                            <ProtectedAdminRoute>
                               <Moderation />
-                            </ProtectedRoute>
+                            </ProtectedAdminRoute>
                           }
                         />
 

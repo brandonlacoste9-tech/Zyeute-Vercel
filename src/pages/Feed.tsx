@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Header } from '@/components/Header';
 import { BottomNav } from '@/components/BottomNav';
 import { ChatButton } from '@/components/ChatButton';
@@ -16,6 +16,7 @@ import { getCurrentUser, getFeedPosts, getStories, togglePostFire } from '@/serv
 import type { Post, User, Story } from '@/types';
 
 export const Feed: React.FC = () => {
+  const location = useLocation();
   const [posts, setPosts] = React.useState<Post[]>([]);
   const [stories, setStories] = React.useState<Array<{ user: User; story?: Story; isViewed?: boolean }>>([]);
   const [currentUser, setCurrentUser] = React.useState<User | null>(null);
@@ -66,10 +67,19 @@ export const Feed: React.FC = () => {
     fetchStories();
   }, [currentUser]);
 
-  // Initial fetch
+  // Initial fetch and refresh on navigation
   React.useEffect(() => {
     fetchPosts(0);
   }, [fetchPosts]);
+
+  // Refresh feed when navigating from upload (with refreshFeed flag)
+  React.useEffect(() => {
+    if (location.state?.refreshFeed) {
+      fetchPosts(0);
+      // Clear the state to prevent infinite refresh
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state, fetchPosts]);
 
   // Load more on scroll
   const handleScroll = React.useCallback(() => {
@@ -85,7 +95,7 @@ export const Feed: React.FC = () => {
     }
   }, [isLoading, hasMore, page, fetchPosts]);
 
-  // Handle fire toggle
+  // Handle fire toggle - memoized to prevent VideoCard re-renders
   const handleFireToggle = React.useCallback(async (postId: string, currentFire: number) => {
     if (!currentUser) return;
     
@@ -104,7 +114,7 @@ export const Feed: React.FC = () => {
     }
   }, [currentUser]);
 
-  // Handle comment
+  // Memoize comment handler to prevent VideoCard re-renders
   const handleComment = React.useCallback((postId: string) => {
     // Navigate to post detail page for comments
     window.location.href = `/p/${postId}`;

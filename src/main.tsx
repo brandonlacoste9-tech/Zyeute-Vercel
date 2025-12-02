@@ -3,16 +3,23 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
 
+import { logger } from './lib/logger';
+
+const errorLogger = logger.withContext('GlobalError');
+
 // Add error handler for uncaught errors
 window.addEventListener('error', (event) => {
-  console.error('❌ Uncaught error:', event.error);
+  errorLogger.error('Uncaught error:', event.error);
 });
 
 window.addEventListener('unhandledrejection', (event) => {
-  console.error('❌ Unhandled promise rejection:', event.reason);
+  errorLogger.error('Unhandled promise rejection:', event.reason);
 });
 
 import { extractSupabaseProjectRef } from './lib/utils';
+import { logger } from './lib/logger';
+
+const appLogger = logger.withContext('App');
 
 // Log that we're starting
 console.log('🚀 Starting Zyeuté app...');
@@ -48,6 +55,8 @@ if (import.meta.env.VITE_SUPABASE_URL) {
   }
 } else {
   console.error('❌ VITE_SUPABASE_URL not set! App may not function correctly.');
+appLogger.info('🚀 Starting Zyeuté app...');
+appLogger.info('📍 Environment check:', {
   VITE_SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL 
     ? `✅ Set (${extractSupabaseProjectRef(import.meta.env.VITE_SUPABASE_URL) || 'unknown'})` 
     : '❌ Missing',
@@ -59,7 +68,7 @@ if (import.meta.env.VITE_SUPABASE_URL) {
 
 // Show actual Supabase URL if set
 if (import.meta.env.VITE_SUPABASE_URL) {
-  console.log('📍 Supabase URL:', import.meta.env.VITE_SUPABASE_URL);
+  appLogger.debug('📍 Supabase URL:', import.meta.env.VITE_SUPABASE_URL);
 }
 
 try {
@@ -68,7 +77,7 @@ try {
     throw new Error('Root element not found!');
   }
 
-  console.log('✅ Root element found, rendering App...');
+  appLogger.debug('✅ Root element found, rendering App...');
   
   ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
@@ -76,10 +85,10 @@ try {
     </React.StrictMode>,
   );
   
-  console.log('✅ App rendered successfully');
+  appLogger.debug('✅ App rendered successfully');
 } catch (error) {
-  console.error('❌ Failed to render app:', error);
-  console.error('❌ Error stack:', error instanceof Error ? error.stack : 'No stack');
+  errorLogger.error('❌ Failed to render app:', error);
+  errorLogger.error('❌ Error stack:', error instanceof Error ? error.stack : 'No stack');
   
   // Show error on page with more details
   const rootElement = document.getElementById('root');
