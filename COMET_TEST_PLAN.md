@@ -5,11 +5,11 @@
 ### **Environment URLs**
 
 **Primary (Production):**
-- **Live URL:** `https://brandonlacoste9-tech-zyeute.vercel.app`
-- **Status:** ✅ Confirmed live (Vercel deployment)
-- **Alternative:** `https://zyeuté.com` (if DNS propagated)
+- **Live URL:** `https://zyeuté.com` (or `https://zyeute.com`)
+- **Status:** ✅ Confirmed live (Netlify deployment)
+- **Alternative Netlify URL:** Check Netlify dashboard for `.netlify.app` URL if custom domain not ready
 
-**Note:** The app is deployed on Vercel. Check Vercel dashboard for latest deployment status.
+**Note:** The app is deployed on Netlify. Check Netlify dashboard for latest deployment status.
 
 **Staging (if available):**
 - Check Netlify dashboard for staging URL
@@ -80,7 +80,7 @@
 **Priority:** 🔴 Critical
 
 **Steps:**
-1. ✅ Navigate to `https://brandonlacoste9-tech-zyeute.vercel.app`
+1. ✅ Navigate to `https://zyeuté.com` (or Netlify URL from dashboard)
 2. ✅ Login as test user (or create new account)
 3. ✅ Navigate to home/feed (`/`)
 4. ✅ Look for upload button or "Écris ton premier post" CTA
@@ -161,7 +161,7 @@
 1. ✅ Logout (if logged in)
 2. ✅ Login as NON-ADMIN user
 3. ✅ Verify logged in successfully
-4. ✅ Navigate directly to: `https://brandonlacoste9-tech-zyeute.vercel.app/moderation`
+4. ✅ Navigate directly to: `https://zyeuté.com/moderation` (or your Netlify URL + `/moderation`)
 5. ✅ **VERIFY:** Redirects (not error page)
 6. ✅ **VERIFY:** Redirects to `/` or `/login` (not 404)
 7. ✅ **VERIFY:** No error messages shown
@@ -171,7 +171,7 @@
 **Part B: Admin Access Test**
 10. ✅ Logout
 11. ✅ Login as ADMIN user
-12. ✅ Navigate to: `https://brandonlacoste9-tech-zyeute.vercel.app/moderation`
+12. ✅ Navigate to: `https://zyeuté.com/moderation` (or your Netlify URL + `/moderation`)
 13. ✅ **VERIFY:** Access GRANTED (no redirect)
 14. ✅ **VERIFY:** Moderation dashboard loads
 15. ✅ **VERIFY:** Can see moderation tools/content
@@ -196,7 +196,7 @@
 ### **Test Run: [Date/Time]**
 
 **Tester:** Comet  
-**Environment:** Production (`brandonlacoste9-tech-zyeute.vercel.app`)  
+**Environment:** Production (`https://zyeuté.com` or Netlify URL)  
 **Browser:** [Chrome/Firefox/Safari]  
 **Device:** [Desktop/Mobile]
 
