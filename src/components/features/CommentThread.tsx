@@ -10,6 +10,10 @@ import { toast } from '../Toast';
 import { moderateContent } from '../../services/moderationService';
 import { getTimeAgo, formatNumber } from '../../lib/utils';
 import type { Comment as CommentType, User } from '../../types';
+import { logger } from '../../lib/logger';
+
+const commentThreadLogger = logger.withContext('CommentThread');
+
 
 interface CommentThreadProps {
   comment: CommentType;
@@ -49,7 +53,7 @@ const CommentThreadComponent: React.FC<CommentThreadProps> = ({
         .order('created_at', { ascending: true });
 
       if (error) {
-        console.error('Error fetching replies:', error);
+        commentThreadLogger.error('Error fetching replies:', error);
         return;
       }
 
@@ -134,7 +138,7 @@ const CommentThreadComponent: React.FC<CommentThreadProps> = ({
         onReply?.(comment.id, replyText);
       }
     } catch (error) {
-      console.error('Error posting reply:', error);
+      commentThreadLogger.error('Error posting reply:', error);
       toast.error('Erreur lors de la réponse');
     } finally {
       setIsSubmitting(false);
@@ -166,7 +170,7 @@ const CommentThreadComponent: React.FC<CommentThreadProps> = ({
           } as any);
       }
     } catch (error) {
-      console.error('Error liking comment:', error);
+      commentThreadLogger.error('Error liking comment:', error);
       // Revert optimistic update
       setHasLiked(!hasLiked);
       setLikes(hasLiked ? likes + 1 : likes - 1);

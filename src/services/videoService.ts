@@ -98,7 +98,7 @@ export async function addBackgroundMusic(
   // Mock implementation
   await new Promise(resolve => setTimeout(resolve, 1000));
   
-  console.log(`Adding ${musicTrack} music to video...`);
+  videoServiceLogger.debug(`Adding ${musicTrack} music to video...`);
   return URL.createObjectURL(videoFile);
 }
 

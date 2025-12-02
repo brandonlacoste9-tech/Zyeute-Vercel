@@ -9,6 +9,7 @@ import { BottomNav } from '../components/BottomNav';
 import { Button } from '../components/Button';
 import { cn } from '../lib/utils';
 import { supabase } from '../lib/supabase';
+import { logger } from '../lib/logger';
 import {
   getAllAchievements,
   getUserAchievements,
@@ -19,6 +20,8 @@ import {
   type AchievementCategory,
   type TierInfo,
 } from '../services/achievementService';
+
+const achievementsLogger = logger.withContext('Achievements');
 
 const TIER_ICONS = {
   novice: '🥉',
@@ -61,7 +64,7 @@ export const Achievements: React.FC = () => {
       setStats(statsData);
       setTierInfo(tier);
     } catch (error) {
-      console.error('Error loading achievements:', error);
+      achievementsLogger.error('Error loading achievements:', error);
     } finally {
       setIsLoading(false);
     }

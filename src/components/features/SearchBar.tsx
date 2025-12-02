@@ -7,6 +7,10 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import { Avatar } from '../Avatar';
 import type { Post, User } from '../../types';
+import { logger } from '../../lib/logger';
+
+const searchBarLogger = logger.withContext('SearchBar');
+
 
 interface SearchBarProps {
   onSearchChange?: (query: string) => void;
@@ -91,7 +95,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 
         setResults(searchResults);
       } catch (error) {
-        console.error('Error searching:', error);
+        searchBarLogger.error('Error searching:', error);
       } finally {
         setIsLoading(false);
       }

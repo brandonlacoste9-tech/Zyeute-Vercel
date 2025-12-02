@@ -4,6 +4,7 @@
  */
 
 import OpenAI from 'openai';
+import { logger } from '@/lib/logger';
 
 // Initialize OpenAI
 const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
@@ -40,7 +41,7 @@ export const generateMarketingEmail = async (prompt: string): Promise<{ subject:
     const resultText = response.choices[0].message.content || "{}";
     return JSON.parse(resultText);
   } catch (error) {
-    console.error('Error generating email:', error);
+    emailServiceLogger.error('Error generating email:', error);
     return {
       subject: "Erreur de génération",
       body: "<p>Impossible de générer le courriel pour le moment.</p>"
@@ -54,8 +55,8 @@ export const sendMarketingEmail = async (
   body: string
 ): Promise<void> => {
   // Integration with Resend would go here
-  console.log(`Sending email to ${recipients.length} recipients`);
-  console.log(`Subject: ${subject}`);
+  emailServiceLogger.debug(`Sending email to ${recipients.length} recipients`);
+  emailServiceLogger.debug(`Subject: ${subject}`);
   // In a real app, we would call the Resend API
   
   // Simulate delay

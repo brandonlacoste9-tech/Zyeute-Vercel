@@ -5,6 +5,10 @@
  */
 
 import { useCallback } from 'react';
+import { logger } from '../lib/logger';
+
+const useHapticsLogger = logger.withContext('UseHaptics');
+
 
 // Haptic patterns (duration in milliseconds)
 const HAPTIC_PATTERNS = {
@@ -47,7 +51,7 @@ const triggerVibration = (pattern: number[]): void => {
     try {
       navigator.vibrate(pattern);
     } catch (error) {
-      console.warn('Vibration API error:', error);
+      useHapticsLogger.warn('Vibration API error:', error);
     }
   }
 };

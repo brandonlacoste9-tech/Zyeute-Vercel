@@ -4,6 +4,10 @@
  */
 
 import React from 'react';
+import { logger } from '../lib/logger';
+
+const errorBoundaryLogger = logger.withContext('ErrorBoundary');
+
 
 interface Props {
   children: React.ReactNode;
@@ -26,7 +30,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('❌ Error caught by boundary:', error, errorInfo);
+    errorBoundaryLogger.error('❌ Error caught by boundary:', error, errorInfo);
   }
 
   render() {
