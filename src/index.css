@@ -33,51 +33,124 @@
 
 @layer base {
   body {
-    @apply bg-black text-white;
+    @apply text-white;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
       sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Base: Dark Pebbled Leather Texture */
+    background-color: #0d0c0b;
     background-image: 
-      radial-gradient(circle at 50% 50%, rgba(255, 191, 0, 0.03) 0%, transparent 50%),
-      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231a1a1a' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      /* Pebbled grain pattern */
+      radial-gradient(circle at 20% 30%, rgba(30, 25, 20, 0.4) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(20, 15, 10, 0.4) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(25, 20, 15, 0.3) 0%, transparent 60%),
+      /* Fine pebbled texture */
+      url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='pebble'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.05 0 0 0 0 0.04 0 0 0 0 0.03 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23pebble)' opacity='0.15'/%3E%3C/svg%3E"),
+      /* Subtle gold ambient glow */
+      radial-gradient(circle at 50% 50%, rgba(255, 191, 0, 0.02) 0%, transparent 50%);
   }
 }
 
 @layer utilities {
-  /* --- TEXTURES & MATERIALS --- */
+  /* --- LAYERED LEATHER TEXTURE SYSTEM --- */
   
-  /* Leather Texture */
+  /* Base: Dark Pebbled Leather (for main backgrounds) */
   .leather-overlay {
-    background-color: #0a0a0a;
-    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+    background-color: #0d0c0b;
+    background-image: 
+      radial-gradient(circle at 20% 30%, rgba(30, 25, 20, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(20, 15, 10, 0.3) 0%, transparent 50%),
+      url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='pebble-base'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.05 0 0 0 0 0.04 0 0 0 0 0.03 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23pebble-base)' opacity='0.12'/%3E%3C/svg%3E");
   }
 
+  /* Layer 1: Medium Brown Suede (for standard cards) */
   .leather-card {
-    @apply bg-neutral-900 border border-neutral-800 relative overflow-hidden;
-    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
-    box-shadow: 0 4px 20px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+    background-color: #2a2523;
+    background-image: 
+      /* Suede nap texture */
+      radial-gradient(circle at 30% 40%, rgba(60, 50, 45, 0.3) 0%, transparent 40%),
+      radial-gradient(circle at 70% 60%, rgba(50, 40, 35, 0.3) 0%, transparent 40%),
+      /* Fine suede grain */
+      url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='suede'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.08 0 0 0 0 0.06 0 0 0 0 0.05 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23suede)' opacity='0.2'/%3E%3C/svg%3E");
+    @apply border border-neutral-800 relative overflow-hidden;
+    box-shadow: 
+      0 4px 20px rgba(0,0,0,0.7), 
+      inset 0 1px 0 rgba(255,255,255,0.03),
+      inset 0 -1px 0 rgba(0,0,0,0.5);
   }
 
-  /* Gold Stitching Effect */
+  /* Layer 2: Reddish-Brown Suede (for elevated cards, welcome cards) */
+  .leather-card-elevated {
+    background-color: #3d2e28;
+    background-image: 
+      /* Warmer suede texture */
+      radial-gradient(circle at 25% 35%, rgba(80, 60, 50, 0.25) 0%, transparent 45%),
+      radial-gradient(circle at 75% 65%, rgba(70, 50, 40, 0.25) 0%, transparent 45%),
+      /* Fine reddish suede grain */
+      url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='suede-red'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.07 0 0 0 0 0.05 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23suede-red)' opacity='0.18'/%3E%3C/svg%3E");
+    @apply border border-neutral-700 relative overflow-hidden;
+    box-shadow: 
+      0 6px 25px rgba(0,0,0,0.8), 
+      inset 0 1px 0 rgba(255,255,255,0.04),
+      inset 0 -1px 0 rgba(0,0,0,0.6),
+      0 0 0 1px rgba(255, 191, 0, 0.05);
+  }
+
+  /* Subtle leather for inputs and secondary elements */
+  .leather-subtle {
+    background-color: #1a1512;
+    background-image: 
+      url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='leather-subtle'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.03 0 0 0 0 0.02 0 0 0 0 0.01 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23leather-subtle)' opacity='0.1'/%3E%3C/svg%3E");
+  }
+
+  /* Enhanced Gold Stitching - Stands out against all leather textures */
   .stitched {
     position: relative;
-    border: 2px dashed #4a3b22; /* Dark gold thread base */
-    box-shadow: 0 0 0 4px #1a1a1a, inset 0 0 10px rgba(0,0,0,0.8);
+    /* Base dark thread */
+    border: 2px dashed rgba(179, 134, 0, 0.4);
+    /* Shadow for depth */
+    box-shadow: 
+      0 0 0 3px rgba(13, 12, 11, 0.9),
+      inset 0 0 15px rgba(0,0,0,0.6),
+      0 2px 4px rgba(0,0,0,0.4);
+  }
+  
+  .stitched::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    /* Gold thread highlight */
+    border: 1px dashed rgba(255, 191, 0, 0.5);
+    pointer-events: none;
+    border-radius: inherit;
+    box-shadow: 0 0 8px rgba(255, 191, 0, 0.2);
   }
   
   .stitched::after {
     content: '';
     position: absolute;
     inset: -6px;
-    border: 1px dashed rgba(255, 191, 0, 0.3); /* Gold highlight */
+    /* Outer glow */
+    border: 1px dashed rgba(255, 191, 0, 0.2);
     pointer-events: none;
     border-radius: inherit;
   }
   
   .stitched-subtle {
-    border: 1px dashed rgba(255, 191, 0, 0.2);
+    border: 1px dashed rgba(255, 191, 0, 0.25);
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.4);
+  }
+
+  /* Stitching for elevated cards - brighter gold */
+  .leather-card-elevated.stitched {
+    border-color: rgba(255, 191, 0, 0.5);
+  }
+  
+  .leather-card-elevated.stitched::before {
+    border-color: rgba(255, 191, 0, 0.7);
+    box-shadow: 0 0 12px rgba(255, 191, 0, 0.3);
   }
 
   /* Gold Gradient Text/Borders */
@@ -102,21 +175,32 @@
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.6), 0 1px 0 rgba(255,255,255,0.05);
   }
 
-  /* Premium Buttons */
+  /* Premium Buttons with Leather Texture */
   .btn-leather {
-    @apply bg-neutral-800 text-gold-400 border border-neutral-700 transition-all duration-300;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
+    background-color: #2a2523;
+    background-image: 
+      radial-gradient(circle at 50% 50%, rgba(60, 50, 45, 0.2) 0%, transparent 60%),
+      url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='btn-leather'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.0' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.05 0 0 0 0 0.04 0 0 0 0 0.03 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23btn-leather)' opacity='0.15'/%3E%3C/svg%3E");
+    @apply text-gold-400 border border-neutral-700 transition-all duration-300;
+    box-shadow: 
+      0 4px 6px rgba(0,0,0,0.4), 
+      inset 0 1px 0 rgba(255,255,255,0.03),
+      inset 0 -1px 0 rgba(0,0,0,0.5);
   }
   
   .btn-leather:hover {
-    @apply bg-neutral-700 border-gold-500/50 text-gold-300;
+    background-color: #3d2e28;
+    @apply border-gold-500/50 text-gold-300;
     transform: translateY(-1px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.4), 0 0 10px rgba(255, 191, 0, 0.1);
+    box-shadow: 
+      0 6px 12px rgba(0,0,0,0.5), 
+      0 0 10px rgba(255, 191, 0, 0.15),
+      inset 0 1px 0 rgba(255,255,255,0.04);
   }
   
   .btn-leather:active {
     transform: translateY(0px);
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.6);
   }
 
   .btn-gold {
@@ -129,15 +213,23 @@
     box-shadow: 0 0 15px rgba(255, 191, 0, 0.4);
   }
 
-  /* Premium Inputs */
+  /* Premium Inputs with Subtle Leather */
   .input-premium {
-    @apply w-full bg-black/40 border border-neutral-700 rounded-xl px-4 py-3 text-gold-100 placeholder-neutral-500 transition-all;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+    background-color: #1a1512;
+    background-image: 
+      url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='input-leather'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.02 0 0 0 0 0.015 0 0 0 0 0.01 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23input-leather)' opacity='0.08'/%3E%3C/svg%3E");
+    @apply w-full border border-neutral-700 rounded-xl px-4 py-3 text-gold-100 placeholder-neutral-500 transition-all;
+    box-shadow: 
+      inset 0 2px 4px rgba(0,0,0,0.6),
+      inset 0 1px 0 rgba(255,255,255,0.02);
   }
   
   .input-premium:focus {
     @apply border-gold-500/80 outline-none ring-1 ring-gold-500/50;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.5), 0 0 10px rgba(255, 191, 0, 0.1);
+    box-shadow: 
+      inset 0 2px 4px rgba(0,0,0,0.6), 
+      0 0 10px rgba(255, 191, 0, 0.15),
+      inset 0 1px 0 rgba(255,255,255,0.03);
   }
 
   /* --- EXISTING UTILITIES (Preserved) --- */
