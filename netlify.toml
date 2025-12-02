@@ -41,6 +41,8 @@
   # Security headers for all pages
   for = "/*"
   [headers.values]
+    # Content Security Policy (includes Stripe domains)
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://m.stripe.com; script-src-elem 'self' 'unsafe-inline' https://js.stripe.com https://m.stripe.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; font-src 'self' data:; connect-src 'self' https://*.supabase.co https://*.supabase.in wss://*.supabase.co https://api.stripe.com https://m.stripe.com https://m.stripe.network; frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://m.stripe.com; object-src 'none'; base-uri 'self'; form-action 'self';"
     # Prevent clickjacking attacks
     X-Frame-Options = "DENY"
     # Prevent MIME type sniffing
@@ -87,10 +89,11 @@
   # Uses same configuration as deploy-preview
   # Inherits preview Supabase branch settings
 
-# Functions configuration (for future use if needed)
-# Uncomment when you add serverless functions
-# [functions]
-#   directory = "netlify/functions"
+# Functions configuration for Stripe integration
+[functions]
+  directory = "netlify/functions"
+  # Node.js version for functions (must match build environment)
+  node_bundler = "esbuild"
 
 # IMPORTANT: Next.js plugin is disabled via NETLIFY_NEXT_PLUGIN_SKIP environment variable
 # Netlify auto-detects Next.js and injects vercel.live scripts

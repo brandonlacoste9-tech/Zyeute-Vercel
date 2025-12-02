@@ -49,20 +49,62 @@ export async function subscribeToPremium(tier: 'bronze' | 'silver' | 'gold'): Pr
   }
 
   try {
-    // Call backend to create checkout session
-    // In production, this would be a Supabase Edge Function:
-    // const { data } = await supabase.functions.invoke('create-checkout-session', {
-    //   body: { tier, userId: user.id }
-    // });
+    // Try Netlify Function first (if deployed), fallback to Supabase Edge Function
+    const netlifyFunctionUrl = import.meta.env.VITE_NETLIFY_FUNCTION_URL || '/.netlify/functions/create-checkout-session';
+    const useNetlify = import.meta.env.VITE_USE_NETLIFY_FUNCTIONS === 'true' || window.location.hostname.includes('netlify');
 
-    toast.info('Redirection vers Stripe...');
-    
-    // For now, show instructions
-    toast.info('Intégration Stripe prête! Ajoute une Edge Function pour activer.');
+    let data: any;
+    let error: any;
+
+    if (useNetlify) {
+      // Use Netlify Function
+      const { data: { session } } = await supabase.auth.getSession();
+      const response = await fetch(netlifyFunctionUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session?.access_token || ''}`,
+        },
+        body: JSON.stringify({ tier }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `HTTP ${response.status}`);
+      }
+
+      data = await response.json();
+    } else {
+      // Use Supabase Edge Function
+      const result = await supabase.functions.invoke('create-checkout-session', {
+        body: { tier },
+      });
+      data = result.data;
+      error = result.error;
+    }
+
+    if (error) {
+      console.error('Function error:', error);
+      toast.error('Erreur lors de la création de la session de paiement');
+      return;
+    }
+
+    if (data?.url && stripe) {
+      // Redirect to Stripe Checkout
+      toast.info('Redirection vers Stripe...');
+      window.location.href = data.url;
+    } else if (data?.sessionId) {
+      // If we have sessionId but no URL, redirect manually
+      const checkoutUrl = `https://checkout.stripe.com/c/pay/${data.sessionId}`;
+      toast.info('Redirection vers Stripe...');
+      window.location.href = checkoutUrl;
+    } else {
+      toast.error('Erreur: URL de paiement non reçue');
+    }
     
   } catch (error: any) {
     console.error('Subscription error:', error);
-    toast.error('Erreur de paiement');
+    toast.error('Erreur de paiement: ' + (error.message || 'Erreur inconnue'));
   }
 }
 

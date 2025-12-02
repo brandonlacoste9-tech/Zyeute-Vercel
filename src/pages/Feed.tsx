@@ -12,7 +12,7 @@ import { GoldButton } from '@/components/GoldButton';
 import { SectionHeader } from '@/components/SectionHeader';
 import { StoryCarousel } from '@/components/features/StoryCircle';
 import { VideoCard } from '@/components/features/VideoCard';
-import { getCurrentUser, getFeedPosts, getStories } from '@/services/api';
+import { getCurrentUser, getFeedPosts, getStories, togglePostFire } from '@/services/api';
 import type { Post, User, Story } from '@/types';
 
 export const Feed: React.FC = () => {
@@ -87,14 +87,22 @@ export const Feed: React.FC = () => {
 
   // Handle fire toggle
   const handleFireToggle = React.useCallback(async (postId: string, currentFire: number) => {
+    if (!currentUser) return;
+    
     try {
-      // TODO: Implement API call to toggle fire
-      console.log('Fire toggled for post:', postId, 'Current fire count:', currentFire);
-      // For now, just log - will be implemented with API
+      const success = await togglePostFire(postId, currentUser.id);
+      if (success) {
+        // Optimistically update local state
+        setPosts(prev => prev.map(p => 
+          p.id === postId 
+            ? { ...p, fire_count: p.fire_count + (p.is_fired ? -1 : 1), is_fired: !p.is_fired }
+            : p
+        ));
+      }
     } catch (error) {
       console.error('Error toggling fire:', error);
     }
-  }, []);
+  }, [currentUser]);
 
   // Handle comment
   const handleComment = React.useCallback((postId: string) => {

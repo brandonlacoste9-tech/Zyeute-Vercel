@@ -5,6 +5,8 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from '../types/database';
 
+import { extractSupabaseProjectRef, validateSupabaseUrl } from './utils';
+
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://demo.supabase.co';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'demo-key';
 
@@ -33,12 +35,30 @@ if (supabaseUrl.includes('kihxqurnmyxnsyqgpdaw')) {
 } else {
   console.warn('⚠️ Using unexpected Supabase project:', projectRef);
   console.warn('   Expected: vuanulvyqkfefmjcikfk');
+const EXPECTED_PROJECT_REF = 'vuanulvyqkfefmjcikfk';
+
+// Enhanced logging with actual URL values
+console.log('[Supabase] Initializing...');
+console.log('[Supabase] URL:', supabaseUrl);
+console.log('[Supabase] Expected project:', EXPECTED_PROJECT_REF);
+
+// Extract and validate project reference
+const projectRef = extractSupabaseProjectRef(supabaseUrl);
+if (projectRef) {
+  console.log('[Supabase] Detected project:', projectRef);
+  validateSupabaseUrl(supabaseUrl, EXPECTED_PROJECT_REF);
+} else {
+  console.warn('⚠️ Could not extract project reference from URL:', supabaseUrl);
 }
 
 // Warn about missing credentials but don't crash
 if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
   console.warn('⚠️ Missing Supabase credentials! Using demo mode.');
   console.warn('   Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env.local');
+  console.warn('⚠️ Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in Netlify environment variables');
+} else {
+  // Show that key is set (but don't expose the actual key)
+  console.log('[Supabase] Anon key:', supabaseAnonKey.substring(0, 20) + '...' + ' ✅ Set');
 }
 
 export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {

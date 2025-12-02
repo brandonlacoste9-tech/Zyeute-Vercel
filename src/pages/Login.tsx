@@ -119,8 +119,8 @@ export const Login: React.FC = () => {
 
       <div className="w-full max-w-md relative z-10">
         {/* Glowing Fleur-de-lys Logo */}
-        <div className="text-center mb-10">
-          <div className="relative inline-block">
+        <div className="text-center mb-10 overflow-visible">
+          <div className="relative inline-block overflow-visible">
             {/* Outer Glow */}
             <div 
               className="absolute inset-0 blur-xl opacity-60"
@@ -197,6 +197,9 @@ export const Login: React.FC = () => {
               WebkitTextFillColor: 'transparent',
               textShadow: '0 0 40px rgba(255,191,0,0.5)',
               filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.8))',
+              lineHeight: '1.2',
+              paddingTop: '0.25rem',
+              overflow: 'visible',
             }}
           >
             Zyeuté

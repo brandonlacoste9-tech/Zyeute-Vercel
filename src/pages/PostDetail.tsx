@@ -57,7 +57,7 @@ export const PostDetail: React.FC = () => {
           .from('posts')
           .select(`
             *,
-            user:users(*),
+            user:user_profiles!user_id(*),
             user_fire:fires!user_id(fire_level)
           `)
           .eq('id', id)

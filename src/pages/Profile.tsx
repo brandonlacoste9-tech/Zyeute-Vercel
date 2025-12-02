@@ -397,7 +397,7 @@ export const Profile: React.FC = () => {
             {posts.map((post) => (
               <Link
                 key={post.id}
-                to={`/post/${post.id}`}
+                to={`/p/${post.id}`}
                 className="relative aspect-square leather-card rounded-xl overflow-hidden stitched-subtle hover:scale-105 transition-transform group"
               >
                 <Image

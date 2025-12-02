@@ -44,7 +44,7 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
 
       const { data, error } = await supabase
         .from('comments')
-        .select('*, user:users(*)')
+        .select('*, user:user_profiles!user_id(*)')
         .eq('parent_id', comment.id)
         .order('created_at', { ascending: true });
 
@@ -111,7 +111,7 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
           text: replyText.trim(),
           parent_id: comment.id,
         } as any)
-        .select('*, user:users(*)')
+        .select('*, user:user_profiles!user_id(*)')
         .single() as { data: CommentType | null; error: any };
 
       if (error) throw error;

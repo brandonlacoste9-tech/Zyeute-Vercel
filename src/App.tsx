@@ -47,6 +47,24 @@ import GoLive from '@/pages/GoLive';
 import WatchLive from '@/pages/WatchLive';
 import LiveDiscover from '@/pages/LiveDiscover';
 
+// Settings Pages
+import TagsSettings from '@/pages/settings/TagsSettings';
+import CommentsSettings from '@/pages/settings/CommentsSettings';
+import SharingSettings from '@/pages/settings/SharingSettings';
+import RestrictedAccountsSettings from '@/pages/settings/RestrictedAccountsSettings';
+import FavoritesSettings from '@/pages/settings/FavoritesSettings';
+import MutedAccountsSettings from '@/pages/settings/MutedAccountsSettings';
+import ContentPreferencesSettings from '@/pages/settings/ContentPreferencesSettings';
+import MediaSettings from '@/pages/settings/MediaSettings';
+import AudioSettings from '@/pages/settings/AudioSettings';
+import StorageSettings from '@/pages/settings/StorageSettings';
+import AppSettings from '@/pages/settings/AppSettings';
+import RegionSettings from '@/pages/settings/RegionSettings';
+import LanguageSettings from '@/pages/settings/LanguageSettings';
+import ProfileEditSettings from '@/pages/settings/ProfileEditSettings';
+import PrivacySettings from '@/pages/settings/PrivacySettings';
+import NotificationSettings from '@/pages/settings/NotificationSettings';
+
 // Moderation
 import Moderation from '@/pages/moderation/Moderation';
 
@@ -235,6 +253,134 @@ function App() {
                           element={
                             <ProtectedRoute>
                               <VoiceSettingsPage />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/settings/tags"
+                          element={
+                            <ProtectedRoute>
+                              <TagsSettings />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/settings/comments"
+                          element={
+                            <ProtectedRoute>
+                              <CommentsSettings />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/settings/sharing"
+                          element={
+                            <ProtectedRoute>
+                              <SharingSettings />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/settings/restricted"
+                          element={
+                            <ProtectedRoute>
+                              <RestrictedAccountsSettings />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/settings/favorites"
+                          element={
+                            <ProtectedRoute>
+                              <FavoritesSettings />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/settings/muted"
+                          element={
+                            <ProtectedRoute>
+                              <MutedAccountsSettings />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/settings/content"
+                          element={
+                            <ProtectedRoute>
+                              <ContentPreferencesSettings />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/settings/media"
+                          element={
+                            <ProtectedRoute>
+                              <MediaSettings />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/settings/audio"
+                          element={
+                            <ProtectedRoute>
+                              <AudioSettings />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/settings/storage"
+                          element={
+                            <ProtectedRoute>
+                              <StorageSettings />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/settings/app"
+                          element={
+                            <ProtectedRoute>
+                              <AppSettings />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/settings/region"
+                          element={
+                            <ProtectedRoute>
+                              <RegionSettings />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/settings/language"
+                          element={
+                            <ProtectedRoute>
+                              <LanguageSettings />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/settings/profile"
+                          element={
+                            <ProtectedRoute>
+                              <ProfileEditSettings />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/settings/privacy"
+                          element={
+                            <ProtectedRoute>
+                              <PrivacySettings />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/settings/notifications"
+                          element={
+                            <ProtectedRoute>
+                              <NotificationSettings />
                             </ProtectedRoute>
                           }
                         />

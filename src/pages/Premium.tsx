@@ -10,12 +10,15 @@ import { BottomNav } from '../components/BottomNav';
 import { Button } from '../components/Button';
 import { subscribeToPremium } from '../services/stripeService';
 import { usePremium } from '../hooks/usePremium';
+import { toast } from '../components/Toast';
+import { useHaptics } from '../hooks/useHaptics';
 
 type SubscriptionTier = 'free' | 'bronze' | 'silver' | 'gold';
 
 export default function Premium() {
   const { tier: currentTier, isLoading } = usePremium();
   const [selectedTier, setSelectedTier] = useState<SubscriptionTier>('gold');
+  const { tap } = useHaptics();
 
   const tiers = [
     {
@@ -78,6 +81,7 @@ export default function Premium() {
       await subscribeToPremium(tier);
     } catch (error: any) {
       console.error('Subscription error:', error);
+      toast.error('Erreur lors de l\'abonnement. Réessaie plus tard.');
     }
   };
 
@@ -184,7 +188,10 @@ export default function Premium() {
 
                 {/* CTA Button */}
                 <button
-                  onClick={() => handleSubscribe(tier.id)}
+                  onClick={() => {
+                    tap();
+                    handleSubscribe(tier.id);
+                  }}
                   disabled={isCurrentTier}
                   className={`w-full py-3 rounded-xl font-bold transition-all ${
                     isCurrentTier
