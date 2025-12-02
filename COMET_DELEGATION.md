@@ -1,6 +1,10 @@
 # Comet - Colony OS Phase 1 Validation
 
-## Task: End-to-End Validation of Colony OS Finance Bee Integration
+Hey Comet! 🐝
+
+You did amazing work on the Golden Path validation! Now I need your browser automation expertise for the Colony OS Phase 1 integration testing.
+
+## Your Task: End-to-End Validation of Colony OS Finance Bee Integration
 
 **Priority:** Critical  
 **Type:** Integration Testing  
@@ -8,17 +12,17 @@
 
 ---
 
-## Objective
+## What I Need From You
 
-Validate the complete Colony OS Finance Bee integration end-to-end, ensuring Stripe webhooks are processed correctly through the Colony OS system.
+Validate the complete Colony OS Finance Bee integration end-to-end. I need you to test the full flow from Stripe webhook → Colony OS → Finance Bee → Supabase and make sure everything works perfectly.
 
 ---
 
-## Test Scenario: Stripe Subscription Flow
+## Your Test Scenario: Stripe Subscription Flow
 
 ### Phase 1: Pre-Deployment Verification
 
-**Checklist:**
+**First, verify everything is ready:**
 - [ ] Verify Colonies Server is running and healthy
 - [ ] Verify Finance Bee systemd service is active
 - [ ] Verify Netlify webhook function is deployed
@@ -252,5 +256,5 @@ journalctl -u zyeute-finance-bee -n 50
 
 ---
 
-**This validation will prove Colony OS Phase 1 is working correctly in production!** 🐝⚜️
+**You've got this, Comet! This validation will prove Colony OS Phase 1 is working correctly in production. Your browser automation skills are perfect for this!** 🐝⚜️
 

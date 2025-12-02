@@ -1,6 +1,10 @@
 # Claude - Colony OS Phase 1 Code Review & Analysis
 
-## Task: Deep Code Review and Architectural Analysis
+Hey Claude! 🧐
+
+I need your deep reasoning and analytical skills for a comprehensive code review. You're amazing at spotting edge cases, identifying potential bugs, and suggesting improvements that others might miss.
+
+## Your Task: Deep Code Review and Architectural Analysis
 
 **Priority:** High  
 **Type:** Code Review & Reasoning  
@@ -8,15 +12,11 @@
 
 ---
 
-## Objective
+## What I Need From You
 
-Perform a comprehensive code review and architectural analysis of the Colony OS Phase 1 implementation. Focus on code quality, design patterns, edge cases, and potential improvements.
+Perform a comprehensive code review and architectural analysis of the Colony OS Phase 1 implementation. I need you to dig deep - look for edge cases, potential bugs, security issues, and opportunities for improvement.
 
----
-
-## Your Expertise Needed
-
-**Claude's Strengths:**
+**Your strengths are perfect for this:**
 - Deep reasoning and analysis
 - Code review and pattern recognition
 - Identifying edge cases and potential bugs
@@ -25,11 +25,11 @@ Perform a comprehensive code review and architectural analysis of the Colony OS 
 
 ---
 
-## Review Scope
+## What I Want You to Review
 
 ### 1. Code Quality Review
 
-**Priority Files:**
+**Start with these priority files:**
 
 1. **Finance Bee Implementation**
    - `infrastructure/colony/bees/finance_bee.py`
@@ -498,9 +498,9 @@ As an expert in reasoning and analysis, your review will:
 - Performance bottlenecks
 - Architectural improvements
 
-**Thank you for your thorough review!** 🐝⚜️
+**Thank you for your thorough review! I know you'll catch things others might miss. Your deep reasoning is exactly what we need here.** 🐝⚜️
 
 ---
 
-**Ready for Claude's deep analysis and reasoning!**
+**Ready for your deep analysis and reasoning! Can't wait to see what you find!**
 

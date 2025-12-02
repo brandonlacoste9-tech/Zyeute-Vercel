@@ -1,6 +1,10 @@
 # VS Code Cloud Agent - Code Quality Improvements
 
-## Task: Systematic Code Quality Improvements
+Hey VS Code! 👋
+
+I need your help with systematic code quality improvements across the Zyeute codebase. You're the best at this kind of systematic, methodical work.
+
+## Your Task: Systematic Code Quality Improvements
 
 **Priority:** High  
 **Scope:** Zyeute codebase  
@@ -8,16 +12,16 @@
 
 ---
 
-## Objectives
+## What I Need From You
 
 ### 1. Replace `console.log` with Production-Safe Logging
 
-**Current State:**
+**What I'm seeing:**
 - Many files still use `console.log` directly
 - No environment-based log level control
 - Logs may leak sensitive data in production
 
-**Action Items:**
+**What I need you to do:**
 - [ ] Audit all `console.log` usage across codebase
 - [ ] Replace with `logger` utility from `src/lib/logger.ts`
 - [ ] Ensure sensitive data (keys, tokens) are never logged
@@ -42,12 +46,12 @@ logger.info('User logged in', { userId: user.id });
 
 ### 2. Enhance Type Safety
 
-**Current State:**
+**What I'm seeing:**
 - Some `any` types still present
 - Missing type definitions for API responses
 - Incomplete TypeScript coverage
 
-**Action Items:**
+**What I need you to do:**
 - [ ] Identify all `any` types and replace with proper types
 - [ ] Add type definitions for Supabase responses
 - [ ] Add type definitions for Stripe webhook payloads
@@ -84,13 +88,13 @@ async function getPost(id: string): Promise<Post | null> {
 
 ### 3. Improve Error Handling
 
-**Current State:**
+**What I'm seeing:**
 - Some try-catch blocks swallow errors silently
 - Inconsistent error messages
 - Missing error boundaries in React components
 - No centralized error handling strategy
 
-**Action Items:**
+**What I need you to do:**
 - [ ] Review all try-catch blocks for proper error handling
 - [ ] Ensure errors are logged (not just console.error)
 - [ ] Add user-friendly error messages where appropriate
@@ -146,13 +150,15 @@ try {
 
 ---
 
-## Approach
+## How to Approach This
 
-1. **Audit First**: Run analysis to identify all issues
+1. **Start with Audit**: Run analysis to identify all issues first
 2. **Prioritize**: Focus on high-impact files first
-3. **Incremental**: Make changes in small, reviewable PRs
-4. **Test**: Ensure changes don't break functionality
+3. **Go Incremental**: Make changes in small, reviewable PRs
+4. **Test Everything**: Ensure changes don't break functionality
 5. **Document**: Update code comments where needed
+
+**You've got this!** Start with the audit, then work systematically through each objective.
 
 ---
 
@@ -176,5 +182,5 @@ try {
 
 ---
 
-**Ready to start? Begin with audit, then proceed systematically through each objective.**
+**Ready to start? Begin with the audit, then work systematically through each objective. I trust your methodical approach!**
 
