@@ -94,9 +94,22 @@ export async function getFeedPosts(page: number = 0, limit: number = 20): Promis
 
     // Map publications columns to Post type (handle column name differences)
     const posts = (data || []).map((pub: any) => ({
+      id: pub.id,
+      user_id: pub.user_id,
+      type: pub.media_url?.match(/\.(mp4|webm|mov)$/i) ? 'video' : 'photo',  // Infer type from media_url
+      media_url: pub.media_url || '',
+      caption: pub.content || null,  // Map content to caption
+      hashtags: null,  // TODO: Extract from content or join hashtags table
+      region: null,  // TODO: Map from region field if exists
+      city: null,  // TODO: Map from city field if exists
+      fire_count: pub.reactions_count || 0,
+      comment_count: pub.comments_count || 0,
+      created_at: pub.created_at,
+      user: pub.user,  // Already joined
+      // Keep original fields for compatibility
       ...pub,
-      visibility: pub.visibilite,  // Map visibilite to visibility
-      is_hidden: pub.est_masque,  // Map est_masque to is_hidden
+      visibility: pub.visibilite,
+      is_hidden: pub.est_masque,
     })) as Post[];
 
     return posts;
