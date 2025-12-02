@@ -310,5 +310,19 @@ Multiple Sources → Colony OS Server → Multiple Bees → Supabase/Redis
 
 ---
 
-**This pre-plan sets the foundation. When you're ready, we'll create the detailed real plan with specific steps, timelines, and assignments.** 🚀
+## 🤝 Multi-Agent Team Available
+
+**Available Agents:**
+- 🐝 **Comet** - Browser automation, testing, validation
+- 💻 **VS Code Cloud Agent** - Code quality, systematic improvements
+- 🧠 **Gemini** - Strategic planning, Colony OS expertise
+- 🤖 **ChatGPT 5.1** - Code generation, general assistance
+- 🔷 **Claude** - Reasoning, analysis, code review
+- ⚡ **Cursor (Me)** - Coordination, implementation, integration
+
+**Delegation Strategy:** See `COLONY_OS_DELEGATION_STRATEGY.md` for detailed task assignments.
+
+---
+
+**This pre-plan sets the foundation. When you're ready, we'll create the detailed real plan with specific steps, timelines, and multi-agent assignments.** 🚀
 
