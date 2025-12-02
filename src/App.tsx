@@ -3,7 +3,7 @@
  * Global Styles Applied via leather-overlay
  */
 
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
@@ -14,50 +14,52 @@ import { MainLayout } from '@/components/MainLayout';
 import { PageTransition } from '@/components/AnimatedRoutes';
 import { TiGuy } from '@/components/features/TiGuy';
 import { LoadingScreen } from '@/components/LoadingScreen';
+import { AchievementListener } from '@/components/gamification/AchievementModal';
+import { ProtectedAdminRoute } from '@/components/auth/ProtectedAdminRoute';
 
-// Pages
+// Critical pages - loaded immediately
 import Feed from '@/pages/Feed';
-import Profile from '@/pages/Profile';
-import Upload from '@/pages/Upload';
-import Explore from '@/pages/Explore';
-import PostDetail from '@/pages/PostDetail';
-import Player from '@/pages/Player';
-import Notifications from '@/pages/Notifications';
-import Settings from '@/pages/Settings';
-import Analytics from '@/pages/Analytics';
 import Login from '@/pages/Login';
 import Signup from '@/pages/Signup';
 import AuthCallback from '@/pages/AuthCallback';
-import StoryCreator from '@/components/features/StoryCreator';
-import Achievements from '@/pages/Achievements';
-import { AchievementListener } from '@/components/gamification/AchievementModal';
-import CreatorRevenue from '@/pages/CreatorRevenue';
-import AdminDashboard from '@/pages/admin/Dashboard';
-import EmailCampaigns from '@/pages/admin/EmailCampaigns';
-import { ProtectedAdminRoute } from '@/components/auth/ProtectedAdminRoute';
 
-// New Phase 2 Pages
-import Artiste from '@/pages/Artiste';
-import Studio from '@/pages/Studio';
-import Marketplace from '@/pages/Marketplace';
-import Premium from '@/pages/Premium';
-import Challenges from '@/pages/Challenges';
-import VoiceSettingsPage from '@/pages/VoiceSettingsPage';
-import GoLive from '@/pages/GoLive';
-import WatchLive from '@/pages/WatchLive';
-import LiveDiscover from '@/pages/LiveDiscover';
+// Lazy-loaded pages for better performance
+const Profile = lazy(() => import('@/pages/Profile'));
+const Upload = lazy(() => import('@/pages/Upload'));
+const Explore = lazy(() => import('@/pages/Explore'));
+const PostDetail = lazy(() => import('@/pages/PostDetail'));
+const Player = lazy(() => import('@/pages/Player'));
+const Notifications = lazy(() => import('@/pages/Notifications'));
+const Settings = lazy(() => import('@/pages/Settings'));
+const Analytics = lazy(() => import('@/pages/Analytics'));
+const StoryCreator = lazy(() => import('@/components/features/StoryCreator'));
+const Achievements = lazy(() => import('@/pages/Achievements'));
+const CreatorRevenue = lazy(() => import('@/pages/CreatorRevenue'));
+const AdminDashboard = lazy(() => import('@/pages/admin/Dashboard'));
+const EmailCampaigns = lazy(() => import('@/pages/admin/EmailCampaigns'));
 
-// Settings Pages
-import TagsSettings from '@/pages/settings/TagsSettings';
-import CommentsSettings from '@/pages/settings/CommentsSettings';
-import SharingSettings from '@/pages/settings/SharingSettings';
-import RestrictedAccountsSettings from '@/pages/settings/RestrictedAccountsSettings';
-import FavoritesSettings from '@/pages/settings/FavoritesSettings';
-import MutedAccountsSettings from '@/pages/settings/MutedAccountsSettings';
-import ContentPreferencesSettings from '@/pages/settings/ContentPreferencesSettings';
-import MediaSettings from '@/pages/settings/MediaSettings';
-import AudioSettings from '@/pages/settings/AudioSettings';
-import StorageSettings from '@/pages/settings/StorageSettings';
+// Phase 2 Pages - Lazy loaded
+const Artiste = lazy(() => import('@/pages/Artiste'));
+const Studio = lazy(() => import('@/pages/Studio'));
+const Marketplace = lazy(() => import('@/pages/Marketplace'));
+const Premium = lazy(() => import('@/pages/Premium'));
+const Challenges = lazy(() => import('@/pages/Challenges'));
+const VoiceSettingsPage = lazy(() => import('@/pages/VoiceSettingsPage'));
+const GoLive = lazy(() => import('@/pages/GoLive'));
+const WatchLive = lazy(() => import('@/pages/WatchLive'));
+const LiveDiscover = lazy(() => import('@/pages/LiveDiscover'));
+
+// Settings Pages - Lazy loaded
+const TagsSettings = lazy(() => import('@/pages/settings/TagsSettings'));
+const CommentsSettings = lazy(() => import('@/pages/settings/CommentsSettings'));
+const SharingSettings = lazy(() => import('@/pages/settings/SharingSettings'));
+const RestrictedAccountsSettings = lazy(() => import('@/pages/settings/RestrictedAccountsSettings'));
+const FavoritesSettings = lazy(() => import('@/pages/settings/FavoritesSettings'));
+const MutedAccountsSettings = lazy(() => import('@/pages/settings/MutedAccountsSettings'));
+const ContentPreferencesSettings = lazy(() => import('@/pages/settings/ContentPreferencesSettings'));
+const MediaSettings = lazy(() => import('@/pages/settings/MediaSettings'));
+const AudioSettings = lazy(() => import('@/pages/settings/AudioSettings'));
+const StorageSettings = lazy(() => import('@/pages/settings/StorageSettings'));
 import AppSettings from '@/pages/settings/AppSettings';
 import RegionSettings from '@/pages/settings/RegionSettings';
 import LanguageSettings from '@/pages/settings/LanguageSettings';
@@ -110,24 +112,25 @@ function App() {
               {/* Achievement Listener (Global) */}
               <AchievementListener />
 
-              <Routes>
-                {/* Full-screen routes (outside MainLayout) */}
-                <Route
-                  path="/video/:videoId"
-                  element={
-                    <ProtectedRoute>
-                      <Player />
-                    </ProtectedRoute>
-                  }
-                />
+              <Suspense fallback={<LoadingScreen />}>
+                <Routes>
+                  {/* Full-screen routes (outside MainLayout) */}
+                  <Route
+                    path="/video/:videoId"
+                    element={
+                      <ProtectedRoute>
+                        <Player />
+                      </ProtectedRoute>
+                    }
+                  />
 
-                {/* Main App Content (inside MainLayout) */}
-                <Route
-                  path="*"
-                  element={
-                    <MainLayout>
-                      <PageTransition>
-                        <Routes>
+                  {/* Main App Content (inside MainLayout) */}
+                  <Route
+                    path="*"
+                    element={
+                      <MainLayout>
+                        <PageTransition>
+                          <Routes>
                         {/* Public Routes */}
                         <Route path="/login" element={<Login />} />
                         <Route path="/signup" element={<Signup />} />
@@ -475,6 +478,7 @@ function App() {
                   }
                 />
               </Routes>
+              </Suspense>
             </BrowserRouter>
           </BorderColorProvider>
         </NotificationProvider>

@@ -23,13 +23,13 @@ import {
 
 const achievementsLogger = logger.withContext('Achievements');
 
-// const TIER_ICONS = ...
-  novice: '🥉',
-  vrai: '🥈',
-  pur_laine: '🥇',
-  legende: '💎',
-  icone: '👑',
-};
+// const TIER_ICONS = {
+//   novice: '🥉',
+//   vrai: '🥈',
+//   pur_laine: '🥇',
+//   legende: '💎',
+//   icone: '👑',
+// };
 
 export const Achievements: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<any>(null);

@@ -116,7 +116,7 @@ export const Feed: React.FC = () => {
   }, [isLoading, hasMore, page, fetchPosts]);
 
   // Handle fire toggle - memoized to prevent VideoCard re-renders
-  // const handleFireToggle = React.useCallback(async (postId: string, currentFire: number) => {
+  const handleFireToggle = React.useCallback(async (postId: string, _currentFire: number) => {
     if (!currentUser) return;
     
     try {
