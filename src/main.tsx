@@ -22,6 +22,39 @@ import { logger } from './lib/logger';
 const appLogger = logger.withContext('App');
 
 // Log that we're starting
+console.log('🚀 Starting Zyeuté app...');
+console.log('📍 Environment check:', {
+  VITE_SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL || '❌ Missing',
+  VITE_SUPABASE_ANON_KEY: import.meta.env.VITE_SUPABASE_ANON_KEY ? '✅ Set (hidden)' : '❌ Missing',
+  NODE_ENV: import.meta.env.MODE,
+});
+
+// Additional debug logging for Supabase URL
+if (import.meta.env.VITE_SUPABASE_URL) {
+  const url = import.meta.env.VITE_SUPABASE_URL;
+  
+  // Import utilities dynamically to avoid circular dependency
+  const extractSupabaseProjectRef = (url: string) => url.split('//')[1]?.split('.')[0] || 'unknown';
+  
+  console.log('🔍 Supabase URL Details:', {
+    full_url: url,
+    project_ref: extractSupabaseProjectRef(url),
+    expected_ref: 'vuanulvyqkfefmjcikfk',
+  });
+  
+  // Validate URL (inline to avoid import issues at startup)
+  const projectRef = extractSupabaseProjectRef(url);
+  if (url.includes('kihxqurnmyxnsyqgpdaw')) {
+    console.error('❌ WRONG PROJECT! Using kihxqurnmyxnsyqgpdaw instead of vuanulvyqkfefmjcikfk');
+  } else if (projectRef === 'vuanulvyqkfefmjcikfk') {
+    console.log('✅ Using correct Supabase project: vuanulvyqkfefmjcikfk');
+  } else if (url.includes('demo.supabase.co')) {
+    console.warn('⚠️ Using demo Supabase URL');
+  } else {
+    console.warn('⚠️ Unknown Supabase project. Expected: vuanulvyqkfefmjcikfk');
+  }
+} else {
+  console.error('❌ VITE_SUPABASE_URL not set! App may not function correctly.');
 appLogger.info('🚀 Starting Zyeuté app...');
 appLogger.info('📍 Environment check:', {
   VITE_SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL 
@@ -71,8 +104,8 @@ try {
           </div>
           <div style="background: #1a1a1a; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
             <p style="color: #fff; margin-bottom: 10px;"><strong>Environment Variables:</strong></p>
-            <p style="color: ${import.meta.env.VITE_SUPABASE_URL ? '#4ade80' : '#ff6b6b'};">VITE_SUPABASE_URL: ${import.meta.env.VITE_SUPABASE_URL ? '✅ Set' : '❌ Missing'}</p>
-            <p style="color: ${import.meta.env.VITE_SUPABASE_ANON_KEY ? '#4ade80' : '#ff6b6b'};">VITE_SUPABASE_ANON_KEY: ${import.meta.env.VITE_SUPABASE_ANON_KEY ? '✅ Set' : '❌ Missing'}</p>
+            <p style="color: ${import.meta.env.VITE_SUPABASE_URL ? '#4ade80' : '#ff6b6b'};">VITE_SUPABASE_URL: ${import.meta.env.VITE_SUPABASE_URL || '❌ Missing'}</p>
+            <p style="color: ${import.meta.env.VITE_SUPABASE_ANON_KEY ? '#4ade80' : '#ff6b6b'};">VITE_SUPABASE_ANON_KEY: ${import.meta.env.VITE_SUPABASE_ANON_KEY ? '✅ Set (hidden)' : '❌ Missing'}</p>
           </div>
           <p style="color: #888; margin-top: 20px;">Check browser console (F12) for more details.</p>
           <button onclick="window.location.reload()" style="margin-top: 20px; padding: 10px 20px; background: #F5C842; color: #000; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Reload Page</button>
