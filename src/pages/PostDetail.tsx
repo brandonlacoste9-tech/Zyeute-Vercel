@@ -140,19 +140,31 @@ export const PostDetail: React.FC = () => {
 
     setIsSubmitting(true);
     try {
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('comments')
         .insert({
           post_id: post.id,
           user_id: currentUser.id,
           text: newComment.trim(),
-        });
+        })
+        .select('*, user:user_profiles!user_id(*)')
+        .single();
 
-      if (!error) {
+      if (error) throw error;
+
+      if (data) {
+        // Optimistically add comment to list (realtime might be delayed)
+        setComments(prev => [...prev, data as CommentType]);
         setNewComment('');
+        // Update post comment count
+        if (post) {
+          setPost({ ...post, comment_count: (post.comment_count || 0) + 1 });
+        }
+        toast.success('Commentaire publié! 💬');
       }
     } catch (error) {
       console.error('Error posting comment:', error);
+      toast.error('Erreur lors de la publication du commentaire');
     } finally {
       setIsSubmitting(false);
     }

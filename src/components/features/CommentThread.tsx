@@ -20,7 +20,7 @@ interface CommentThreadProps {
   maxDepth?: number;
 }
 
-export const CommentThread: React.FC<CommentThreadProps> = ({
+const CommentThreadComponent: React.FC<CommentThreadProps> = ({
   comment,
   postId,
   currentUser,
@@ -289,6 +289,23 @@ export const CommentThread: React.FC<CommentThreadProps> = ({
     </div>
   );
 };
+
+// Memoize CommentThread to prevent unnecessary re-renders in feed
+// Performance optimization: Focus on components that render per post/comment
+export const CommentThread = React.memo(CommentThreadComponent, (prevProps, nextProps) => {
+  // Custom comparison - only re-render if comment data or user changes
+  return (
+    prevProps.comment.id === nextProps.comment.id &&
+    prevProps.comment.likes === nextProps.comment.likes &&
+    prevProps.comment.text === nextProps.comment.text &&
+    prevProps.currentUser?.id === nextProps.currentUser?.id &&
+    prevProps.postId === nextProps.postId &&
+    prevProps.depth === nextProps.depth &&
+    prevProps.onReply === nextProps.onReply
+  );
+});
+
+CommentThread.displayName = 'CommentThread';
 
 export default CommentThread;
 
