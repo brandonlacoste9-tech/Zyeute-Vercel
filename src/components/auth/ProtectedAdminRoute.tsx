@@ -1,6 +1,17 @@
 /**
  * ProtectedAdminRoute - Route wrapper for admin-only pages
  * Checks admin status via user_profiles.is_admin and auth metadata
+ * 
+ * Protects dangerous areas:
+ * - Moderation tools (content reports, user strikes, bans)
+ * - Database cleanup scripts and maintenance operations
+ * - Revenue/Stripe test utilities and payment debugging
+ * - User management (role changes, account deletions)
+ * - Analytics dashboards with sensitive data
+ * - Email campaign management
+ * - System configuration changes
+ * 
+ * Note: Also enforce admin checks in API routes via RLS policies
  */
 
 import React, { useEffect, useState } from 'react';

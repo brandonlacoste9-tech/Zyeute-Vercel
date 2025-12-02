@@ -237,7 +237,9 @@ const VideoCardComponent: React.FC<VideoCardProps> = ({
 };
 
 // Memoize VideoCard to prevent unnecessary re-renders
+// Performance optimization: Focus on components that render per post/comment in main feed
 // Only re-render if post, user, or callback functions change
+// This is critical for infinite scroll/virtualized views performance
 export const VideoCard = React.memo(VideoCardComponent, (prevProps, nextProps) => {
   // Custom comparison function for better performance
   return (

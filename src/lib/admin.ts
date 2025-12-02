@@ -1,6 +1,17 @@
 /**
  * Admin role checking utilities
  * Checks both user_profiles.is_admin and auth.users metadata for admin role
+ * 
+ * Admin-only areas that should be protected:
+ * - Moderation tools (content reports, user strikes, bans)
+ * - Database cleanup scripts and maintenance operations
+ * - Revenue/Stripe test utilities and payment debugging
+ * - User management (role changes, account deletions)
+ * - Analytics dashboards with sensitive data
+ * - Email campaign management
+ * - System configuration changes
+ * 
+ * These should be enforced in both UI (ProtectedAdminRoute) and API routes (RLS policies)
  */
 
 import { supabase } from './supabase';
@@ -11,6 +22,15 @@ const adminLogger = logger.withContext('Admin');
 /**
  * Check if current user is an admin
  * Checks both user_profiles.is_admin and auth.users metadata
+ * 
+ * Use this to protect:
+ * - Moderation tools
+ * - Database cleanup scripts
+ * - Revenue/Stripe test utilities
+ * - User management features
+ * - Analytics dashboards
+ * - Email campaigns
+ * - System configuration
  */
 export async function checkIsAdmin(): Promise<boolean> {
   try {
