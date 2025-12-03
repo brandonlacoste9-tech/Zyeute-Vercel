@@ -14,12 +14,27 @@
     "dev:bee": "npm run dev --workspace=packages/bee-node",
     "build:all": "npm run build --workspace=packages/kernel-node && npm run build --workspace=packages/bee-node",
     "docs": "npx tsx scripts/generate-docs.ts",
-    "docs:generate": "npm run docs"
-        "build": "npm run build:all",
+    "docs:generate": "npm run docs",
+    "build": "npm run build:all",
     "build:all": "npm run build --workspace=packages/kernel-node && npm run build --workspace=packages/bee-node"
   },
   "devDependencies": {
-    "@bufbuild/buf": "^1.28.1"
+    "@bufbuild/buf": "^1.28.1",
+    "@tailwindcss/postcss": "^4.0.0",
+    "@types/node": "^20.10.0",
+    "@types/react": "^18.3.5",
+    "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.1",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.5.4",
+    "vite": "^7.2.4"
   },
   "engines": {
     "node": ">=20.0.0"

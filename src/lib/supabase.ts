@@ -23,9 +23,9 @@ supabaseLogger.info('Anon key is set:', !!import.meta.env.VITE_SUPABASE_ANON_KEY
 supabaseLogger.info('Expected project:', EXPECTED_PROJECT_REF);
 
 // Extract and validate project reference
-const projectRef = extractSupabaseProjectRef(supabaseUrl);
-if (projectRef) {
-  supabaseLogger.info('Detected project:', projectRef);
+const detectedProjectRef = extractSupabaseProjectRef(supabaseUrl);
+if (detectedProjectRef) {
+  supabaseLogger.info('Detected project:', detectedProjectRef);
   
   // Check for wrong project
   if (supabaseUrl.includes('kihxqurnmyxnsyqgpdaw')) {
@@ -34,12 +34,12 @@ if (projectRef) {
     supabaseLogger.error('   Expected: vuanulvyqkfefmjcikfk');
     supabaseLogger.error('   Action: Update VITE_SUPABASE_URL to: https://vuanulvyqkfefmjcikfk.supabase.co');
     supabaseLogger.error('   Platforms: Check Netlify and Vercel environment variables');
-  } else if (projectRef === 'vuanulvyqkfefmjcikfk') {
+  } else if (detectedProjectRef === 'vuanulvyqkfefmjcikfk') {
     supabaseLogger.info('✅ Using correct Supabase project: vuanulvyqkfefmjcikfk');
   } else if (supabaseUrl.includes('demo.supabase.co')) {
     supabaseLogger.warn('⚠️ Using demo Supabase URL - features will be limited');
   } else {
-    supabaseLogger.warn('⚠️ Using unexpected Supabase project:', projectRef);
+    supabaseLogger.warn('⚠️ Using unexpected Supabase project:', detectedProjectRef);
     supabaseLogger.warn('   Expected: vuanulvyqkfefmjcikfk');
   }
   
