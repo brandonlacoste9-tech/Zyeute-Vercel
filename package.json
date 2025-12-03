@@ -15,6 +15,8 @@
     "build:all": "npm run build --workspace=packages/kernel-node && npm run build --workspace=packages/bee-node",
     "docs": "npx tsx scripts/generate-docs.ts",
     "docs:generate": "npm run docs"
+        "build": "npm run build:all",
+    "build:all": "npm run build --workspace=packages/kernel-node && npm run build --workspace=packages/bee-node"
   },
   "devDependencies": {
     "@bufbuild/buf": "^1.28.1"
