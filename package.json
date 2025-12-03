@@ -12,7 +12,9 @@
     "install:packages": "npm install --workspace=packages/kernel-node && npm install --workspace=packages/bee-node",
     "dev:kernel": "npm run dev --workspace=packages/kernel-node",
     "dev:bee": "npm run dev --workspace=packages/bee-node",
-    "build:all": "npm run build --workspace=packages/kernel-node && npm run build --workspace=packages/bee-node"
+    "build:all": "npm run build --workspace=packages/kernel-node && npm run build --workspace=packages/bee-node",
+    "docs": "npx tsx scripts/generate-docs.ts",
+    "docs:generate": "npm run docs"
   },
   "devDependencies": {
     "@bufbuild/buf": "^1.28.1"
