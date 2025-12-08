@@ -5,8 +5,7 @@
 
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
-const isDevelopment = import.meta.env.MODE === 'development' || import.meta.env.DEV;
-
+const isDevelopment = process.env.NODE_ENV === 'development';
 /**
  * Logger configuration
  */
