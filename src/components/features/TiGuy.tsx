@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Ti-Guy - Premium Quebec Heritage Emblem Design
  * The Zyeuté Mascot & AI Assistant featuring the iconic beaver emblem
