@@ -1,3 +1,4 @@
+"use client"
 /**
  * AchievementModal - Popup when achievement is unlocked
  * Beautiful animation and celebration!
