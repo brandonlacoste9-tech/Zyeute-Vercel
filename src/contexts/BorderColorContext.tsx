@@ -1,3 +1,4 @@
+"use client"
 /**
  * BorderColorContext - Customizable App Accent Lighting
  * Allows users to customize the border glow color around the app
