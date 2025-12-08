@@ -1,3 +1,4 @@
+"use client"
 /**
  * MainLayout Component - Phone-Screen Centering with Dynamic Border Lighting
  * Provides a centered mobile app aesthetic on desktop with customizable border glow
