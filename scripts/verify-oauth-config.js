@@ -1,12 +1,12 @@
 /**
  * OAuth Configuration Verification Script
- * 
+ *
  * This script verifies:
  * 1. Environment variables are set correctly
  * 2. Supabase client configuration
  * 3. OAuth redirect URL format
  * 4. Expected configuration values
- * 
+ *
  * Run with: node scripts/verify-oauth-config.js
  */
 
@@ -18,13 +18,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 console.log('🔍 OAuth Configuration Verification\n');
-console.log('=' .repeat(60));
+console.log('='.repeat(60));
 
 // Expected values
 const EXPECTED_SUPABASE_PROJECT = 'vuanulvyqkfefmjcikfk';
 const EXPECTED_SUPABASE_URL = `https://${EXPECTED_SUPABASE_PROJECT}.supabase.co`;
 const PRODUCTION_DOMAIN = 'https://zyeute.com';
-const NETLIFY_DOMAIN = 'https://zyeute-netlify.netlify.app';
 const EXPECTED_CALLBACK_PATH = '/auth/callback';
 const EXPECTED_GOOGLE_CALLBACK = `${EXPECTED_SUPABASE_URL}/auth/v1/callback`;
 
@@ -61,7 +60,9 @@ if (supabaseUrl) {
     console.log('✅ Correct Supabase project ID');
   } else {
     console.log(`❌ WRONG PROJECT! Expected: ${EXPECTED_SUPABASE_PROJECT}`);
-    console.log(`   Found: ${supabaseUrl.match(/https:\/\/([^.]+)\.supabase\.co/)?.[1] || 'unknown'}`);
+    console.log(
+      `   Found: ${supabaseUrl.match(/https:\/\/([^.]+)\.supabase\.co/)?.[1] || 'unknown'}`
+    );
   }
 } else {
   console.log('❌ VITE_SUPABASE_URL not found');
@@ -81,20 +82,20 @@ console.log('-'.repeat(60));
 const supabaseTsPath = path.join(__dirname, '..', 'src', 'lib', 'supabase.ts');
 if (fs.existsSync(supabaseTsPath)) {
   const content = fs.readFileSync(supabaseTsPath, 'utf-8');
-  
+
   // Check redirectTo configuration
   if (content.includes('redirectTo')) {
     const redirectMatch = content.match(/redirectTo:\s*[`'"]([^`'"]+)[`'"]/);
     if (redirectMatch) {
       const redirectUrl = redirectMatch[1];
       console.log(`\n📍 OAuth redirectTo: ${redirectUrl}`);
-      
+
       if (redirectUrl.includes(EXPECTED_CALLBACK_PATH)) {
         console.log('✅ Callback path is correct');
       } else {
         console.log(`❌ Callback path should include: ${EXPECTED_CALLBACK_PATH}`);
       }
-      
+
       if (redirectUrl.includes('window.location.origin')) {
         console.log('✅ Using dynamic origin (good for production)');
       } else if (redirectUrl.includes('localhost')) {
@@ -102,14 +103,14 @@ if (fs.existsSync(supabaseTsPath)) {
       }
     }
   }
-  
+
   // Check detectSessionInUrl
   if (content.includes('detectSessionInUrl: true')) {
     console.log('✅ detectSessionInUrl is enabled');
   } else {
     console.log('⚠️  detectSessionInUrl might not be enabled');
   }
-  
+
   console.log('✅ supabase.ts file found and readable');
 } else {
   console.log('❌ supabase.ts not found');
@@ -122,13 +123,13 @@ console.log('-'.repeat(60));
 const appTsxPath = path.join(__dirname, '..', 'src', 'App.tsx');
 if (fs.existsSync(appTsxPath)) {
   const content = fs.readFileSync(appTsxPath, 'utf-8');
-  
+
   if (content.includes('/auth/callback')) {
     console.log('✅ /auth/callback route is registered');
   } else {
     console.log('❌ /auth/callback route not found in App.tsx');
   }
-  
+
   if (content.includes('AuthCallback')) {
     console.log('✅ AuthCallback component is imported');
   } else {
@@ -147,12 +148,8 @@ console.log(`   Redirect URLs:`);
 console.log(`     - ${PRODUCTION_DOMAIN}`);
 console.log(`     - ${PRODUCTION_DOMAIN}${EXPECTED_CALLBACK_PATH}`);
 console.log(`     - ${PRODUCTION_DOMAIN}/**`);
-console.log(`     - ${NETLIFY_DOMAIN}`);
-console.log(`     - ${NETLIFY_DOMAIN}${EXPECTED_CALLBACK_PATH}`);
-console.log(`     - ${NETLIFY_DOMAIN}/**`);
 console.log(`     - http://localhost:5173${EXPECTED_CALLBACK_PATH} (for dev)`);
 console.log(`     - http://localhost:5173/** (for dev)`);
-console.log(`\n   ⚠️  Remove any Vercel URLs (brandonlacoste9-tech-zyeute-*.vercel.app)`);
 
 console.log('\n🔧 Google Cloud Console Settings:');
 console.log(`   Authorized redirect URIs:`);
@@ -164,9 +161,6 @@ console.log('\nPlease verify these in Supabase Dashboard:');
 console.log('□ Site URL is set to:', PRODUCTION_DOMAIN);
 console.log('□ Redirect URLs include:', `${PRODUCTION_DOMAIN}${EXPECTED_CALLBACK_PATH}`);
 console.log('□ Redirect URLs include:', `${PRODUCTION_DOMAIN}/**`);
-console.log('□ Redirect URLs include:', `${NETLIFY_DOMAIN}${EXPECTED_CALLBACK_PATH}`);
-console.log('□ Redirect URLs include:', `${NETLIFY_DOMAIN}/**`);
-console.log('□ ALL Vercel URLs removed from Redirect URLs');
 console.log('□ Google OAuth provider is enabled');
 console.log('\nPlease verify these in Google Cloud Console:');
 console.log('□ Authorized redirect URI:', EXPECTED_GOOGLE_CALLBACK);
@@ -175,7 +169,6 @@ console.log('□ OAuth 2.0 Client ID is configured in Supabase');
 console.log('\n' + '='.repeat(60));
 console.log('✅ Verification complete!');
 console.log('\nIf any checks failed, please:');
-console.log('1. Update environment variables in Netlify/Vercel');
+console.log('1. Update environment variables in Vercel');
 console.log('2. Verify Supabase Dashboard → Authentication → URL Configuration');
 console.log('3. Verify Google Cloud Console → OAuth 2.0 Client → Authorized redirect URIs');
-

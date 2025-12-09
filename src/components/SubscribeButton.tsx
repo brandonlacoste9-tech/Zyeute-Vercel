@@ -25,7 +25,7 @@ export const SubscribeButton: React.FC<SubscribeButtonProps> = ({
 
     try {
       const supabase = createClient();
-      const response = await fetch('/.netlify/functions/create-checkout-session', {
+      const response = await fetch('/api/checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
