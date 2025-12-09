@@ -394,18 +394,18 @@ jobs:
           name: dist
           path: dist/
 
-      - name: Deploy to Netlify (Staging)
+      - name: Deploy to Vercel (Staging)
         run: |
-          npm install -g netlify-cli
-          netlify deploy --dir=dist --message="Staging deploy from ${{ github.sha }}"
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID_STAGING }}
-
-      - name: Deployment notification
-        run: |
-          echo "✅ Staging deployment successful!"
+          echo "✅ Vercel automatically deploys develop branch to staging"
           echo "🔗 URL: https://staging.zyeute.ca"
+        # Vercel automatically deploys branches when GitHub integration is enabled
+        # For manual deployment, uncomment:
+        # - name: Install Vercel CLI
+        #   run: npm install -g vercel
+        # - name: Deploy
+        #   run: vercel --token=${{ secrets.VERCEL_TOKEN }}
+        #   env:
+        #     VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
   # ============================================
   # Job 9: Deploy Production (main branch)
@@ -429,20 +429,20 @@ jobs:
           name: dist
           path: dist/
 
-      - name: Deploy to Netlify (Production)
+      - name: Deploy to Vercel (Production)
         run: |
-          npm install -g netlify-cli
-          netlify deploy --prod --dir=dist --message="Production deploy from ${{ github.sha }}"
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-
-      - name: Deployment notification
-        run: |
-          echo "✅ Production deployment successful!"
+          echo "✅ Vercel automatically deploys main branch to production"
           echo "🔗 URL: https://zyeute.ca"
           echo "📊 Commit: ${{ github.sha }}"
           echo "👤 Author: ${{ github.actor }}"
+        # Vercel automatically deploys the main branch when GitHub integration is enabled
+        # For manual deployment, uncomment:
+        # - name: Install Vercel CLI
+        #   run: npm install -g vercel
+        # - name: Deploy
+        #   run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
+        #   env:
+        #     VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
   # ============================================
   # Job 10: Deploy Preview (Pull Requests)
@@ -463,25 +463,30 @@ jobs:
           name: dist
           path: dist/
 
-      - name: Deploy to Netlify (Preview)
-        id: deploy
+      - name: Vercel Preview Deployment
         run: |
-          npm install -g netlify-cli
-          DEPLOY_OUTPUT=$(netlify deploy --dir=dist --message="PR #${{ github.event.pull_request.number }}" 2>&1)
-          PREVIEW_URL=$(echo "$DEPLOY_OUTPUT" | grep -oP 'https://[^\s]+\.netlify\.app' | head -1)
-          echo "preview_url=$PREVIEW_URL" >> $GITHUB_OUTPUT
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-
-      - name: Comment PR with preview URL
-        uses: actions/github-script@v8
-        if: steps.deploy.outputs.preview_url
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `🚀 **Preview Deployment Ready!**\n\n🔗 Preview URL: ${{ steps.deploy.outputs.preview_url }}\n\nBuilt from commit: \`${{ github.sha }}\``
-            })
+          echo "✅ Vercel automatically creates preview deployments for pull requests"
+          echo "🔗 Check the Vercel bot comment on this PR for the preview URL"
+        # Vercel automatically deploys PRs when GitHub integration is enabled
+        # The Vercel bot will comment on the PR with the preview URL
+        # For manual deployment, uncomment:
+        # - name: Install Vercel CLI
+        #   run: npm install -g vercel
+        # - name: Deploy Preview
+        #   id: deploy
+        #   run: |
+        #     PREVIEW_URL=$(vercel --token=${{ secrets.VERCEL_TOKEN }} 2>&1 | grep -oP 'https://[^\s]+\.vercel\.app' | head -1)
+        #     echo "preview_url=$PREVIEW_URL" >> $GITHUB_OUTPUT
+        #   env:
+        #     VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        # - name: Comment PR with preview URL
+        #   uses: actions/github-script@v8
+        #   if: steps.deploy.outputs.preview_url
+        #   with:
+        #     script: |
+        #       github.rest.issues.createComment({
+        #         issue_number: context.issue.number,
+        #         owner: context.repo.owner,
+        #         repo: context.repo.repo,
+        #         body: `🚀 **Preview Deployment Ready!**\n\n🔗 Preview URL: ${{ steps.deploy.outputs.preview_url }}\n\nBuilt from commit: \`${{ github.sha }}\``
+        #       })
