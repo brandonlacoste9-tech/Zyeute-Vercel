@@ -2107,56 +2107,249 @@ function Feed() {
 ---
 
 >>>>>>> 6e1bc52ae8d2bd229e3286e6ca216f4a95c7eb68
-## 🤖 AI Features (Ti-Guy)
+## 🤖 AI Features (Ti-Guy) - Open Source Stack
 
-### OpenAI Integration
+Zyeuté uses a **high-performance, cost-effective open-source AI stack** for Ti-Guy features:
 
-**Environment Variable**: `VITE_OPENAI_API_KEY`
+### 🚀 The Stack
 
-#### 1. Ti-Guy Artiste (Image Generation)
+| Feature | Technology | Provider | Cost Advantage |
+|---------|-----------|----------|---------------|
+| **Text Generation** | DeepSeek V3 | DeepSeek | 70x cheaper than GPT-4 |
+| **Image Generation** | Flux.1 Schnell | Fal.ai | 10x cheaper than DALL-E 3 |
+
+**Why Open Source?**
+- 💰 **Lower costs**: ~$0.27/1M tokens (vs $15/1M for GPT-4)
+- 🎮 **More control**: Open weights, self-hostable
+- ⚡ **Fast**: Flux generates in 4-8 seconds
+- 🎨 **Creative freedom**: Less censorship than DALL-E 3
+- 🔮 **Future-proof**: Migrate to Colony OS self-hosting later
+
+---
+
+### 1️⃣ Ti-Guy Text Engine (DeepSeek V3)
+
+**Service**: `src/services/tiGuyService.ts`
+**Environment Variable**: `VITE_DEEPSEEK_API_KEY`
+
+DeepSeek V3 powers Ti-Guy's conversational AI, captions, and hashtags **in authentic Joual**.
+
+#### Generate Caption in Joual
 
 ```typescript
-import { generateImage } from '../services/openaiService';
+import { generateCaption } from '@/services/tiGuyService';
 
-const imageUrl = await generateImage(
-  'Une poutine géante dans le Vieux-Montréal',
-  'realistic'
+const caption = await generateCaption(
+  'Photo de ma poutine au Mont-Royal',
+  'fun' // or 'chill', 'hype', 'drole'
+);
+
+// Output: "Yo! Une belle pout bien graisseuse! 🍟🔥
+// Rien de mieux qu'une classique pour finir la soirée.
+// #Poutine #MTL #QuebecLife"
+```
+
+#### Generate Quebec Hashtags
+
+```typescript
+import { generateHashtags } from '@/services/tiGuyService';
+
+const hashtags = await generateHashtags('Hiver à Québec', 5);
+
+// Output: ['#HiverQuébécois', '#FretteEnEsti', '#QuebecCity', '#418', '#Carnaval']
+```
+
+#### Chat with Ti-Guy
+
+```typescript
+import { chatWithTiGuy } from '@/services/tiGuyService';
+
+const response = await chatWithTiGuy(
+  "Donne-moi des idées de posts pour la Saint-Jean",
+  [] // conversation history
+);
+
+// Output: "Heille, c'est LA fête nationale! Post une photo avec
+// le drapeau québécois ⚜️, caption genre 'Fier d'être québécois!
+// Bonne Saint-Jean gang! 🔥' Ajoute #SaintJean #Québec #FierDIciTte.
+// Ça va exploser!"
+```
+
+#### Get Content Suggestions
+
+```typescript
+import { getContentSuggestions } from '@/services/tiGuyService';
+
+const suggestions = await getContentSuggestions({
+  region: 'Montreal',
+  interests: ['poutine', 'hockey', 'musique']
+});
+
+// Returns 3 personalized post ideas based on user profile
+```
+
+**Features**:
+- ✅ Comprehensive Joual system prompt
+- ✅ Quebec cultural awareness (regions, events, slang)
+- ✅ Adapts to current season and events
+- ✅ Fallback mode without API key
+
+---
+
+### 2️⃣ Image Generation (Flux.1 Schnell)
+
+**Service**: `src/services/imageGenService.ts`
+**Environment Variable**: `VITE_FAL_API_KEY`
+
+Flux.1 Schnell generates **photorealistic, luxury-aesthetic images** for Zyeuté.
+
+#### Generate Standard Image
+
+```typescript
+import { generateImage } from '@/services/imageGenService';
+
+const image = await generateImage({
+  prompt: 'Luxury poutine in Montreal, cinematic lighting',
+  style: 'photorealistic', // or 'cinematic', 'luxury', 'glassmorphism', 'quebec-heritage'
+  aspectRatio: 'square', // or 'portrait', 'landscape', '9:16', '16:9'
+  enhancePrompt: true, // Auto-adds style modifiers
+  numImages: 1
+});
+
+// Returns: { url: string, width: number, height: number, contentType: string }
+```
+
+#### Generate Quebec-Themed Image
+
+```typescript
+import { generateQuebecImage } from '@/services/imageGenService';
+
+const image = await generateQuebecImage(
+  'Montreal skyline at sunset',
+  'luxury', // style
+  'landscape' // aspect ratio
+);
+
+// Automatically adds Quebec cultural elements (fleur-de-lys, etc.)
+```
+
+#### Generate Zyeuté-Styled Image
+
+```typescript
+import { generateZyeuteStyledImage } from '@/services/imageGenService';
+
+const image = await generateZyeuteStyledImage(
+  'Premium social media app interface',
+  'square'
+);
+
+// Applies Zyeuté's luxury glassmorphism + fur trader aesthetic
+```
+
+#### Generate Avatar / Post Thumbnail
+
+```typescript
+import { generateAvatar, generatePostThumbnail } from '@/services/imageGenService';
+
+// Profile picture
+const avatar = await generateAvatar('Friendly Quebec person, 25 years old');
+
+// Social media post
+const thumbnail = await generatePostThumbnail(
+  'Festival de musique à Osheaga',
+  '9:16' // Instagram Stories format
 );
 ```
 
-- **Model**: DALL-E 3
-- **Demo Mode**: Returns placeholder if no API key
+**Available Styles**:
+- `photorealistic` - Sharp, detailed, professional photography
+- `cinematic` - Film grain, dramatic lighting, color grading
+- `luxury` - Premium materials, leather, gold accents
+- `glassmorphism` - Frosted glass, translucent, modern UI
+- `quebec-heritage` - Fleur-de-lys, maple leaf, blue/white colors
+- `vibrant` - Eye-catching, high saturation, Instagram-worthy
+- `artistic` - Creative, stylized, unique perspective
 
-#### 2. Ti-Guy Studio (Video Captions)
+**Performance**:
+- ⚡ 4-8 seconds per image
+- 🎯 1024x1024 default resolution
+- 📱 Mobile-optimized aspect ratios (9:16, 16:9)
+
+---
+
+### 🔧 Setup Instructions
+
+#### 1. Get DeepSeek API Key
+
+1. Sign up at [platform.deepseek.com](https://platform.deepseek.com)
+2. Navigate to **API Keys**
+3. Create new key
+4. Add to `.env`: `VITE_DEEPSEEK_API_KEY=sk-...`
+
+**Cost**: ~$0.27 per 1M tokens (input) / $1.10 per 1M tokens (output)
+
+#### 2. Get Fal.ai API Key
+
+1. Sign up at [fal.ai](https://fal.ai)
+2. Go to **Dashboard → Keys**
+3. Create new key
+4. Add to `.env`: `VITE_FAL_API_KEY=...`
+
+**Cost**: ~$0.003 per image
+
+#### 3. Test Integration
 
 ```typescript
-import { generateCaptions } from '../services/videoService';
+// Check if services are available
+import { isFluxAvailable } from '@/services/imageGenService';
+import tiGuyService from '@/services/tiGuyService';
 
-const captions = await generateCaptions(videoUrl);
+if (isFluxAvailable()) {
+  console.log('✅ Flux.1 ready');
+} else {
+  console.log('⚠️ Flux.1 in demo mode');
+}
 ```
 
-- **Model**: GPT-4
-- **Output**: Captions in Joual
+---
 
-#### 3. Ti-Guy Assistant (Chat)
+### 📊 Cost Comparison
 
-```typescript
-import { generateCaption, generateHashtags } from '../services/openaiService';
+| Service | Old (OpenAI) | New (Open Source) | Savings |
+|---------|-------------|-------------------|---------|
+| **Text (1M tokens)** | $15.00 | $0.27 | **98%** |
+| **Image (1 generation)** | $0.04 | $0.003 | **92%** |
+| **100K user interactions** | ~$2,000 | ~$30 | **98%** |
 
-const caption = await generateCaption(imageDescription);
-const hashtags = await generateHashtags(caption);
-```
+### ✅ Best Practices
 
-- **Model**: GPT-4
-- **System Prompt**: See `TI_GUY_PROMPTS` in `quebecFeatures.ts`
+1. **DeepSeek**:
+   - Always include Joual context in prompts
+   - Use temperature 0.7-0.9 for creative tasks
+   - Check API key exists before calls
+   - Provide fallback responses in demo mode
+   - Log usage for monitoring
 
-### Best Practices
+2. **Flux.1**:
+   - Enhance prompts with style modifiers
+   - Use appropriate aspect ratios for use case
+   - Enable safety checker for user-generated content
+   - Cache generated images in Supabase Storage
+   - Show generation time to users (4-8s estimate)
 
-1. **Always check API key exists** before calls
-2. **Provide demo/fallback modes** when unavailable
-3. **Include Joual context** in system prompts
-4. **Handle rate limits gracefully**
-5. **Log API usage** (console.log in dev)
+3. **General**:
+   - Handle rate limits gracefully
+   - Never expose API keys client-side in production (move to serverless functions)
+   - Monitor costs via provider dashboards
+   - A/B test against old OpenAI stack if migrating
+
+### 🚀 Future: Colony OS Self-Hosting
+
+Once deployed on Colony OS, both services can be **self-hosted**:
+- DeepSeek V3 weights available for download
+- Flux.1 Schnell is fully open source
+- Zero per-request costs (only infrastructure)
+- Full data privacy and control
 
 ---
 
