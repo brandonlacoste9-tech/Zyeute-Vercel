@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "@ai-sdk/openai": "^2.0.74",
+    "@fal-ai/serverless-client": "^0.15.0",
     "@stripe/react-stripe-js": "^2.9.0",
     "@stripe/stripe-js": "^4.10.0",
     "@supabase/ssr": "^0.8.0",
