@@ -194,5 +194,3 @@ if (require.main === module) {
   main();
 }
 
-export { buildServer };
-
