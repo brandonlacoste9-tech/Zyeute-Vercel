@@ -8,17 +8,22 @@ import { Button } from './Button';
 import { createClient } from '@/lib/supabase/client';
 
 interface SubscribeButtonProps {
-  priceId: string;
+  tier?: string;
+  priceId?: string; // Deprecated: use tier instead
   className?: string;
   children?: React.ReactNode;
 }
 
 export const SubscribeButton: React.FC<SubscribeButtonProps> = ({
+  tier,
   priceId,
   className = '',
   children,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
+
+  // Support both tier and priceId (priceId is deprecated)
+  const tierValue = tier || priceId || 'bronze';
 
   const handleCheckout = async () => {
     setIsLoading(true);
@@ -31,7 +36,7 @@ export const SubscribeButton: React.FC<SubscribeButtonProps> = ({
           'Content-Type': 'application/json',
           Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
         },
-        body: JSON.stringify({ tier: priceId }), // The backend expects "tier", not "priceId"
+        body: JSON.stringify({ tier: tierValue }),
       });
 
       const data = await response.json();

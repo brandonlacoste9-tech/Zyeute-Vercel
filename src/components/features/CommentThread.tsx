@@ -34,6 +34,7 @@ const CommentThreadComponent: React.FC<CommentThreadProps> = ({
   depth = 0,
   maxDepth = 3,
 }) => {
+  const supabase = createClient();
   const [isReplying, setIsReplying] = useState(false);
   const [replyText, setReplyText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);

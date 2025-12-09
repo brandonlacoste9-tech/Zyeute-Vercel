@@ -7,7 +7,7 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import Stripe from 'https://esm.sh/stripe@14.21.0?target=deno';
 
 const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY') || '', {
-  apiVersion: '2024-11-20.acacia',
+  apiVersion: '2025-11-17.clover',
   httpClient: Stripe.createFetchHttpClient(),
 });
 
@@ -62,9 +62,8 @@ serve(async (req) => {
 
       // Also try to create subscription record in subscriptions table (for tracking)
       // This is optional - the main update is to user_profiles
-      const { error: subError } = await supabaseAdmin
-        .from('subscriptions')
-        .upsert({
+      const { error: subError } = await supabaseAdmin.from('subscriptions').upsert(
+        {
           subscriber_id: userId,
           creator_id: userId, // Self-subscription for premium tiers
           status: 'active',
@@ -72,9 +71,11 @@ serve(async (req) => {
           stripe_customer_id: session.customer as string,
           current_period_start: currentPeriodStart,
           current_period_end: currentPeriodEnd,
-        }, {
+        },
+        {
           onConflict: 'stripe_subscription_id',
-        });
+        }
+      );
 
       if (subError) {
         console.warn('Note: Could not create subscription record:', subError);
@@ -135,4 +136,3 @@ serve(async (req) => {
     return new Response(`Webhook Error: ${error.message}`, { status: 400 });
   }
 });
-
