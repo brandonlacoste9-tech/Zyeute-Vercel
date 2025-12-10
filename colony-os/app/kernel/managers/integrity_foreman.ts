@@ -120,45 +120,15 @@ export class IntegrityForeman {
 
   /**
    * Initiate complete security audit workflow
-   * Orchestrates: ArchiveBee caching -> SecurityBee audit -> Processing
+   * NOTE: Archive and Security Bee modules have been deprecated.
+   * This method is retained for API compatibility but returns an empty result.
+   * For security audits, use dedicated security scanning tools.
    * 
-   * @param digestContent - The codebase digest content from digest_codebase.py
-   * @returns Array of security audit findings
+   * @param _digestContent - The codebase digest content (unused)
+   * @returns Empty array of security audit findings
    */
-  static async initiateSecurityAudit(digestContent: string): Promise<SecurityAuditFinding[]> {
-    console.log('🛡️ Initiating BEE SWARM Security Audit...\n');
-
-    // Dynamic imports to avoid circular dependencies
-    const ArchiveBee = (await import('../bees/archive_bee.js')).default;
-    const SecurityBee = (await import('../bees/security_bee.js')).default;
-
-    try {
-      // Step 1: Cache the codebase digest
-      console.log('📦 Step 1: Caching codebase digest...');
-      const archiveBee = new ArchiveBee();
-      const cacheName = await archiveBee.cache_current_codebase(digestContent);
-      console.log(`✅ Digest cached: ${cacheName}\n`);
-
-      // Step 2: Run deep security audit
-      console.log('🔍 Step 2: Running deep security audit...');
-      const securityBee = new SecurityBee();
-      const findings = await securityBee.runDeepAudit(cacheName);
-      console.log(`✅ Audit complete: ${findings.length} findings\n`);
-
-      // Step 3: Generate summary
-      const summary = this.generateSummary();
-      console.log('📊 Audit Summary:');
-      console.log(`   Total Findings: ${summary.total}`);
-      console.log(`   Critical/High: ${summary.criticalCount}`);
-      console.log(`   Modules Affected: ${summary.modulesAffected.length}`);
-      console.log(`   Severity Breakdown:`, summary.bySeverity);
-      console.log('');
-
-      return findings;
-    } catch (error) {
-      console.error('❌ Security audit failed:', error);
-      throw error;
-    }
+  static async initiateSecurityAudit(_digestContent: string): Promise<SecurityAuditFinding[]> {
+    console.log('⚠️  Security audit workflow is deprecated. Please use external security scanning tools.');
+    return [];
   }
 }
-
