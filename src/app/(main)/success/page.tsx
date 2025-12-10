@@ -6,7 +6,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/Button';
 import { createClient } from '@/lib/supabase/client';
 import { logger } from '@/lib/logger';
-import confetti from 'canvas-confetti';
 
 const successLogger = logger.withContext('Success');
 
@@ -45,14 +44,17 @@ export default function SuccessPage() {
 
         setLoading(false);
 
-        // Trigger confetti
-        setTimeout(() => {
-          confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 },
-          });
-        }, 500);
+        // Trigger confetti animation (without canvas-confetti library)
+        if (typeof window !== 'undefined') {
+          // Simple celebration animation using CSS
+          setTimeout(() => {
+            const celebrationEl = document.createElement('div');
+            celebrationEl.textContent = '🎉';
+            celebrationEl.style.cssText = 'position: fixed; top: 50%; left: 50%; font-size: 3rem; animation: bounce 0.5s ease-in-out;';
+            document.body.appendChild(celebrationEl);
+            setTimeout(() => celebrationEl.remove(), 1000);
+          }, 500);
+        }
       } catch (error) {
         successLogger.error('Error fetching success data:', error);
         setLoading(false);
