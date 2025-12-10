@@ -13,9 +13,9 @@
 import { FastifyPluginAsync } from 'fastify';
 import { z } from 'zod';
 
-// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 // SCHEMAS
-// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 
 const SaveMemorySchema = z.object({
   scope: z.enum(['task', 'agent', 'global']),
@@ -31,9 +31,9 @@ const SearchMemorySchema = z.object({
   limit: z.number().int().min(1).max(100).default(10),
 });
 
-// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 // ROUTES
-// ═══════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
 
 export const createMemoryRoutes: FastifyPluginAsync = async (app) => {
   
@@ -44,7 +44,7 @@ export const createMemoryRoutes: FastifyPluginAsync = async (app) => {
     try {
       const body = SaveMemorySchema.parse(request.body);
       
-      app.log.info(`💾 Saving memory: ${body.scope}/${body.key}`);
+      app.log.info(`📋 Saving memory: ${body.scope}/${body.key}`);
       
       // ═══════════════════════════════════════════════════════════
       // GENERATE EMBEDDING VIA MIND
@@ -89,7 +89,7 @@ export const createMemoryRoutes: FastifyPluginAsync = async (app) => {
       };
       
     } catch (err) {
-      app.log.error('Save memory error:', err);
+      app.log.error({ err }, 'Save memory error');
       
       if (err instanceof z.ZodError) {
         return reply.code(400).send({
@@ -131,7 +131,7 @@ export const createMemoryRoutes: FastifyPluginAsync = async (app) => {
       };
       
     } catch (err) {
-      app.log.error('Get memory error:', err);
+      app.log.error({ err }, 'Get memory error');
       return reply.code(500).send({ error: 'Internal server error' });
     }
   });
@@ -208,7 +208,7 @@ export const createMemoryRoutes: FastifyPluginAsync = async (app) => {
       };
       
     } catch (err) {
-      app.log.error('Search memory error:', err);
+      app.log.error({ err }, 'Search memory error');
       
       if (err instanceof z.ZodError) {
         return reply.code(400).send({
@@ -240,9 +240,8 @@ export const createMemoryRoutes: FastifyPluginAsync = async (app) => {
       return reply.code(204).send();
       
     } catch (err) {
-      app.log.error('Delete memory error:', err);
+      app.log.error({ err }, 'Delete memory error');
       return reply.code(500).send({ error: 'Internal server error' });
     }
   });
 };
-
