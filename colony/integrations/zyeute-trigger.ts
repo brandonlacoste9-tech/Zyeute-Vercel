@@ -13,7 +13,9 @@
  *   });
  */
 
-import { supabase } from '@/lib/supabase';
+import { createClient } from '../../src/lib/supabase/server';
+
+const supabase = createClient();
 
 export interface ColonyTaskInput {
   command: string;
@@ -134,4 +136,3 @@ export async function cancelColonyTask(taskId: string): Promise<boolean> {
     return false;
   }
 }
-
