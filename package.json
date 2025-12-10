@@ -1,6 +1,6 @@
 {
   "name": "colony-os",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Colony OS - The First AI Civilization Operating System",
   "private": true,
   "workspaces": [
