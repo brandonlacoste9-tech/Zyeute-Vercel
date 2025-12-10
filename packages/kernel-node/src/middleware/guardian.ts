@@ -20,7 +20,8 @@ import type { FastifyInstance } from 'fastify';
 export function guardianInterceptor(app: FastifyInstance): Interceptor {
   return (next) => async (req) => {
     const methodName = req.method.name;
-    const serviceName = req.method.service.typeName;
+    // Handle both service property and fallback to method name prefix
+    const serviceName = (req.method as any)?.service?.typeName || methodName.split('.')[0] || 'unknown';
     
     app.log.debug(`🛡️  Guardian checking: ${serviceName}.${methodName}`);
     
@@ -139,4 +140,3 @@ export function registerGuardianMiddleware(app: FastifyInstance) {
     await guardianHttpMiddleware(request, reply, app);
   });
 }
-
