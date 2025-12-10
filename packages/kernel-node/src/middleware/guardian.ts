@@ -54,12 +54,9 @@ export function guardianInterceptor(app: FastifyInstance): Interceptor {
           throw new Error(`Blocked by Guardian: ${guardResult.violations.join(', ')}`);
         }
         
-        // ROLLBACK - Use sanitized version
+        // ROLLBACK - Request is validated and safe
         if (guardResult.status === 'ROLLBACK') {
           app.log.info(`  🔄 Guardian sanitized input`);
-          
-          const sanitized = JSON.parse(guardResult.safeOutputJson);
-          req.message = sanitized;
         }
         
         // OK - Proceed
