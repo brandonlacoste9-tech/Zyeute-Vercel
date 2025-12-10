@@ -64,7 +64,7 @@ async function analyzeImage(payload: any): Promise<TaskResult> {
   return {
     success: true,
     output: {
-      analysis: response.choices[0].message.content
+      analysis: response.choices[0]?.message.content || 'No analysis generated'
     },
     metadata: {
       model: 'gpt-4o',
@@ -84,11 +84,21 @@ async function generateImage(payload: any): Promise<TaskResult> {
     n: 1
   });
   
+  if (!response.data || response.data.length === 0) {
+    return {
+      success: false,
+      output: { error: 'No image generated' },
+      metadata: { model: 'dall-e-3', size, quality }
+    };
+  }
+  
+  const imageData = response.data[0];
+  
   return {
     success: true,
     output: {
-      imageUrl: response.data[0].url,
-      revisedPrompt: response.data[0].revised_prompt
+      imageUrl: imageData.url || '',
+      revisedPrompt: imageData.revised_prompt || prompt
     },
     metadata: {
       model: 'dall-e-3',
@@ -124,7 +134,7 @@ async function extractText(payload: any): Promise<TaskResult> {
   return {
     success: true,
     output: {
-      text: response.choices[0].message.content
+      text: response.choices[0]?.message.content || ''
     },
     metadata: {
       model: 'gpt-4o',
@@ -136,10 +146,9 @@ async function extractText(payload: any): Promise<TaskResult> {
 async function describeVideo(payload: any): Promise<TaskResult> {
   const { frameUrls, prompt } = payload;
   
-  // Analyze key frames
   const frameAnalyses = [];
   
-  for (const frameUrl of frameUrls.slice(0, 5)) {  // Max 5 frames
+  for (const frameUrl of frameUrls.slice(0, 5)) {
     const response = await openai.chat.completions.create({
       model: 'gpt-4o',
       messages: [
@@ -160,10 +169,9 @@ async function describeVideo(payload: any): Promise<TaskResult> {
       temperature: 0.3
     });
     
-    frameAnalyses.push(response.choices[0].message.content);
+    frameAnalyses.push(response.choices[0]?.message.content || '');
   }
   
-  // Synthesize video description
   const synthesis = await openai.chat.completions.create({
     model: 'gpt-4o',
     messages: [
@@ -182,7 +190,7 @@ async function describeVideo(payload: any): Promise<TaskResult> {
   return {
     success: true,
     output: {
-      description: synthesis.choices[0].message.content,
+      description: synthesis.choices[0]?.message.content || '',
       frameCount: frameUrls.length,
       framesAnalyzed: frameAnalyses.length
     },
@@ -200,4 +208,3 @@ async function processVisual(payload: any): Promise<TaskResult> {
     }
   };
 }
-
