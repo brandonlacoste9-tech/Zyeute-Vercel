@@ -37,8 +37,8 @@ export interface ChatCompletionResponse {
  * Defaults to DeepSeek V3 if available, falls back to OpenAI
  */
 export function getTextProvider(): AIProvider {
-  const deepseekKey = process.env.VITE_DEEPSEEK_API_KEY;
-  const openaiKey = process.env.VITE_OPENAI_API_KEY;
+  const deepseekKey = process.env.DEEPSEEK_API_KEY;
+  const openaiKey = process.env.OPENAI_API_KEY;
   
   if (deepseekKey) return 'deepseek';
   if (openaiKey) return 'openai';
@@ -51,8 +51,8 @@ export function getTextProvider(): AIProvider {
  * Defaults to Flux.1 Schnell if available, falls back to DALL-E
  */
 export function getImageProvider(): ImageProvider {
-  const falKey = process.env.VITE_FAL_API_KEY;
-  const openaiKey = process.env.VITE_OPENAI_API_KEY;
+  const falKey = process.env.FAL_API_KEY;
+  const openaiKey = process.env.OPENAI_API_KEY;
   
   if (falKey) return 'flux';
   if (openaiKey) return 'dalle';
@@ -66,23 +66,21 @@ export function getImageProvider(): ImageProvider {
 export function initializeTextClient(provider: AIProvider): OpenAI | null {
   try {
     if (provider === 'deepseek') {
-      const apiKey = process.env.VITE_DEEPSEEK_API_KEY;
+      const apiKey = process.env.DEEPSEEK_API_KEY;
       if (!apiKey) return null;
       
       return new OpenAI({
         apiKey,
         baseURL: 'https://api.deepseek.com',
-        dangerouslyAllowBrowser: true,
       });
     }
     
     if (provider === 'openai') {
-      const apiKey = process.env.VITE_OPENAI_API_KEY;
+      const apiKey = process.env.OPENAI_API_KEY;
       if (!apiKey) return null;
       
       return new OpenAI({
         apiKey,
-        dangerouslyAllowBrowser: true,
       });
     }
     
@@ -149,10 +147,10 @@ export async function chatCompletion(
  */
 export function isProviderAvailable(provider: AIProvider): boolean {
   if (provider === 'deepseek') {
-    return !!process.env.VITE_DEEPSEEK_API_KEY;
+    return !!process.env.DEEPSEEK_API_KEY;
   }
   if (provider === 'openai') {
-    return !!process.env.VITE_OPENAI_API_KEY;
+    return !!process.env.OPENAI_API_KEY;
   }
   return false;
 }
@@ -173,7 +171,7 @@ export function getAvailableProviders(): {
     image.push('dalle');
   }
   
-  const falKey = process.env.VITE_FAL_API_KEY;
+  const falKey = process.env.FAL_API_KEY;
   if (falKey) image.push('flux');
   
   return { text, image };

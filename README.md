@@ -79,13 +79,13 @@ STRIPE_WEBHOOK_SECRET=whsec_test_...
 #### DeepSeek V3 (Text Generation)
 1. Visit [DeepSeek Platform](https://platform.deepseek.com/)
 2. Create an account and generate an API key
-3. Add to `.env.local`: `VITE_DEEPSEEK_API_KEY=sk-...`
+3. Add to `.env.local`: `DEEPSEEK_API_KEY=sk-...` (server-side only)
 4. Cost: ~$0.15 per 1M tokens (95% cheaper than GPT-4)
 
 #### Flux.1 Schnell (Image Generation)
 1. Visit [Fal.ai](https://fal.ai/)
 2. Create an account and get your API key
-3. Add to `.env.local`: `VITE_FAL_API_KEY=...`
+3. Add to `.env.local`: `FAL_API_KEY=...` (server-side only)
 4. Cost: ~$0.003 per image (fast generation)
 
 ### Demo Mode

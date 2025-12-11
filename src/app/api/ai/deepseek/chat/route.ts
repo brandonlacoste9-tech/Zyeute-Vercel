@@ -15,7 +15,7 @@ import OpenAI from 'openai';
 
 export async function POST(request: NextRequest) {
   try {
-    const apiKey = process.env.VITE_DEEPSEEK_API_KEY;
+    const apiKey = process.env.DEEPSEEK_API_KEY;
     
     if (!apiKey) {
       return NextResponse.json(

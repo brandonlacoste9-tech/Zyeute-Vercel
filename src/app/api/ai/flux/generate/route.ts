@@ -36,7 +36,7 @@ const ASPECT_RATIO_DIMENSIONS: Record<ImageAspectRatio, { width: number; height:
 
 export async function POST(request: NextRequest) {
   try {
-    const apiKey = process.env.VITE_FAL_API_KEY;
+    const apiKey = process.env.FAL_API_KEY;
     
     if (!apiKey) {
       // Return placeholder image in demo mode
