@@ -4,9 +4,11 @@
  * Matches the premium gold/leather aesthetic
  */
 
+'use client';
+
 import React from 'react';
-import { useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { usePathname } from 'next/navigation';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
 
 interface TransitionWrapperProps {
   children: React.ReactNode;
@@ -16,7 +18,7 @@ interface TransitionWrapperProps {
  * Animation variants for page transitions
  * Smooth fade with subtle slide for premium feel
  */
-const pageVariants = {
+const pageVariants: Variants = {
   initial: {
     opacity: 0,
     y: 10, // Subtle slide down
@@ -26,7 +28,7 @@ const pageVariants = {
     y: 0,
     transition: {
       duration: 0.3,
-      ease: [0.22, 1, 0.36, 1], // Custom easing for smooth feel
+      ease: [0.22, 1, 0.36, 1] as const, // Custom easing for smooth feel
     },
   },
   exit: {
@@ -34,18 +36,18 @@ const pageVariants = {
     y: -10, // Subtle slide up on exit
     transition: {
       duration: 0.25,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   },
 };
 
 export const TransitionWrapper: React.FC<TransitionWrapperProps> = ({ children }) => {
-  const location = useLocation();
+  const pathname = usePathname();
 
   return (
     <AnimatePresence mode="wait">
       <motion.div
-        key={location.pathname}
+        key={pathname}
         initial="initial"
         animate="animate"
         exit="exit"
