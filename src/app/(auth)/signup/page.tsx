@@ -87,7 +87,7 @@ export default function SignupPage() {
       <div className="w-full max-w-md z-10">
         {/* Logo */}
         <div className="text-center mb-8 flex flex-col items-center animate-fade-in">
-          <Logo size="xl" showText={true} linkTo={null} className="mb-4" />
+          <Logo size="xl" className="mb-4" />
           <p className="text-gold-400 text-sm font-semibold tracking-wider mb-1 embossed">
             REJOINS LA COMMUNAUTÉ QUÉBÉCOISE
           </p>
