@@ -101,6 +101,8 @@ export const BottomNav: React.FC = () => {
 
   // Helper to check if a path is active (handles profile routes)
   const isActivePath = (path: string): boolean => {
+    if (!pathname) return false;
+    
     if (path === '/profile/me') {
       return pathname === '/profile/me' || pathname.startsWith('/profile/');
     }
