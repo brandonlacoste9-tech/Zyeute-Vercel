@@ -65,7 +65,7 @@ export const createTestRoutes: FastifyPluginAsync = async (app) => {
       };
       
     } catch (err: any) {
-      app.log.error('Test task creation error:', err);
+      app.log.error({ err }, 'Test task creation error');
       return reply.code(500).send({
         success: false,
         error: err.message
@@ -90,7 +90,7 @@ export const createTestRoutes: FastifyPluginAsync = async (app) => {
     return {
       success: true,
       count: tasks.length,
-      tasks: tasks.map(t => ({
+      tasks: tasks.map((t: any) => ({
         id: t.id,
         status: t.status,
         priority: t.priority,
@@ -165,7 +165,7 @@ export const createTestRoutes: FastifyPluginAsync = async (app) => {
       };
       
     } catch (err: any) {
-      app.log.error('Test memory error:', err);
+      app.log.error({ err }, 'Test memory error');
       return reply.code(500).send({
         success: false,
         error: err.message
@@ -205,7 +205,7 @@ export const createTestRoutes: FastifyPluginAsync = async (app) => {
       };
       
     } catch (err: any) {
-      app.log.error('Get memory error:', err);
+      app.log.error({ err }, 'Get memory error');
       return reply.code(500).send({
         success: false,
         error: err.message

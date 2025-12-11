@@ -158,7 +158,7 @@ export const createTaskRoutes: FastifyPluginAsync = async (app) => {
       });
       
     } catch (err) {
-      app.log.error('Task creation error:', err);
+      app.log.error({ err }, 'Task creation error');
       
       if (err instanceof z.ZodError) {
         return reply.code(400).send({
@@ -209,7 +209,7 @@ export const createTaskRoutes: FastifyPluginAsync = async (app) => {
       };
       
     } catch (err) {
-      app.log.error('Get task error:', err);
+      app.log.error({ err }, 'Get task error');
       return reply.code(500).send({ error: 'Internal server error' });
     }
   });
@@ -246,7 +246,7 @@ export const createTaskRoutes: FastifyPluginAsync = async (app) => {
         take: limit
       });
       
-      return tasks.map(task => ({
+      return tasks.map((task: any) => ({
         id: task.id,
         type: task.type,
         status: task.status,
@@ -257,7 +257,7 @@ export const createTaskRoutes: FastifyPluginAsync = async (app) => {
       }));
       
     } catch (err) {
-      app.log.error('List tasks error:', err);
+      app.log.error({ err }, 'List tasks error');
       return reply.code(500).send({ error: 'Internal server error' });
     }
   });
@@ -299,7 +299,7 @@ export const createTaskRoutes: FastifyPluginAsync = async (app) => {
       return reply.code(204).send();
       
     } catch (err) {
-      app.log.error('Cancel task error:', err);
+      app.log.error({ err }, 'Cancel task error');
       return reply.code(500).send({ error: 'Internal server error' });
     }
   });
