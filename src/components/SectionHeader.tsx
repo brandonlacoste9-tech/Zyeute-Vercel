@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
 interface SectionHeaderProps {
@@ -42,7 +42,7 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
 
   if (linkTo) {
     return (
-      <Link to={linkTo} className="block px-4 mb-3 mt-6">
+      <Link href={linkTo} className="block px-4 mb-3 mt-6">
         {content}
       </Link>
     );
