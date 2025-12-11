@@ -47,7 +47,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nothing yet
 
 ### Fixed
-- Nothing yet
+- TypeScript compilation error in `packages/kernel-node/src/routes/tasks.ts`
+  - Fixed Pino logger error handling to use object notation `{ err }` instead of passing error as second parameter
+  - Updated error logging in tasks.ts (lines 161, 212, 260, 302) and test.ts (lines 68, 168, 208)
+  - Added explicit type annotations for map callback parameters to resolve implicit 'any' type errors
+  - Build now completes successfully with `npm run build`
 
 ### Security
 - Added security headers in Netlify configuration
