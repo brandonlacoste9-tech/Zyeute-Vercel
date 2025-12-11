@@ -68,7 +68,6 @@ export default function LoginPage() {
         loginLogger.error('Error details:', {
           message: error.message,
           status: error.status,
-          statusCode: error.statusCode,
           code: error.code,
         });
         throw error;
@@ -93,7 +92,6 @@ export default function LoginPage() {
       loginLogger.error('Error object:', {
         message: err?.message,
         status: err?.status,
-        statusCode: err?.statusCode,
         code: err?.code,
         stack: err?.stack,
       });
