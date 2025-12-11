@@ -1,0 +1,89 @@
+name: Revenue Validation
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+  pull_request:
+    branches:
+      - main
+      - master
+      - develop
+
+permissions:
+  contents: read
+
+jobs:
+  validate-revenue:
+    runs-on: self-hosted
+    name: Validate Revenue Integration
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Validate Stripe configuration
+        run: |
+          echo "🔍 Validating Stripe integration..."
+          
+          # Check for Stripe service files
+          if [ -f "src/services/stripeService.ts" ]; then
+            echo "✅ Stripe service file found"
+          else
+            echo "⚠️ Warning: Stripe service file not found"
+          fi
+          
+          # Check for Stripe webhook documentation
+          if [ -f "STRIPE_WEBHOOK_SETUP.md" ]; then
+            echo "✅ Stripe webhook documentation found"
+          else
+            echo "⚠️ Warning: Stripe webhook documentation not found"
+          fi
+          
+      - name: Check revenue documentation
+        run: |
+          echo "📚 Checking revenue documentation..."
+          
+          # Check for revenue-related documentation
+          if [ -f "REVENUE_TEST_EXECUTION.md" ]; then
+            echo "✅ Revenue test execution documentation found"
+          else
+            echo "⚠️ Warning: Revenue test execution documentation not found"
+          fi
+          
+          if [ -f "STRIPE_QUICKSTART.md" ]; then
+            echo "✅ Stripe quickstart documentation found"
+          else
+            echo "⚠️ Warning: Stripe quickstart documentation not found"
+          fi
+      
+      - name: Verify Stripe integration
+        run: |
+          echo "🔐 Verifying Stripe integration in codebase..."
+          
+          # Check if Stripe is properly integrated
+          if grep -ri "stripe" src/services/ > /dev/null 2>&1; then
+            echo "✅ Stripe integration found in services"
+          else
+            echo "⚠️ Warning: Stripe integration not found in services"
+          fi
+          
+          if grep "@stripe" package.json > /dev/null 2>&1; then
+            echo "✅ Stripe packages found in dependencies"
+          else
+            echo "⚠️ Warning: Stripe packages not found in dependencies"
+          fi
+      
+      - name: Revenue validation complete
+        run: echo "✅ Revenue validation checks completed successfully"

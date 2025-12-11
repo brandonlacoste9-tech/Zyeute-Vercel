@@ -1,0 +1,41 @@
+name: 🛡️ SecurityBee Deep Audit
+
+on:
+  pull_request:
+    branches: [ master ] # Targets the final production branch before merge
+
+jobs:
+  run_security_audit:
+    name: Execute Codebase Audit (2M Context)
+    
+    # 🎯 TARGETS YOUR SELF-HOSTED RUNNER
+    runs-on: self-hosted
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        # The tsx script needs a valid Node.js environment
+        uses: actions/setup-node@v6
+        with:
+          node-version: '18' 
+
+      - name: Install Dependencies
+        # Installs project dependencies and the global tsx runner
+        run: |
+          npm install
+          npm install -g tsx 
+
+      - name: Execute SecurityBee Audit
+        # This script triggers the ArchiveBee, caches the digest, and runs SecurityBee
+        run: tsx scripts/run-security-audit.js
+        
+        env:
+          # Passes the required key from GitHub Secrets to the runner's environment
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+      - name: Report Audit Success
+        # Simple confirmation that the script ran and generated its report/output
+        run: echo "SecurityBee audit complete. Findings processed by IntegrityForeman."
+
