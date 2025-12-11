@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { LogoFull } from './Logo';
+import { Logo } from './Logo';
 import { cn } from '../lib/utils';
 
 interface LoadingScreenProps {
@@ -44,7 +44,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({
 
       {/* Logo */}
       <div className="relative z-10 animate-fade-in">
-        <LogoFull />
+        <Logo size="xl" className="pointer-events-none" />
       </div>
 
       {/* Loading message and spinner */}
