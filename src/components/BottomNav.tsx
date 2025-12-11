@@ -3,8 +3,11 @@
  * Leather texture with gold stitching and glowing icons
  */
 
+'use client';
+
 import React from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useHaptics } from '@/hooks/useHaptics';
 import { cn } from '../lib/utils';
 
@@ -93,18 +96,18 @@ const navItems: NavItem[] = [
 ];
 
 export const BottomNav: React.FC = () => {
-  const location = useLocation();
+  const pathname = usePathname();
   const { tap } = useHaptics();
 
   // Helper to check if a path is active (handles profile routes)
   const isActivePath = (path: string): boolean => {
     if (path === '/profile/me') {
-      return location.pathname === '/profile/me' || location.pathname.startsWith('/profile/');
+      return pathname === '/profile/me' || pathname.startsWith('/profile/');
     }
     if (path === '/') {
-      return location.pathname === '/';
+      return pathname === '/';
     }
-    return location.pathname === path || location.pathname.startsWith(path + '/');
+    return pathname === path || pathname.startsWith(path + '/');
   };
 
   return (
@@ -123,25 +126,22 @@ export const BottomNav: React.FC = () => {
         <div className="flex items-center justify-around h-16">
           {navItems.map((item) => {
             const isActive = isActivePath(item.to);
+            const active = isActive;
             
             return (
-              <NavLink
+              <Link
                 key={item.to}
-                to={item.to}
-                end={item.to === '/'}
+                href={item.to}
                 onClick={() => tap()} // Haptic feedback on navigation
-                className={({ isActive: navLinkActive }) =>
-                  cn(
-                    'flex flex-col items-center justify-center gap-0.5 px-3 py-2 rounded-xl transition-all duration-300 relative',
-                    item.to === '/upload' ? '-mt-4' : '',
-                    (isActive || navLinkActive)
-                      ? 'text-gold-400' 
-                      : 'text-neutral-500 hover:text-gold-500/70'
-                  )
-                }
+                className={cn(
+                  'flex flex-col items-center justify-center gap-0.5 px-3 py-2 rounded-xl transition-all duration-300 relative',
+                  item.to === '/upload' ? '-mt-4' : '',
+                  active
+                    ? 'text-gold-400' 
+                    : 'text-neutral-500 hover:text-gold-500/70'
+                )}
               >
-              {({ isActive: navLinkActive }) => {
-                const active = isActive || navLinkActive;
+              {() => {
                 
                 return (
                   <>
@@ -213,7 +213,7 @@ export const BottomNav: React.FC = () => {
                   </>
                 );
               }}
-            </NavLink>
+            </Link>
             );
           })}
         </div>
