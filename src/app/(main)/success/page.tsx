@@ -28,7 +28,7 @@ export default function SuccessPage() {
         setUser(user);
 
         // Get session_id from URL
-        const sessionId = searchParams.get('session_id');
+        const sessionId = searchParams?.get('session_id');
 
         if (sessionId && user) {
           // Fetch subscription details
